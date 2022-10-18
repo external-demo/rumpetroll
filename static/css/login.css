@@ -1,0 +1,126 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -moz-box-sizing: border-box; }
+
+body {
+  line-height: 1;
+  width: 16rem;
+  margin: 0 auto;
+  background: #fff;
+  font-family: "arial",SimHei; }
+
+ul, ol, li {
+  list-style: none; }
+
+a, button, input {
+  -webkit-tap-highlight-color: rgba(255, 0, 0, 0); }
+
+a {
+  text-decoration: none; }
+
+img, input, textarea {
+  vertical-align: middle; }
+
+input, textarea {
+  outline: none; }
+  input.focus, textarea.focus {
+    outline: none; }
+  input.active, textarea.active {
+    outline: none; }
+
+body {
+  background-image: url(../images/bg.png);
+  background-size: 100%; }
+
+header {
+  margin-top: 4.30933rem;
+  height: 2.60267rem;
+  background-image: url(../images/title.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top center; }
+
+.tip {
+  font-size: 0.68267rem;
+  color: #ff5656;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  top: 9.17333rem;
+  white-space: nowrap; }
+
+#nickname {
+  height: 2.38933rem;
+  width: 14.89067rem;
+  margin: 3.52rem 0.55467rem 1.28rem 0.55467rem;
+  border: none;
+  background-image: url(../images/nickname.png);
+  background-size: contain;
+  background-color: #000;
+  font-size: 1.024rem;
+  color: #ceb478;
+  text-align: center;
+  font-weight: bold; }
+
+input::-webkit-input-placeholder {
+  font-size: 1.024rem;
+  color: #ceb478;
+  text-align: center;
+  font-weight: bold;
+  opacity: 0.1; }
+
+.sex {
+  width: 12.8rem;
+  height: 1.664rem;
+  display: flex;
+  justify-content: space-around;
+  margin: 0 1.6rem; }
+  .sex .btn {
+    color: #362e1e;
+    font-size: 0.896rem;
+    font-weight: bold;
+    height: 1.70667rem;
+    width: 5.76rem;
+    line-height: 1.70667rem;
+    text-align: center;
+    border: 0.04267rem solid #362e1e;
+    border-radius: 1.06667rem;
+    position: relative; }
+    .sex .btn::before {
+      content: '';
+      display: inline-block;
+      width: 0.768rem;
+      height: 0.768rem;
+      background-image: url(../images/icon.png);
+      background-size: contain;
+      position: absolute;
+      left: 0.64rem;
+      top: 0.42667rem; }
+    .sex .btn.act {
+      color: #ceb478;
+      border: 0.04267rem solid #ceb478; }
+      .sex .btn.act::before {
+        background-image: url(../images/act-icon.png); }
+
+.login {
+  width: 12.8rem;
+  height: 2.13333rem;
+  margin: 2.13333rem 1.6rem;
+  background-image: url(../images/login.png);
+  background-size: contain;
+  background-repeat: no-repeat; }
+
+
+.disabled {
+  opacity: 0.4;
+}
+
+.enable {
+  opacity: 1;
+}

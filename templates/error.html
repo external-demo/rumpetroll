@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ SETTINGS.TITLE }}</title>
+    <script src="{{ static_url }}static/js/hotcss.js?v={{version}}"></script>
+    <link rel="stylesheet" href="{{ static_url }}static/css/common.css?v={{version}}">
+    <link rel="stylesheet" href="{{ static_url }}static/css/error.css?v={{version}}">
+</head>
+
+<body>
+    <article class="bg error">
+        <img src="{{ static_url }}static/images/game-on.png" alt="GAME ON" class="game-on">
+        <div class="tips">
+            <p class="row">场面太火爆</p>
+            <p class="row">小蝌蚪挤不进去了</p>
+        </div>
+        <div class="btn-row">
+            <a href="/rumpetroll/" class="game-btn">
+                <div class="btn-text" data-text="我挤"></div>
+            </a>
+        </div>
+    </article>
+</body>
+
+</html>

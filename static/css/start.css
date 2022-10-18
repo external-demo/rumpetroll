@@ -1,0 +1,31 @@
+.start {
+  background-image: url(./../images/start-bg.png);
+}
+.start .date {
+  padding-top: 5.07733rem;
+}
+.start .pic-title {
+  padding-top: 0.29867rem;
+}
+.start .intro {
+  width: 11.73333rem;
+  padding-top: 2.34667rem;
+  color: #d5bd84;
+  font-size: 0.64rem;
+  text-align: justify;
+  line-height: 0.81067rem;
+  margin: auto;
+}
+.start .tips {
+  position: absolute;
+  bottom: 65px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.64rem;
+  color: #d5bd84;
+}
+.start .start-btn {
+  margin-top: 2.13333rem;
+}
+
+/*# sourceMappingURL=start.css.map */

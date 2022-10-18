@@ -1,0 +1,125 @@
+<!DOCTYPE html>{% autoescape None %}
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=0;">
+        <meta name="apple-mobile-web-app-capable" content="YES">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <title>{{ SETTINGS.TITLE }}</title>
+        <link rel="stylesheet" type="text/css" href="{{ static_url }}static/css/main.css?v={{version}}">
+        <script type="text/javascript" charset="utf-8">
+            var Settings = function() {
+                this.socketServer = '{{ WEBSOCKET_URL }}';
+            }
+            var is_token = {{ is_token }};
+            var over_time = {{ over_time }};
+            var token = "{{ SETTINGS.TOKEN }}"
+            var room = "1" // 废弃
+        </script>
+        <link rel="stylesheet" href="{{ static_url }}static/css/common.css?v={{version}}">
+        <link rel="stylesheet" href="{{ static_url }}static/css/error.css?v={{version}}">
+    </head>
+	<body data-twttr-rendered="true">
+		<canvas id="canvas" width="1920" height="933" style="position:absolute; left:0; top: 0;"></canvas>
+
+        <article class="bg error fixed" id="dav_error" style="display: none;">
+            <img src="{{ static_url }}static/images/game-on.png" alt="GAME ON" class="game-on">
+            <div class="tips">
+                <p class="row">Oh Oh,</p>
+                <p class="row">The little tadpole got lost</p>
+            </div>
+            <div class="btn-row">
+                <a href="/rumpetroll/" class="game-btn">
+                    <div class="btn-text" data-text="Enter"></div>
+                </a>
+            </div>
+        </article>
+
+        <img src="{{ static_url }}static/images/bk_logo_en.png?v={{version}}" alt="" class="bk-logo-en">
+
+        <div class="music music-play" id="music_box">
+            <audio src="{{ static_url }}static/shadow.mp3" preload autoplay="autoplay" id="music" loop></audio>
+            <img src="{{ static_url }}static/images/music-play.png"/>
+        </div>
+
+        <div class="tip-box animated zoomInDown" id="tip_box" style="display: none;font-size:16px;" >
+            <p><img src="{{ static_url }}static/images/tip-en.png" style="width:320px" alt=""></p>
+        </div>
+
+        <div class="timer-box" id="timer_box">
+            <!--倒计时模块-->
+            <div class="time-item" id="timer_wrapper" style="display:none;">
+                <strong id="day" class="day">0Day</strong>
+                <strong id="hour" class="hour">0Hour</strong>
+                <strong id="minute" class="minute">0</strong>
+                <strong id="second" class="second">0</strong>
+                <strong id="haomiao" class="second">0</strong>
+            </div>
+
+            <!-- 在线人数 -->
+            <!-- <div class="game-online-box">
+                在线人数：<span class="game-online-num" id="game_online_num">0</span>
+            </div> -->
+        </div>
+        <p class="room-num" id="room_num" style="display:none;"></p>
+
+		<div id="ui">
+			<div id="fps"></div>
+            <div class="chat-box" id="chat_box">
+                <input id="chat" type="text" maxlength="10" placeholder="10 characters within the message">
+                <button id="submit">Submit</button>
+            </div>
+			<div id="chatText"></div>
+
+			<div id="instructions"><a id="authorize-user-button"></a>
+			</div>
+
+            <aside id="frogMode">
+                <h3>Frog Mode</h3>
+                <section id="tadpoles">
+                    <h4>Tadpoles</h4>
+                    <ul id="tadpoleList">
+                    </ul>
+                </section>
+                <section id="console">
+                    <h4>Console</h4>
+                </section>
+            </aside>
+
+		</div>
+        <script>
+            var static_url = "{{ static_url }}";
+            var gotPNg = "{{ static_url }}static/images/got.png?v={{version}}";
+            var goldPNg = "{{ static_url }}static/images/gold2.png?v={{version}}";
+            var qqFace = "{{ static_url }}static/images/qqface/?v={{version}}";
+        </script>
+        <script src="{{ static_url }}static/assets/jquery.min.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/assets/modernizr-1.5.min.js?v={{version}}"></script>
+
+        <script src="{{ static_url }}static/js/active_view.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/App.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/Arrow.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/Camera.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/formControls.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/Gold.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/Keys.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/Message.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/Model.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/music.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/parseUri.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/Stats.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/Tadpole.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/TadpoleTail.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/WaterParticle.js?v={{version}}"></script>
+        <script src="{{ static_url }}static/js/WebSocketService.js?v={{version}}"></script>
+
+        <script src="{{ static_url }}static/js/main.js?v={{version}}"></script>
+
+        <div style="position: fixed; z-index: -1; width: 1px; height: 1px; overflow: hidden; opacity: 0; bottom: 0;">
+            <img src="{{ static_url }}static/images/error-bg.png?v={{version}}">
+            <img src="{{ static_url }}static/images/error-text.png?v={{version}}">
+            <img src="{{ static_url }}static/images/error-btn.png?v={{version}}">
+        </div>
+
+</body></html>

@@ -1,0 +1,140 @@
+*{
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+a,p,span{
+    outline: none;
+}
+a:hover,a:visited{
+    text-decoration: none;
+}
+html,body{
+    height: 100%;
+}
+
+html,body,div,p,h1,h2{
+    margin: 0;
+    padding: 0;
+    font-family: "微软雅黑","PingFangSC-Regular";
+}
+body{
+    padding-bottom: 30px;
+    min-height: 900px;
+    background-color: #000;
+    position: relative;
+    background: url(../images/bg-r.jpg) no-repeat center center;
+    background-size: 100% 100%;
+}
+ul,li{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.game-ranger-box{
+    width: 1162px;
+    height: 665px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-top: -332px;
+    margin-left: -581px;
+}
+.game-ranger-header{
+    position: absolute;
+    left: 50%;
+    top: -80px;
+    margin-left: -213px;
+}
+.game-ranger-body{
+    width: 1162px;
+    margin: auto;
+}
+.game-ranger-table{
+    width: 572px;
+    height: 652px;
+    background: url(../images/table_bg2.png) no-repeat;
+    display: inline-block;
+    padding: 35px 13px 10px 13px;
+}
+.game-ranger-table table{
+    width: 100%;
+    /*height: 100%;*/
+    /*background: #fff;*/
+}
+.game-ranger-table table img{
+    vertical-align: middle;
+}
+.game-ranger-table table th{
+    height: 61px;
+}
+.game-index-wrapper{
+    text-align: center;
+}
+.game-ranger-table table td{
+    height: 52px;
+    font-size: 14px;
+    color: #642b22;
+}
+.game-avatar-wrapper{
+    width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 16px;
+}
+.game-avatar{
+    width: 31px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+.game-score{
+    margin-right: 20px;
+}
+.game-score-wrapper{
+    width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 16px;
+}
+.game-ranger-table table.first-child tbody tr:nth-child(1) .game-index{
+    text-indent: -99999999px;
+    font-size: 0px;
+    display: inline-block;
+    width: 20px;
+    height: 30px;
+    background: url(../images/num1.png) no-repeat center center;
+    vertical-align: middle;
+}
+.game-ranger-table table.first-child tbody tr:nth-child(2) .game-index{
+    text-indent: -99999999px;
+    font-size: 0px;
+    display: inline-block;
+    width: 20px;
+    height: 30px;
+    background: url(../images/num2.png) no-repeat center center;
+    vertical-align: middle;
+}
+.game-ranger-table table.first-child tbody tr:nth-child(3) .game-index{
+    text-indent: -99999999px;
+    font-size: 0px;
+    display: inline-block;
+    width: 20px;
+    height: 30px;
+    background: url(../images/num3.png) no-repeat center center;
+    vertical-align: middle;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

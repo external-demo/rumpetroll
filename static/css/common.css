@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Microsoft YaHei';
+  line-height: 1;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+img {
+  display: block;
+  width: 100%;
+}
+
+.bg {
+  position: relative;
+  height: 100%;
+  padding: 0 2.13333rem;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.bg.error {
+  padding: 0 1.92rem;
+}
+
+.game-btn {
+  display: block;
+  width: 7.68rem;
+  height: 2.56rem;
+  margin: 0 auto;
+  background-image: url(./../images/error-btn.png);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  -webkit-tap-highlight-color: none;
+  color: #d5bd84;
+}
+.game-btn .btn-text {
+  height: 100%;
+  line-height: 2.56rem;
+  font-size: 0.896rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px #fff;
+}
+.game-btn .btn-text[data-text]::after {
+  content: attr(data-text);
+  color: #493c1e;
+  z-index: 2;
+}
+
+/*# sourceMappingURL=common.css.map */

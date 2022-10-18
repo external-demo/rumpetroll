@@ -1,0 +1,129 @@
+@import './libs/px2rem.scss';
+$designWidth : 750;
+$normalColor: #362e1e;
+$actColor: #ceb478;
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+}
+body{
+    line-height: 1;
+    width: 16rem;
+    margin: 0 auto;
+    background: #fff;
+    font-family:"arial",SimHei;
+}
+ul,ol,li{
+    list-style: none;
+}
+a,button,input{-webkit-tap-highlight-color:rgba(255,0,0,0);}
+a{
+    text-decoration: none;
+}
+img,input,textarea{
+    vertical-align:middle;
+}
+input,textarea{
+    outline: none;
+    &.focus{
+        outline: none;
+    }
+    &.active{
+        outline: none;
+    }
+}
+
+body{
+    background-image: url(../images/bg.png);
+    background-size: 100%;
+}
+header{
+    margin-top:px2rem(202);
+    height:px2rem(122);
+    background-image: url(../images/title.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: top center;
+}
+.tip{
+    font-size: px2rem(32);
+    color: #ff5656;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
+    -ms-transform: translateX(-50%);
+    -o-transform: translateX(-50%);
+    top:px2rem(430);
+    white-space: nowrap;        
+
+}
+#nickname{
+    height:px2rem(112);
+    width: px2rem(698);
+    margin:px2rem(165) px2rem(26) px2rem(60) px2rem(26);
+    border:none;
+    background-image: url(../images/nickname.png);
+    background-size: contain;
+    background-color: #000;
+    font-size: px2rem(48);
+    color: #ceb478;
+    text-align: center;
+    font-weight: bold;
+}
+input::-webkit-input-placeholder {
+    font-size: px2rem(48);
+    color: #ceb478;
+    text-align: center;
+    font-weight: bold;
+    opacity: 0.1;
+}
+.sex{
+    width: px2rem(600);
+    height: px2rem(78);
+    display: flex;
+    justify-content: space-around;
+    margin:0 px2rem(75);
+    .btn{
+        color: $normalColor;
+        font-size: px2rem(42);
+        font-weight: bold;
+        height: px2rem(80);
+        width: px2rem(270);
+        line-height: px2rem(80);
+        text-align: center;
+        border: px2rem(2) solid $normalColor;
+        border-radius:px2rem(50);
+        position: relative;
+        &::before{
+            content:'';
+            display:inline-block;
+            width: px2rem(36);
+            height: px2rem(36);
+            background-image:url(../images/icon.png);
+            background-size: contain;
+            position: absolute;
+            left: px2rem(30);
+            top: px2rem(20);
+        }
+        &.act{
+            color: $actColor;
+            border: px2rem(2) solid $actColor;
+            &::before{
+                background-image:url(../images/act-icon.png);
+            }
+        }
+    }
+}
+.login{
+    width:px2rem(600);
+    height: px2rem(100);
+    margin: px2rem(100) px2rem(75);
+    background-image: url(../images/login.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}

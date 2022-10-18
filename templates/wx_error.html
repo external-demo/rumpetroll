@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>{{ SETTINGS.TITLE }}</title>
+    <meta charset="utf8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
+    <style type="text/css">
+        body {
+            font-family: 微软雅黑, Helvetica, "Helvetica Neue", "segoe UI Light", "Kozuka Gothic Pro";
+            font-size: 15px;
+            background-color: #EFEFF4;
+            -webkit-user-select: none;
+            color: #666;
+        }
+        html, body, ul, li, p {
+            padding: 0px;
+            margin: 0px;
+        }
+        ul {
+            list-style: none;
+        }
+        .wrp {
+            padding: 35px 15px 15px;
+            text-align: center;
+        }
+        .icon_msg.warn {
+            width: 100px;
+            height: 100px;
+            vertical-align: middle;
+            display: inline-block;
+            background:url("{{static_url}}static/images/icon_error.svg") no-repeat center;
+        }
+        .text_area {
+            display: inline-block;
+            text-align: center;
+            line-height: 1.5em
+        }
+        .text_area h2 {
+            font-size: 16px;
+            color: #000;
+            margin-bottom: 18px;
+            font-weight: normal;
+        }
+        .text_area .text_content {
+            display: inline-block;
+            padding: 0px 15px
+        }
+        .text_area .text_content p {
+            text-align: left;
+        }
+        .icon_area {
+            margin-bottom: 25px;
+        }
+        .group:after {
+            content: ".";
+            display: block;
+            height: 0;
+            font-size: 0;
+            clear: both;
+            visibility: hidden;
+        }
+        ul li .li_title {
+            width: 7em;
+            text-align: right;
+            float: left;
+        }
+        ul li .li_content {
+            margin-left: 7em;
+            word-break: break-all;
+            word-wrap: break-word;
+        }
+        .footer {
+            padding: 30px 0px 20px;
+            width: 100%;
+            color: #808080;
+            font-size: 11px;
+        }
+        .footer a {
+            color: #007aff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrp">
+        <div class="icon_area"><i class="icon_msg warn"></i>
+        </div>
+        <div class="text_area">
+            <h2>{{ message }}</h2>
+        </div>
+    </div>
+</body>
+
+</html>

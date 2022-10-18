@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ SETTINGS.TITLE }}</title>
+    <script src="{{ static_url }}static/js/hotcss.js"></script>
+    <link rel="stylesheet" href="{{ static_url }}static/css/common.css?v={{version}}">
+    <link rel="stylesheet" href="{{ static_url }}static/css/start.css?v={{version}}">
+    <link rel="stylesheet" href="{{ static_url }}static/css/orient.css?v={{version}}">
+</head>
+
+<body>
+    <article class="bg start">
+<!--         <img src="{{ static_url }}static/images/date.png?v={{version}}" alt="2014.7.21" class="date">
+        <img src="{{ static_url }}static/images/yaobai.png?v={{version}}" alt="一起游吧" class="pic-title"> -->
+        <div class="intro" style="text-align: center; height: 100%; padding-top: 90%; font-size: 35px">
+            <p style="margin-bottom: 10px">BlueKing Special</p>
+            <p style="margin-bottom: 10px">To Be Continued.</p>
+        </p>
+        <div class="btn-row" style="display: none;">
+            <a href="javascript:;" class="game-btn start-btn">
+                <div class="btn-text" data-text="进入"></div>
+            </a>
+        </div>
+    </article>
+    <div id="orientLayer" class="mod-orient-layer" style="-webkit-transform: scale(2);">
+        <div class="mod-orient-layer__content"><i class="icon mod-orient-layer__icon-orient"></i>
+            <div class="mod-orient-layer__desc">For a better experience, please use the vertical screen to browse</div>
+        </div>
+    </div>
+</body>
+
+</html>
