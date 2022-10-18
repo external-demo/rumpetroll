@@ -24,7 +24,7 @@ def get_access_token(use_cache=True):
         access_token = None
 
     if not access_token:
-        params = {'app_code': constants.APP_CODE, 'uin': '836324475', 'app_secret': constants.SECRET_KEY}
+        params = {'app_code': constants.APP_CODE, 'uin': constants.QQ_UIN, 'app_secret': constants.SECRET_KEY}
         result = yield http_get(constants.WECHAT_ACCESS_TOKEN_URL, params)
         # 错误日志
         if not result.get('result'):
