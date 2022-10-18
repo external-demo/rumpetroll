@@ -40,7 +40,7 @@ def main(args):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=u'发放蝌蚪金币（joelei）')
+    parser = argparse.ArgumentParser(description=u'发放蝌蚪金币（admin）')
     parser.add_argument('-v', action='store_true', help='verbose mode')
     parser.add_argument('--host', default='http://m.bk.tencent.com', help='rumpetroll host')
     parser.add_argument('--token', required=True, help='rumpetroll token')

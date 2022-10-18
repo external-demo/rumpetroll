@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 IFOOTH
-# Author: Joe Lei <thezero12@hotmail.com>
+# Author: 蓝鲸智云 <thezero12@hotmail.com>
 import base64
 import hashlib
 import hmac

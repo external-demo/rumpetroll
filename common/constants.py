@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 IFOOTH
-# Author: Joe Lei <thezero12@hotmail.com>
+# Author: 蓝鲸智云 <thezero12@hotmail.com>
 
 # 女性
 FEMALE = 2

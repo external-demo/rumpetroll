@@ -20,8 +20,8 @@ from common.utils_func import get_func_control, set_func_control
 FUNC_CODE = 'is_start'
 is_enabled = True
 names = {
-    'joelei': 'ov6bLjuj0pJfj_dENx7sLWZpEcrg',
-    'ramboyang': 'ov6bLji5yqx0GAVL-9BN7PjSK4JA',
+    'admin': 'ov6bLjuj0pJfj_dENx7sLWZpEcrg',
+    'hahayang': 'ov6bLji5yqx0GAVL-9BN7PjSK4JA',
 }
 
 print set_func_control(FUNC_CODE, is_enabled, names.values())
