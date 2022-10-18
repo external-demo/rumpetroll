@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 Tencent
-# Author: Joe Lei <joelei@tencent.com>
+# Author: 蓝鲸智云
 """企业号常量设置"""
 
 WECHAT_APPID = 'wxab249edd27d57738'

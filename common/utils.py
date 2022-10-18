@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Tencent
-# Author: Joe Lei <joelei@tencent.com>
+# Author: 蓝鲸智云
 import json
 import logging
 import time

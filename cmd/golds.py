@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 Tencent
-# Author: Joe Lei <joelei@tencent.com>
+# Author: 蓝鲸智云
 """发送金币消息
 """
 import argparse
 import json
 import logging
 import sys
+
 import urllib2
 
 reload(sys)

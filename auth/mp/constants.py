@@ -1,21 +1,25 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Tencent
-# Author: Joe Lei <joelei@tencent.com>
-"""公众号常量
+# Author: 蓝鲸智云
 """
-WECHAT_APPID = 'wx21fc731faa298408'
-WECHAT_APPSECRET = '5adcdca14a2b875eb079a79d464b77f8'
+公众号常量
+"""
+import os
+
+WECHAT_APPID = os.environ.get("WECHAT_APPID")
+WECHAT_APPSECRET = os.environ.get("WECHAT_APPSECRET")
 
 WECHAT_OAUTH_URL = 'https://open.weixin.qq.com/connect/oauth2/authorize'
 
 # 或者微信昵称
 WECHAT_USERINFO_URL = 'https://api.weixin.qq.com/cgi-bin/user/info'
 
-WECHAT_ACCESS_TOKEN_URL = 'http://m.bkclouds.cc/bk_mobile/api/get_token/'
+WECHAT_ACCESS_TOKEN_URL = os.environ.get("WECHAT_ACCESS_TOKEN_URL")
 
 # 蓝鲸接口鉴权
-APP_CODE = 'got_open'
-SECRET_KEY = 't)$c)oDm_P+@6u!d+QTq+(!ZQHRkt<cFUP_SKVl$Hqz.@m,She'
+APP_CODE = os.environ.get("APP_CODE")
+SECRET_KEY = os.environ.get("SECRET_KEY")
+QQ_UIN = os.environ.get("QQ_UIN")
 
 # 使用蓝鲸登录
-BK_MOBILE_LOGIN_URL = 'http://m.bkclouds.cc/bk_mobile/weixin/accounts/login/?next=%s'
+BK_MOBILE_LOGIN_URL = os.environ.get("BK_MOBILE_LOGIN_URL")

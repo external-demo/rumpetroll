@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 Tencent
-# Author: Joe Lei <joelei@tencent.com>
+# Author: 蓝鲸智云
 import logging
 import logging.config
 import os
