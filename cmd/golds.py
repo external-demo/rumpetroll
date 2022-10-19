@@ -6,12 +6,8 @@
 import argparse
 import json
 import logging
-import sys
+import urllib.request as urllib2
 
-import urllib2
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 LOG_FORMAT = '[%(asctime)s] %(levelname)s: %(message)s'
 LOG = logging.getLogger(__name__)

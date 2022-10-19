@@ -112,7 +112,7 @@ class Namespace(object):
     @property
     def clients(self):
         """获取全部clients"""
-        for client_set in self.rooms.itervalues():
+        for client_set in self.rooms.values():  # itervalues():
             for client in client_set:
                 yield client
 

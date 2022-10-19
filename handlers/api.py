@@ -8,7 +8,10 @@ import uuid
 try:
     from cStringIO import StringIO
 except ImportError:
-    from StringIO import StringIO
+    # py3
+    from io import StringIO
+    # py2
+    # from StringIO import StringIO
 
 import tornado.web
 from tornado import gen
