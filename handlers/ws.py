@@ -252,7 +252,7 @@ def send_message_to_clients():
 
 def send_ping_to_clients():
     for client in namespace.clients:
-        client.ping('ping')
+        client.ping(b'ping')
 
 
 def update_node_status():

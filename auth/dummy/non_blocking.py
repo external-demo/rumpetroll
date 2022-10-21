@@ -26,7 +26,7 @@ def get_userid(code, access_token=None, use_cache=True):
 def get_userinfo(user_id, access_token=None, use_cache=True, gender=2):
     """获取用户RTX信息"""
     try:
-        username = base64.b64decode(user_id) or 'Guest'
+        username = str(base64.b64decode(user_id), "utf-8") or 'Guest'
     except Exception as error:
         LOG.error('user_id: %s not base64, %s', user_id, error)
         username = 'Guest'

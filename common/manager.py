@@ -124,7 +124,7 @@ class Namespace(object):
     def get_global_namespaces(self):
         """获取全局namespace"""
         ret = self.redisdb.hgetall(self.RK_NAMESPACE_KEY)
-        return {key: json.loads(value) for key, value in ret.items()}
+        return {str(key, "utf-8"): json.loads(value) for key, value in ret.items()}
 
     def update_stat(self):
         self.stat['online'] = len([i for i in self.clients])
@@ -226,7 +226,7 @@ def smoothness_rand_gold(num, **kwargs):
     """
 
     # 计算每个格子里面多少个豆子
-    num_box = num / settings.DIVISION_OF_MATRIX ** 2
+    num_box = int(num / settings.DIVISION_OF_MATRIX ** 2)
     num_box = [num_box] * settings.DIVISION_OF_MATRIX ** 2
     num_box[-1] += num % settings.DIVISION_OF_MATRIX ** 2
 
