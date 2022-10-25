@@ -11,6 +11,7 @@ handlers = [
     (r"/rumpetroll", main.IndexHandler),
     (r"/rumpetroll/", main.IndexHandler),
     (r"/rumpetroll/login/", main.LoginHandler),
+    (r"/rumpetroll/register/", main.RegisterHandler),
     (r"/rumpetroll/admin/", main.AdminHandler),
     (r"/rumpetroll/rank/", main.RankHandler),
     (r"/rumpetroll/error/", main.ErrorHandler),

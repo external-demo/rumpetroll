@@ -226,7 +226,7 @@ def smoothness_rand_gold(num, **kwargs):
     """
 
     # 计算每个格子里面多少个豆子
-    num_box = int(num / settings.DIVISION_OF_MATRIX ** 2)
+    num_box = num // settings.DIVISION_OF_MATRIX ** 2
     num_box = [num_box] * settings.DIVISION_OF_MATRIX ** 2
     num_box[-1] += num % settings.DIVISION_OF_MATRIX ** 2
 

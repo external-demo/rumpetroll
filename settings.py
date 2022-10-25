@@ -8,10 +8,24 @@ import os.path
 
 import redis
 from dogpile.cache import make_region
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 from tornado.options import define, options
 
-PORT = 20000
+# 组件标识
+MODULE = os.environ.get("MODULE")
 
+PORT = 20000
+USER_SERVER_PORT = 30000
+SERVICE_SERVER_PORT = 40000
+USER_SERVER_HOST = os.environ.get("USER_SERVER_HOST", "127.0.0.1")
+SERVICE_SERVER_HOST = os.environ.get("SERVICE_SERVER_HOST", "127.0.0.1")
+
+if MODULE == "USER_SERVER":
+    PORT = 30000
+elif MODULE == "SERVICE_SERVER":
+    PORT = 40000
 define("port", default=PORT, help="run on the given port", type=int)
 define("address", default="127.0.0.1", help="bind address", type=str)
 options.parse_command_line()
@@ -24,15 +38,13 @@ RUN_MODE = os.environ.get('RUN_MODE', 'DEVELOP')
 # 排名名单忽略列表
 IGNORES_LIST = os.environ.get('IGNORES_LIST', [u'蓝鲸智云', 'Guest', 'guest'])
 
-
 # 单房间最多连接数
 MAX_ROOM_SIZE = int(os.environ.get('MAX_ROOM_SIZE', 3))
 # 单进程最多房间数
-MAX_ROOM = int(os.environ.get('MAX_ROOM', 1))
+MAX_ROOM = int(os.environ.get('MAX_ROOM', 2))
 
 # 单进程最多房间数
 ROOM_CLIENTS = int(os.environ.get('ROOM_CLIENTS', 3))
-
 
 # 豆子分配区域
 MIN_OF_MATRIX = int(os.environ.get('MIN_OF_MATRIX', -1000))
@@ -46,17 +58,14 @@ STATIC_VERSION = os.environ.get('STATIC_VERSION', 11)
 
 BASE_DIR = os.path.dirname(__file__)
 
-
 TOKEN = 'tPp5GwAmMPIrzXhyyA8X'
-DEBUG = False
-
+DEBUG = True
 
 HTTP_PROXY = {}
 
 SITE_URL = '/rumpetroll/'
 STATIC_URL = '/rumpetroll/'
 # 回调URL
-DEBUG = True
 DEFAULT_LOG_LEVEL = 'DEBUG'
 
 # 看网络是否需要代理访问API
@@ -71,8 +80,27 @@ REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
 REDIS_DB = os.environ.get('REDIS_DB', '0')
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
 
+MYSQL_HOSTNAME = os.environ.get("MYSQL_HOSTNAME", '127.0.0.1')
+MYSQL_PORT = os.environ.get("MYSQL_PORT", '3306')
+MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE", 'rumpetroll')
+MYSQL_USERNAME = os.environ.get("MYSQL_USERNAME", 'root')
+MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", '123456')
+
+# 数据连接 URL
+DB_URI = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(
+    MYSQL_USERNAME,
+    MYSQL_PASSWORD,
+    MYSQL_HOSTNAME,
+    MYSQL_DATABASE,
+)
+
 pool = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, password=REDIS_PASSWORD)
 rd = redis.Redis(connection_pool=pool)
+
+engine = create_engine(DB_URI)
+Base = declarative_base(engine)
+Session = sessionmaker(engine)
+session = Session()
 
 NAMESPACE_NAME = '{}:{}'.format(options.address, options.port)
 

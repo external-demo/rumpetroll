@@ -4,11 +4,10 @@
 import base64
 import json
 import logging
-
+import settings
 import tornado.web
 from tornado import gen
-
-import settings
+from httpx import post
 from auth import non_blocking as wx_client
 from auth import utils as wx_utils
 from handlers.utils import authenticated, get_rank, is_started
@@ -18,6 +17,14 @@ LOG = logging.getLogger(__name__)
 
 def get_login_url(request):
     return 'http://%s/rumpetroll/login/' % request.host
+
+
+def get_register_server_url():
+    return "http://{host}:{port}/register".format(host=settings.USER_SERVER_HOST, port=settings.USER_SERVER_PORT)
+
+
+def get_login_server_url():
+    return "http://{host}:{port}/login".format(host=settings.USER_SERVER_HOST, port=settings.USER_SERVER_PORT)
 
 
 def get_websocket_url(request):
@@ -35,9 +42,11 @@ class IndexHandler(tornado.web.RequestHandler):
         is_token = 0
         if token == settings.TOKEN:
             openid = self.get_argument('openid', 'is__superuser')
+            openpwd = self.get_argument('openid', 'is__superuser')
             gender = self.get_argument('gender', '1')
             is_token = 1
             self.set_cookie('openid', openid)
+            self.set_cookie('openpwd', openpwd)
             self.set_cookie('gender', gender)
 
         elif openid == '':
@@ -100,6 +109,42 @@ class LoginHandlerWX(tornado.web.RequestHandler):
         raise gen.Return()
 
 
+class RegisterHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    @is_started
+    def get(self):
+        ctx = {
+            'static_url': settings.STATIC_URL,
+            'message': "用户名已被使用",
+            'version': settings.STATIC_VERSION,
+            'SETTINGS': settings,
+        }
+        self.render("register.html", **ctx)
+
+    def post(self):
+        location = 'http://%s/rumpetroll/' % self.request.host
+        register_location = 'http://{}/rumpetroll/register/'.format(self.request.host)
+
+        username = self.get_argument('username')
+        gender = self.get_argument('gender')
+        password = self.get_argument("password")
+
+        if username and (len(username) >= 1) and (gender in ['1', '2']) and password and (len(password) >= 3):
+            register_res = self.register({
+                "username": username, "password": password,
+                "gender": gender
+            })
+            if not register_res.get("status", False):
+                location = register_location
+        else:
+            location = register_location
+        self.redirect(location)
+
+    def register(self, data):
+        rep_data = post(url=get_register_server_url(), json=data, verify=False)
+        return rep_data.json()
+
+
 class LoginHandler(tornado.web.RequestHandler):
     @gen.coroutine
     @is_started
@@ -107,7 +152,7 @@ class LoginHandler(tornado.web.RequestHandler):
         # 已经验证用户先登出，再跳转
         self.clear_cookie('openid')
         self.clear_cookie('gender')
-
+        self.clear_cookie('openpwd')
         ctx = {
             'static_url': settings.STATIC_URL,
             'message': u"登录已经失效，请刷新后重试！",
@@ -121,17 +166,32 @@ class LoginHandler(tornado.web.RequestHandler):
         location = self.get_argument('next', '').strip()
         if not location:
             location = 'http://%s/rumpetroll/' % self.request.host
+        login_location = '{}?next=http://{}/rumpetroll/'.format(get_login_url(self.request), self.request.host)
 
         username = self.get_argument('username')
         gender = self.get_argument('gender')
-        if username and len(username) >= 1 and gender in ['1', '2']:
-            username = base64.b64encode(username.encode('utf-8'))
-            self.set_cookie('openid', username)
+        password = self.get_argument("password")
+
+        if username and (len(username) >= 1) and (gender in ['1', '2']) and password and (len(password) >= 3):
+            openid = base64.b64encode(username.encode('utf-8'))
+            openpwd = base64.b64encode(password.encode('utf-8'))
+            self.set_cookie('openid', openid)
+            self.set_cookie('openpwd', openpwd)
             self.set_cookie('gender', gender)
+            login_res = self.login({
+                "username": username, "password": password,
+                "gender": gender
+            })
+            if not login_res.get("status", False):
+                location = login_location
         else:
-            location = '{}?next=http://{}/rumpetroll/'.format(get_login_url(self.request), self.request.host)
+            location = login_location
 
         self.redirect(location)
+
+    def login(self, data):
+        req_data = post(url=get_login_server_url(), json=data, verify=False)
+        return req_data.json()
 
 
 class AdminHandler(tornado.web.RequestHandler):
@@ -142,6 +202,7 @@ class AdminHandler(tornado.web.RequestHandler):
             'token': self.get_argument('token', ''),
             'host': self.request.host,
             'version': settings.STATIC_VERSION,
+            'SETTINGS': settings
         }
         self.render("admin.html", **ctx)
 
@@ -159,7 +220,7 @@ class RankHandler(tornado.web.RequestHandler):
                 continue
             i.update(user_info[i['name']])
 
-        ctx = {'data': data, 'version': settings.STATIC_VERSION, 'static_url': settings.STATIC_URL}
+        ctx = {'data': data, 'version': settings.STATIC_VERSION, 'static_url': settings.STATIC_URL, 'SETTINGS': settings}
         self.render("ranger4.html", **ctx)
 
 

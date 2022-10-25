@@ -8,7 +8,7 @@ os.environ['HOST'] = 'm.bkclouds.cc'
 os.environ['RUN_MODE'] = 'PROD'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BASE_DIR = '/data/home/bk/Pyrumpetroll/rumpetroll/'
+# BASE_DIR = '/data/home/bk/Pyrumpetroll/rumpetroll/'
 print(BASE_DIR)
 
 if BASE_DIR not in sys.path:
