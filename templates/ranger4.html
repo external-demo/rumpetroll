@@ -3,34 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>游戏排名 | {{ SETTINGS.TITLE }}</title>
-    <link rel="stylesheet" href="{{ static_url }}static/css/error.css?v={{version}}">
-    <link rel="stylesheet" href="{{ static_url }}static/css/ranger3.css?v={{version}}">
+    <link rel="stylesheet" href="{{ static_url }}static/css/error.css?v={{ version }}">
+    <link rel="stylesheet" href="{{ static_url }}static/css/ranger3.css?v={{ version }}">
 </head>
 <body class="game-index-wrapper">
 <div>
-
-<table class="game-ranger-table game-index-wrapper">
-    <thead>
-    <tr>
-        <th>排名</th>
-        <th>用户名</th>
-        <th class="game-score">金币数</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    {{ data }}
-    {% for d in data %}
-    <ol>
+    <table align="center" style="height: 652px; width: 572px; border: 1px #b2dba1 solid; text-align: center; color: white">
+        <thead style="font-size: larger; height: 60px">
         <tr>
-            <td>{{ d.get('sank', '-') }}</td>
+            <th style="width: 20%">排名</th>
+            <th style="width: 50%">用户名</th>
+            <th style="width: 40%">金币数</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for i, d in enumerate(data) %}
+        <tr style="height: 60px;">
+            <td style="background: url(../static/images/num{{ i+1 }}.png) no-repeat center center;">
+                {% if i > 2 %}
+                {{ d.get('sank', '-') }}
+                {% end %}
+            </td>
             <td>{{ d.get('name', '-') }}</td>
             <td>{{ d.get('golds', '-') }}</td>
         </tr>
-    </ol>
-    {% end %}
-    </tbody>
-</table>
+        {% end %}
+        </tbody>
+    </table>
 </div>
 </body>
 </html>

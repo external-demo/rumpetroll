@@ -140,9 +140,12 @@ class RegisterHandler(tornado.web.RequestHandler):
             location = register_location
         self.redirect(location)
 
-    def register(self, data):
-        rep_data = post(url=get_register_server_url(), json=data, verify=False)
-        return rep_data.json()
+    def register(self, data: dict) -> dict:
+        try:
+            rep_data = post(url=get_register_server_url(), json=data, verify=False, timeout=10)
+            return rep_data.json()
+        except:
+            return {}
 
 
 class LoginHandler(tornado.web.RequestHandler):
@@ -166,7 +169,6 @@ class LoginHandler(tornado.web.RequestHandler):
         location = self.get_argument('next', '').strip()
         if not location:
             location = 'http://%s/rumpetroll/' % self.request.host
-        login_location = '{}?next=http://{}/rumpetroll/'.format(get_login_url(self.request), self.request.host)
 
         username = self.get_argument('username')
         gender = self.get_argument('gender')
@@ -183,15 +185,18 @@ class LoginHandler(tornado.web.RequestHandler):
                 "gender": gender
             })
             if not login_res.get("status", False):
-                location = login_location
+                location = "http://%s/rumpetroll/error/?type=server_error&token=%s" % (self.request.host, settings.TOKEN)
         else:
-            location = login_location
+            location = '{}?next=http://{}/rumpetroll/'.format(get_login_url(self.request), self.request.host)
 
         self.redirect(location)
 
-    def login(self, data):
-        req_data = post(url=get_login_server_url(), json=data, verify=False)
-        return req_data.json()
+    def login(self, data: dict) -> dict:
+        try:
+            req_data = post(url=get_login_server_url(), json=data, verify=False, timeout=10)
+            return req_data.json()
+        except:
+            return {}
 
 
 class AdminHandler(tornado.web.RequestHandler):
@@ -219,7 +224,6 @@ class RankHandler(tornado.web.RequestHandler):
                 LOG.warning('user[%s] not in user_info %s, has been ignore', i['name'], user_info)
                 continue
             i.update(user_info[i['name']])
-
         ctx = {'data': data, 'version': settings.STATIC_VERSION, 'static_url': settings.STATIC_URL, 'SETTINGS': settings}
         self.render("ranger4.html", **ctx)
 
@@ -227,9 +231,16 @@ class RankHandler(tornado.web.RequestHandler):
 class ErrorHandler(tornado.web.RequestHandler):
     @authenticated
     def get(self):
+        message1, message2, button, url = u'场面太火爆', u'游戏服务器人员已满，请稍后重试！', u'我挤', '/rumpetroll/'
+        tps = self.request.arguments.get("type", [])
+        if tps and "server_error" == str(tps[0], 'utf-8'):
+            message1, message2, button, url = u"服务器错误！", u"当前游戏服务出现问题，无法游玩。", u'重新登录', get_login_url(self.request)
         ctx = {
             'static_url': settings.STATIC_URL,
-            'message': u'游戏服务器人员已满，请稍后重试！',
+            'message1': message1,
+            'message2': message2,
+            'button': button,
+            'url': url,
             'version': settings.STATIC_VERSION,
             'SETTINGS': settings,
         }
