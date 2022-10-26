@@ -117,9 +117,11 @@ var App = function(aSettings, aCanvas) {
 		setTimeout(function(){
 			hotcss.initView();
 			$('#chat_box').hide();
-			$('#dav_error').show()
+			$('#timer_wrapper').hide();
+			$('#game_over').hide();
+			$('#dav_error').show();
 		},2500);
-		
+
 	};
 
 	app.reconnect = function(){

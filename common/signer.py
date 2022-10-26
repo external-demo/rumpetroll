@@ -10,10 +10,9 @@ import random
 import socket
 import time
 from functools import wraps
-from urllib import urlencode
 
-import urlparse
-from urllib2 import urlopen
+from urllib.parse import urlparse, urlencode
+from urllib.request import urlopen
 
 LOG = logging.getLogger(__name__)
 
@@ -28,7 +27,7 @@ def signer(_func):
         secret_key = os.environ.get('SECRET_KEY', '')
 
         # 生成签名参数
-        _request = urlparse.urlparse(url)
+        _request = urlparse(url)
         query = dict(urlparse.parse_qsl(_request.query))
         query['Nonce'] = random.randint(100000, 999999)
         query['Timestamp'] = int(time.time())
@@ -60,7 +59,7 @@ signed_urlopen = signer(urlopen)
 
 def get_signed_url(url, app_code, secret_key, params={}, data=None):
     """获取签名URL"""
-    _request = urlparse.urlparse(url)
+    _request = urlparse(url)
     query = dict(urlparse.parse_qsl(_request.query))
     query['Nonce'] = random.randint(100000, 999999)
     query['Timestamp'] = int(time.time())

@@ -26,6 +26,7 @@ handlers = [
     (r"/rumpetroll/api/stat/", api.GetStatHandler),
     (r"/rumpetroll/api/user/", api.GetUserHandler),
     (r"/rumpetroll/api/gold/", api.GoldsHandler),
+    (r"/rumpetroll/api/rank/", api.RankDataHandler),
     (r"/rumpetroll/api/export/", api.ExportHandler),
     (r"/rumpetroll/api/func_controller/", api.FunctionController),
     (r"/rumpetroll/api/clean/", api.CleanHandler),

@@ -22,8 +22,7 @@ from common import export, utils_func
 from common.manager import namespace
 from common.retrying import Retrying
 from handlers import utils as handler_utils
-from handlers.utils import authenticated
-
+from handlers.utils import authenticated, get_rank
 LOG = logging.getLogger(__name__)
 
 
@@ -152,6 +151,21 @@ class GetUserHandler(APIHandler):
         except Exception as error:
             result = {'result': False, 'message': '%s' % error, 'data': None}
             self.json_response(result)
+
+
+class RankDataHandler(APIHandler):
+    @gen.coroutine
+    @authenticated
+    def get(self):
+        info = settings.rd.hgetall('WEIXIN_OPEN_INFO')
+        user_info = {key: json.loads(value) for key, value in info.items()}
+        data = get_rank(-1)
+        for i in data:
+            if i['name'] not in user_info:
+                LOG.warning('user[%s] not in user_info %s, has been ignore', i['name'], user_info)
+                continue
+            i.update(user_info[i['name']])
+        self.json_response(data)
 
 
 class GoldsHandler(APIHandler):

@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>游戏排名 | {{ SETTINGS.TITLE }}</title>
-    <link rel="stylesheet" href="{{ static_url }}static/css/error.css?v={{ version }}">
     <link rel="stylesheet" href="{{ static_url }}static/css/ranger3.css?v={{ version }}">
 </head>
 <body class="game-index-wrapper">
+<div style="line-height: 100px; color: #ffbb04">
+    <img src="{{ static_url }}static/images/ranger_header.png?v={{version}}" alt="游戏结束，排名名单">
+</div>
 <div>
-    <table align="center" style="height: 652px; width: 572px; border: 1px #b2dba1 solid; text-align: center; color: white">
+    <table align="center" style="width: 572px; border: 1px #b2dba1 solid; text-align: center; color: white">
         <thead style="font-size: larger; height: 60px">
         <tr>
             <th style="width: 20%">排名</th>
@@ -32,5 +34,15 @@
         </tbody>
     </table>
 </div>
+
+<div>
+    <a href="/rumpetroll/" style="">
+        <button style="border: 0;width: 200px;margin-top: 30px; color: #493c1e; background-color: #d5bd84;line-height: 2.56rem;
+        font-size: 0.896rem; font-weight: bold;">
+            重新进入游戏
+        </button>
+    </a>
+</div>
+
 </body>
 </html>
