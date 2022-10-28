@@ -1,3 +1,5 @@
+import json
+
 from pbkdf2 import crypt
 from settings import Base
 from datetime import datetime
@@ -41,6 +43,22 @@ class Users(Base):
         else:
             return False
 
+    # @property
+    # def serialize(self):
+    #     return self.to_json(self, self.__class__)
+    #
+    # def to_json(self, inst, cls):
+    #     d = dict()
+    #     for c in cls.__table__.columns:
+    #         v = getattr(inst, c.name)
+    #         d[c.name] = v
+    #     return json.dumps(d)
+
+    # def to_json(self, inst, cls):
+    #     dict = self.__dict__
+    #     if "_sa_instalce_state" in dict:
+    #         del dict["_sa_instalce_state"]
+    #     return dict
 
 class UserGolds(Base):
     """蝌蚪每局吃的金币数排名"""

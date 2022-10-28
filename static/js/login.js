@@ -1,8 +1,8 @@
 /*
-* @Author: anchen
-* @Date:   2017-07-20 18:17:32
-* @Last Modified by:   anchen
-* @Last Modified time: 2017-07-20 18:22:55
+* @Author:
+* @Date:
+* @Last Modified by:
+* @Last Modified time:
 */
 
 $(document).ready(function(){

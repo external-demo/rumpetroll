@@ -7,7 +7,6 @@ import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 from tornado.options import options
-
 import settings
 from common.manager import namespace
 from handlers.ws import (
@@ -16,6 +15,7 @@ from handlers.ws import (
     update_node_status,
 )
 from urls import handlers
+
 
 LOG = logging.getLogger(__name__)
 

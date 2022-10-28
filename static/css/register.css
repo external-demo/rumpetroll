@@ -36,7 +36,7 @@ body {
 
 header {
   margin-top: 1.30933rem;
-  height: 2.60267rem;
+  height: 1rem;
   background-image: url(../images/title.png);
   background-size: contain;
   background-repeat: no-repeat;
@@ -56,33 +56,46 @@ header {
   white-space: nowrap; }
 
 #nickname {
-  height: 2rem;
-  width: 14.89067rem;
+  height: 1.5rem;
+  width: 13.89067rem;
   margin: 1rem 0.55467rem 1rem 0.55467rem;
   border: none;
   background-image: url(../images/nickname.png);
   background-size: contain;
   background-color: #000;
-  font-size: 1rem;
+  font-size: 0.4rem;
   color: #ceb478;
   text-align: center;
   font-weight: bold; }
 
-#pwd {
-  height: 2rem;
-  width: 14.89067rem;
-  margin: 0.5rem 0.55467rem 1.5rem 0.55467rem;
+#pwd{
+  height: 1.5rem;
+  width: 13.89067rem;
+  margin: 0.5rem 0.55467rem 1rem 0.55467rem;
   border: none;
   background-image: url(../images/nickname.png);
   background-size: contain;
   background-color: #000;
-  font-size: 1rem;
+  font-size:  0.5rem;
+  color: #ceb478;
+  text-align: center;
+  font-weight: bold; }
+
+#pwd2{
+  height: 1.5rem;
+  width: 13.89067rem;
+  margin: 0.5rem 0.55467rem 1rem 0.55467rem;
+  border: none;
+  background-image: url(../images/nickname.png);
+  background-size: contain;
+  background-color: #000;
+  font-size:  0.5rem;
   color: #ceb478;
   text-align: center;
   font-weight: bold; }
 
 input::-webkit-input-placeholder {
-  font-size: 1.024rem;
+  font-size: 0.7rem;
   color: #ceb478;
   text-align: center;
   font-weight: bold;
@@ -90,17 +103,17 @@ input::-webkit-input-placeholder {
 
 .sex {
   width: 12.8rem;
-  height: 1.664rem;
+  height: 1.5rem;
   display: flex;
   justify-content: space-around;
   margin: 0 1.6rem; }
   .sex .btn {
     color: #362e1e;
-    font-size: 0.896rem;
+    font-size: 0.5rem;
     font-weight: bold;
-    height: 1.70667rem;
+    height: 1.5rem;
     width: 5.76rem;
-    line-height: 1.70667rem;
+    line-height: 1.50667rem;
     text-align: center;
     border: 0.04267rem solid #362e1e;
     border-radius: 1.06667rem;
@@ -108,12 +121,12 @@ input::-webkit-input-placeholder {
     .sex .btn::before {
       content: '';
       display: inline-block;
-      width: 0.768rem;
-      height: 0.768rem;
+      width: 0.568rem;
+      height: 0.568rem;
       background-image: url(../images/icon.png);
       background-size: contain;
       position: absolute;
-      left: 0.64rem;
+      left: 0.74rem;
       top: 0.42667rem; }
     .sex .btn.act {
       color: #ceb478;
@@ -121,7 +134,7 @@ input::-webkit-input-placeholder {
       .sex .btn.act::before {
         background-image: url(../images/act-icon.png); }
 
-.login {
+.register {
   width: 12.8rem;
   height: 2.13333rem;
   margin: 1.13333rem 2.13333rem 1rem 1.6rem;

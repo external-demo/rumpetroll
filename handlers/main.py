@@ -19,6 +19,10 @@ def get_login_url(request):
     return 'http://%s/rumpetroll/login/' % request.host
 
 
+def get_register_url(request):
+    return 'http://%s/rumpetroll/register/' % request.host
+
+
 def get_register_server_url():
     return "http://{host}:{port}/register".format(host=settings.USER_SERVER_HOST, port=settings.USER_SERVER_PORT)
 
@@ -115,7 +119,6 @@ class RegisterHandler(tornado.web.RequestHandler):
     def get(self):
         ctx = {
             'static_url': settings.STATIC_URL,
-            'message': "用户名已被使用",
             'version': settings.STATIC_VERSION,
             'SETTINGS': settings,
         }
@@ -124,25 +127,32 @@ class RegisterHandler(tornado.web.RequestHandler):
     def post(self):
         location = 'http://%s/rumpetroll/' % self.request.host
         register_location = 'http://{}/rumpetroll/register/'.format(self.request.host)
+        error_location = "http://{0}/rumpetroll/error/".format(self.request.host)
 
         username = self.get_argument('username')
         gender = self.get_argument('gender')
         password = self.get_argument("password")
+        password2 = self.get_argument("password2")
 
         if username and (len(username) >= 1) and (gender in ['1', '2']) and password and (len(password) >= 3):
-            register_res = self.register({
-                "username": username, "password": password,
-                "gender": gender
-            })
-            if not register_res.get("status", False):
-                location = register_location
+            if password != password2:
+                location = error_location + "?type=secondpwd_notexists&token={0}".format(settings.TOKEN)
+            else:
+                register_res = self.register({
+                    "username": username, "password": password,
+                    "gender": gender
+                })
+                if not register_res:
+                    location = error_location + "?type=register_server_error&token={0}".format(settings.TOKEN)
+                elif not register_res.get("status", False):
+                    location = error_location + "?type=register_error&token={0}".format(settings.TOKEN)
         else:
             location = register_location
         self.redirect(location)
 
     def register(self, data: dict) -> dict:
         try:
-            rep_data = post(url=get_register_server_url(), json=data, verify=False, timeout=10)
+            rep_data = post(url=get_register_server_url(), json=data, verify=False, timeout=30)
             return rep_data.json()
         except:
             return {}
@@ -175,17 +185,20 @@ class LoginHandler(tornado.web.RequestHandler):
         password = self.get_argument("password")
 
         if username and (len(username) >= 1) and (gender in ['1', '2']) and password and (len(password) >= 3):
-            openid = base64.b64encode(username.encode('utf-8'))
-            openpwd = base64.b64encode(password.encode('utf-8'))
-            self.set_cookie('openid', openid)
-            self.set_cookie('openpwd', openpwd)
-            self.set_cookie('gender', gender)
             login_res = self.login({
                 "username": username, "password": password,
                 "gender": gender
             })
-            if not login_res.get("status", False):
-                location = "http://%s/rumpetroll/error/?type=server_error&token=%s" % (self.request.host, settings.TOKEN)
+            if not login_res:
+                location = "http://{0}/rumpetroll/error/?type=server_error&token={1}".format(self.request.host, settings.TOKEN)
+            elif not login_res.get("status", False):
+                location = "http://{0}/rumpetroll/error/?type=login_error&token={1}".format(self.request.host, settings.TOKEN)
+            else:
+                openid = base64.b64encode(username.encode('utf-8'))
+                openpwd = base64.b64encode(password.encode('utf-8'))
+                self.set_cookie('openid', openid)
+                self.set_cookie('openpwd', openpwd)
+                self.set_cookie('gender', login_res.get("gender", gender))
         else:
             location = '{}?next=http://{}/rumpetroll/'.format(get_login_url(self.request), self.request.host)
 
@@ -193,7 +206,7 @@ class LoginHandler(tornado.web.RequestHandler):
 
     def login(self, data: dict) -> dict:
         try:
-            req_data = post(url=get_login_server_url(), json=data, verify=False, timeout=10)
+            req_data = post(url=get_login_server_url(), json=data, verify=False, timeout=60)
             return req_data.json()
         except:
             return {}
@@ -232,9 +245,20 @@ class ErrorHandler(tornado.web.RequestHandler):
     @authenticated
     def get(self):
         message1, message2, button, url = u'场面太火爆', u'游戏服务器人员已满，请稍后重试！', u'我挤', '/rumpetroll/'
-        tps = self.request.arguments.get("type", [])
-        if tps and "server_error" == str(tps[0], 'utf-8'):
-            message1, message2, button, url = u"服务器错误！", u"当前游戏服务出现问题，无法游玩。", u'重新登录', get_login_url(self.request)
+        tps = self.get_query_argument("type", "")
+        if tps:
+            if "login_error" == tps:
+                message1, message2, button, url = u"登录错误！", u'无当前用户名或用户密码错误。', u'重新登录', get_login_url(self.request)
+            elif "server_error" == tps:
+                message1, message2, button, url = u"登录服务错误！", u"当前游戏服务出现问题，无法登录。", u'重新登录', get_login_url(self.request)
+            elif "register_server_error" == tps:
+                message1, message2, button, url = u"注册服务错误！", u"当前游戏服务出现问题，无法注册。", u'重新注册', get_register_url(self.request)
+            elif "register_error" == tps:
+                message1, message2, button, url = u"注册错误！", u'用户名已被注册不可用。', u'重新注册', get_register_url(self.request)
+            elif "secondpwd_notexists" == tps:
+                message1, message2, button, url = u"注册错误！", u'两次输入的密码不一致。', u'重新注册', get_register_url(self.request)
+            elif "inuse_username" == tps:
+                message1, message2, button, url = u"注册错误！", u"用户名已被注册，可直接登录。", u'重新登录', get_login_url(self.request)
         ctx = {
             'static_url': settings.STATIC_URL,
             'message1': message1,

@@ -13,7 +13,6 @@ class LoginHandler(RequestHandler):
         pass
 
     def post(self):
-        state, result = True, "登录成功"
         req_data = json.loads(self.request.body)
         username = req_data.get("username", "")
         password = req_data.get("password", "")
@@ -23,10 +22,8 @@ class LoginHandler(RequestHandler):
                 self.set_secure_cookie("username", username)
                 self.set_secure_cookie("password", password)
                 self.set_secure_cookie("rememberme", "T")
-            state, res = self.loginUser(username, password)
-            if not state:
-                result = res
-            else:
+            state, result = self.loginUser(username, password)
+            if state:
                 self.set_secure_cookie("currentuser", username)
         else:
             state = False
@@ -38,7 +35,7 @@ class LoginHandler(RequestHandler):
         if not exists_username:
             return False, "不存在当前用户名"
         elif exists_username.auth_password(pwd=password):
-            return True, "ok"
+            return True, {"username": exists_username.username, "gender": exists_username.gender}
         else:
             return False, "密码错误"
 
@@ -66,7 +63,11 @@ class RegisterHandler(RequestHandler):
 
     def createUser(self, username, password, gender):
         try:
-            if session.query(Users.username == username).count():
+            r1 = session.query(Users.username == username).count()
+            r2 = session.query(Users.username == username).first()  # 返回值：(False, )   则 .count() 值为1
+            # r3 = session.query(Users.username == username).one() # 返回值：(False, )
+            user_count = list(session.query(Users).filter(Users.username == username))
+            if user_count:
                 return False, 'Name is registered'
             user = Users()
             user.username = username

@@ -1,12 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8" name="hotcss" content="initial-dpr=1, max-width=750">
+    <script src="{{ static_url }}static/js/libs/hotcss.js?v={{ version }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ static_url }}static/css/register.css?v={{ version }}"/>
     <title>用户注册 | {{ SETTINGS.TITLE }}</title>
 </head>
+
 <body>
-{{ static_url }}
-{{ message }}
-{{ version }}
+<p style="color: white; font-weight: bold; font-size: 1.3rem; text-align: center; margin-top: 1rem">GAMES REGISTER</p>
+<form class="form-horizontal" method="POST" action="">
+    <p class="tip" style="display:none" id="tips"></p>
+    <input type="text" placeholder="ENTER YOUR ID" id="nickname" name="username" title="请输入用户名"/>
+    <input type="password" placeholder="ENTER PASSWORD" id="pwd" name="password" title="请输入密码"/>
+    <input type="password" placeholder="ENTER PASSWORD AGAIN" id="pwd2" name="password2" title="请再次输入密码" style=""/>
+    <input type="text" name="gender" id="gender" value="1" style="display: none">
+    <div class="sex">
+        <div class="btn act" value="1">BOY</div>
+        <div class="btn" value="2">GIRL</div>
+    </div>
+    <div class="register disabled" id="register"></div>
+    <div style="color: white; font-size: 30px; float: right; margin-right: 2rem" title="用户登录"><a href="/rumpetroll/">LOGIN</a></div>
+</form>
+<script type="text/javascript" src="{{ static_url }}static/js/libs/jquery-2.0.0.min.js?v={{ version }}"></script>
+<script type="text/javascript" src="{{ static_url }}static/js/register.js?v={{ version }}"></script>
 </body>
 </html>
