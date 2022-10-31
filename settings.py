@@ -52,14 +52,14 @@ MAX_OF_MATRIX = int(os.environ.get('MAX_OF_MATRIX', 1000))
 DIVISION_OF_MATRIX = int(os.environ.get('DIVISION_OF_MATRIX', 4))
 
 # 豆子持续时间
-OVERTIME = int(os.environ.get('OVERTIME', 60))
+OVERTIME = int(os.environ.get('OVERTIME', 60 * 5))
 
 STATIC_VERSION = os.environ.get('STATIC_VERSION', 11)
 
 BASE_DIR = os.path.dirname(__file__)
 
 TOKEN = 'tPp5GwAmMPIrzXhyyA8X'
-DEBUG = True
+DEBUG = False
 
 HTTP_PROXY = {}
 
