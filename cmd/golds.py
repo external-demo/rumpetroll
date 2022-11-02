@@ -39,8 +39,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=u'发放蝌蚪金币（admin）')
     parser.add_argument('-v', action='store_true', help='verbose mode')
     parser.add_argument('--host', default='http://m.bk.tencent.com', help='rumpetroll host')
-    parser.add_argument('--token', required=True, help='rumpetroll token')
-    parser.add_argument('--add-golds', metavar='num', type=int, required=True, help=u"添加金币数")
+    parser.add_argument('--token', default="tPp5GwAmMPIrzXhyyA8X", required=True, help='rumpetroll token')
+    parser.add_argument('--add-golds', default=500, metavar='num', type=int, required=True, help=u"添加金币数")
 
     args = parser.parse_args()
     _setup_logging(args.v)
