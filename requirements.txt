@@ -1,4 +1,4 @@
-tornado==6.1
+tornado==4.0
 supervisor==4.2.4
 requests==2.10.0
 redis==2.10.5
