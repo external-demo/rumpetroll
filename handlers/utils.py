@@ -106,7 +106,7 @@ def add_golds_client_loop(num, test=False):
 def add_golds_client(num, test=False):
     _namespaces = namespace.get_global_namespaces()
     for node in _namespaces:
-        url = 'ws://%s/rumpetroll/socket.io/?messager=1&room=1' % node
+        url = '%s://%s/rumpetroll/socket.io/?messager=1&room=1' % (settings.WSS, node)
         LOG.debug('send add golds message to %s', url)
         conn = yield websocket_connect(url)
         message = {'type': 'addGold', 'num': num, 'token': settings.TOKEN, 'test': test}
@@ -118,8 +118,9 @@ def add_golds_client(num, test=False):
 @gen.coroutine
 def clean_golds_client():
     """清除豆子"""
-    for node in settings.NODE_HOSTS:
-        url = 'ws://{}/rumpetroll/{}/ws?messager=1'.format(settings.HOST, node['url'].split(':')[-1])
+    _namespaces = namespace.get_global_namespaces()
+    for node in _namespaces:
+        url = '{0}://{1}/rumpetroll/{2}/ws?messager=1'.format(settings.WSS, settings.HOST, node['url'].split(':')[-1])
         LOG.debug('send clean golds message to %s', url)
         conn = yield websocket_connect(url)
         message = {'type': 'cleanGold', 'token': settings.TOKEN}

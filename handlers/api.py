@@ -300,8 +300,9 @@ class GetEndpointHandler(APIHandler):
             'room': room,
             'sid': sid,
             'cid': cid,
+            'ws': settings.WSS
         }
-        ws_url = 'ws://{HOST}/rumpetroll/socket.io/{server_id}/{port}/?room={room}&sid={sid}&cid={cid}'.format(**ctx)
+        ws_url = '{ws}://{HOST}/rumpetroll/socket.io/{server_id}/{port}/?room={room}&sid={sid}&cid={cid}'.format(**ctx)
         return ws_url
 
 

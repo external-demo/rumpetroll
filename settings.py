@@ -52,7 +52,7 @@ MAX_OF_MATRIX = int(os.environ.get('MAX_OF_MATRIX', 1000))
 DIVISION_OF_MATRIX = int(os.environ.get('DIVISION_OF_MATRIX', 4))
 
 # 豆子持续时间
-OVERTIME = int(os.environ.get('OVERTIME', 60 * 5))
+OVERTIME = int(os.environ.get('OVERTIME', 60))
 
 STATIC_VERSION = os.environ.get('STATIC_VERSION', 11)
 
@@ -60,6 +60,8 @@ BASE_DIR = os.path.dirname(__file__)
 
 TOKEN = 'tPp5GwAmMPIrzXhyyA8X'
 DEBUG = False
+WSS = "ws"
+HOST = "127.0.0.1"
 
 HTTP_PROXY = {}
 
@@ -75,7 +77,7 @@ DEFAULT_LOG_LEVEL = 'DEBUG'
 # }
 
 LOG_FILE = os.environ.get('LOG_FILE', '/tmp/rumpetroll.log')
-REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
+REDIS_HOST = os.environ.get('REDIS_HOST', '127.0.0.1')
 REDIS_PORT = os.environ.get('REDIS_PORT', '6379')
 REDIS_DB = os.environ.get('REDIS_DB', '0')
 REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD', '')
@@ -84,7 +86,7 @@ MYSQL_HOSTNAME = os.environ.get("MYSQL_HOSTNAME", '127.0.0.1')
 MYSQL_PORT = os.environ.get("MYSQL_PORT", '3306')
 MYSQL_DATABASE = os.environ.get("MYSQL_DATABASE", 'rumpetroll')
 MYSQL_USERNAME = os.environ.get("MYSQL_USERNAME", 'root')
-MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", '123456')
+MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", '')
 
 # 数据连接 URL
 DB_URI = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(

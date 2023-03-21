@@ -24,15 +24,15 @@ def get_register_url(request):
 
 
 def get_register_server_url():
-    return "http://{host}:{port}/register".format(host=settings.USER_SERVER_HOST, port=settings.USER_SERVER_PORT)
+    return "http://{host}:{port}/register".format(host=settings.USER_SERVER_HOST, port=settings.PORT)
 
 
 def get_login_server_url():
-    return "http://{host}:{port}/login".format(host=settings.USER_SERVER_HOST, port=settings.USER_SERVER_PORT)
+    return "http://{host}:{port}/login".format(host=settings.USER_SERVER_HOST, port=settings.PORT)
 
 
 def get_websocket_url(request):
-    return 'ws://%s/rumpetroll/socket.io/' % request.host
+    return '%s://%s/rumpetroll/socket.io/' % (settings.WSS, request.host)
 
 
 class IndexHandler(tornado.web.RequestHandler):

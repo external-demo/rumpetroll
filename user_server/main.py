@@ -1,6 +1,5 @@
 # user login and register model
 import os
-os.environ["MODULE"] = "USER_SERVER"
 import logging
 import tornado.ioloop as ioloop
 import tornado.httpserver as httpserver
