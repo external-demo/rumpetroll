@@ -24,7 +24,7 @@ $(document).ready(function(){
 
     //click login
     $('.login').on('click',function(){
-        if($('#nickname').val().length > 0 && $('#pwd').val().length > 0 && $('#gender').val() != ''){
+        if($('#nickname').val().length > 0 && $('#gender').val() != ''){
             $('form').submit()
         }
     });

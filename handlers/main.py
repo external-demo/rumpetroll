@@ -46,11 +46,9 @@ class IndexHandler(tornado.web.RequestHandler):
         is_token = 0
         if token == settings.TOKEN:
             openid = self.get_argument('openid', 'is__superuser')
-            openpwd = self.get_argument('openid', 'is__superuser')
             gender = self.get_argument('gender', '1')
             is_token = 1
             self.set_cookie('openid', openid)
-            self.set_cookie('openpwd', openpwd)
             self.set_cookie('gender', gender)
 
         elif openid == '':
@@ -131,21 +129,16 @@ class RegisterHandler(tornado.web.RequestHandler):
 
         username = self.get_argument('username')
         gender = self.get_argument('gender')
-        password = self.get_argument("password")
-        password2 = self.get_argument("password2")
 
-        if username and (len(username) >= 1) and (gender in ['1', '2']) and password and (len(password) >= 3):
-            if password != password2:
-                location = error_location + "?type=secondpwd_notexists&token={0}".format(settings.TOKEN)
-            else:
-                register_res = self.register({
-                    "username": username, "password": password,
-                    "gender": gender
-                })
-                if not register_res:
-                    location = error_location + "?type=register_server_error&token={0}".format(settings.TOKEN)
-                elif not register_res.get("status", False):
-                    location = error_location + "?type=register_error&token={0}".format(settings.TOKEN)
+        if username and (len(username) >= 1) and (gender in ['1', '2']):
+            register_res = self.register({
+                "username": username,
+                "gender": gender
+            })
+            if not register_res:
+                location = error_location + "?type=register_server_error&token={0}".format(settings.TOKEN)
+            elif not register_res.get("status", False):
+                location = error_location + "?type=register_error&token={0}".format(settings.TOKEN)
         else:
             location = register_location
         self.redirect(location)
@@ -165,7 +158,6 @@ class LoginHandler(tornado.web.RequestHandler):
         # 已经验证用户先登出，再跳转
         self.clear_cookie('openid')
         self.clear_cookie('gender')
-        self.clear_cookie('openpwd')
         ctx = {
             'static_url': settings.STATIC_URL,
             'message': u"登录已经失效，请刷新后重试！",
@@ -182,11 +174,10 @@ class LoginHandler(tornado.web.RequestHandler):
 
         username = self.get_argument('username')
         gender = self.get_argument('gender')
-        password = self.get_argument("password")
 
-        if username and (len(username) >= 1) and (gender in ['1', '2']) and password and (len(password) >= 3):
+        if username and (len(username) >= 1) and (gender in ['1', '2']):
             login_res = self.login({
-                "username": username, "password": password,
+                "username": username,
                 "gender": gender
             })
             if not login_res:
@@ -195,9 +186,7 @@ class LoginHandler(tornado.web.RequestHandler):
                 location = "http://{0}/rumpetroll/error/?type=login_error&token={1}".format(self.request.host, settings.TOKEN)
             else:
                 openid = base64.b64encode(username.encode('utf-8'))
-                openpwd = base64.b64encode(password.encode('utf-8'))
                 self.set_cookie('openid', openid)
-                self.set_cookie('openpwd', openpwd)
                 self.set_cookie('gender', login_res.get("gender", gender))
         else:
             location = '{}?next=http://{}/rumpetroll/'.format(get_login_url(self.request), self.request.host)
@@ -248,7 +237,7 @@ class ErrorHandler(tornado.web.RequestHandler):
         tps = self.get_query_argument("type", "")
         if tps:
             if "login_error" == tps:
-                message1, message2, button, url = u"登录错误！", u'无当前用户名或用户密码错误。', u'重新登录', get_login_url(self.request)
+                message1, message2, button, url = u"登录错误！", u'无当前用户名。', u'重新登录或注册', get_login_url(self.request)
             elif "server_error" == tps:
                 message1, message2, button, url = u"登录服务错误！", u"当前游戏服务出现问题，无法登录。", u'重新登录', get_login_url(self.request)
             elif "register_server_error" == tps:

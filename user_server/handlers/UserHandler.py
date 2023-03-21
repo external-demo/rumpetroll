@@ -15,14 +15,12 @@ class LoginHandler(RequestHandler):
     def post(self):
         req_data = json.loads(self.request.body)
         username = req_data.get("username", "")
-        password = req_data.get("password", "")
-        if username and password:
+        if username:
             rememberme = req_data.get("rememberme", "off")
             if rememberme == 'on':
                 self.set_secure_cookie("username", username)
-                self.set_secure_cookie("password", password)
                 self.set_secure_cookie("rememberme", "T")
-            state, result = self.loginUser(username, password)
+            state, result = self.loginUser(username)
             if state:
                 self.set_secure_cookie("currentuser", username)
         else:
@@ -30,14 +28,12 @@ class LoginHandler(RequestHandler):
             result = "用户名或密码不能为空"
         self.finish({"status": state, "result": result})
 
-    def loginUser(self, username, password):
+    def loginUser(self, username):
         exists_username = session.query(Users).filter(Users.username == username).first()
-        if not exists_username:
-            return False, "不存在当前用户名"
-        elif exists_username.auth_password(pwd=password):
+        if exists_username:
             return True, {"username": exists_username.username, "gender": exists_username.gender}
         else:
-            return False, "密码错误"
+            return False, "不存在当前用户"
 
 
 class RegisterHandler(RequestHandler):
@@ -52,26 +48,22 @@ class RegisterHandler(RequestHandler):
         result = "注册成功"
         req_data = json.loads(self.request.body)
         username = req_data.get("username", "")
-        password = req_data.get("password", "")
         gender = req_data.get("gender", "1")
-        if not username or not password:
-            result = "注册失败，用户名或密码不能为空"
-        state, res = self.createUser(username, password, gender)
+        if not username:
+            result = "注册失败，用户名不能为空"
+        state, res = self.createUser(username, gender)
         if not state:
             result = res
         self.finish({"result": result, "status": state})
 
-    def createUser(self, username, password, gender):
+    def createUser(self, username, gender):
         try:
-            r1 = session.query(Users.username == username).count()
-            r2 = session.query(Users.username == username).first()  # 返回值：(False, )   则 .count() 值为1
-            # r3 = session.query(Users.username == username).one() # 返回值：(False, )
             user_count = list(session.query(Users).filter(Users.username == username))
             if user_count:
                 return False, 'Name is registered'
             user = Users()
             user.username = username
-            user.password = password
+            user.password = ""
             user.gender = gender
             session.add(user)
             session.commit()
@@ -111,7 +103,6 @@ class ForgetHandler(RequestHandler):
             user = Users()
             user.password = password_new
             res = exists_username.update({"_password": user.password})
-            # res = session.query(Users).filter_by(username = username).update({"_password": user.password})
             if 1 != res:
                 result = "修改失败"
         else:
