@@ -7,7 +7,7 @@
     <title>用户注册 | {{ SETTINGS.TITLE }}</title>
 </head>
 
-<body>
+<body style="margin-top: 4rem;">
 <p style="color: white; font-weight: bold; font-size: 1.3rem; text-align: center; margin-top: 1rem">GAMES REGISTER</p>
 <form class="form-horizontal" method="POST" action="">
     <p class="tip" style="display:none" id="tips"></p>
@@ -20,7 +20,8 @@
         <div class="btn" value="2">GIRL</div>
     </div>
     <div class="register disabled" id="register"></div>
-    <div style="color: white; font-size: 30px; float: right; margin-right: 2rem" title="用户登录"><a href="/rumpetroll/">LOGIN</a></div>
+{#    <div style="color: white; font-size: 0.8rem; float: left; margin-left: 2rem" title="观战模式"><a href="/rumpetroll/tourist/">TOURIST</a></div>#}
+    <div style="color: white; font-size: 0.8rem; float: right; margin-right: 2rem" title="用户登录"><a href="/rumpetroll/">LOGIN</a></div>
 </form>
 <script type="text/javascript" src="{{ static_url }}static/js/libs/jquery-2.0.0.min.js?v={{ version }}"></script>
 <script type="text/javascript" src="{{ static_url }}static/js/register.js?v={{ version }}"></script>

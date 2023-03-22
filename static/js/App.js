@@ -3,14 +3,14 @@
 var App = function(aSettings, aCanvas) {
 	var app = this;
 
-	var 	model,
-			canvas,
-			context,
-			webSocket,
-			webSocketService,
-			mouse = {x: 0, y: 0, worldx: 0, worldy: 0, tadpole:null},
-			keyNav = {x:0,y:0},
-			messageQuota = 5
+	var model,
+		canvas,
+		context,
+		webSocket,
+		webSocketService,
+		mouse = {x: 0, y: 0, worldx: 0, worldy: 0, tadpole:null},
+		keyNav = {x:0,y:0},
+		messageQuota = 5
 	;
 
 	app.update = function() {
@@ -63,7 +63,6 @@ var App = function(aSettings, aCanvas) {
 	};
 
 
-
 	app.draw = function() {
 		model.camera.setupContext();
 
@@ -93,25 +92,16 @@ var App = function(aSettings, aCanvas) {
 		for(i in arrows) {
 			arrows[i].draw(context, canvas);
 		}
-
-
 	};
 
-
-
 	app.onSocketOpen = function(e) {
-		//console.log('Socket opened!', e);
-
-		//FIXIT: Proof of concept. refactor!
 		uri = parseUri(document.location)
 		if ( uri.queryKey.oauth_token ) {
 			app.authorize(uri.queryKey.oauth_token, uri.queryKey.oauth_verifier)
 		}
-		// end of proof of concept code.
 	};
 
 	app.onSocketClose = function(e) {
-		//console.log('Socket closed!', e);
 		webSocketService.connectionClosed();
 		// app.reconnect();
 		setTimeout(function(){
@@ -136,16 +126,13 @@ var App = function(aSettings, aCanvas) {
 					webSocket.onopen 		= app.onSocketOpen;
 					webSocket.onclose		= app.onSocketClose;
 					webSocket.onmessage 	= app.onSocketMessage;
-
 					window.webSocket        = webSocket
-
 					webSocketService		= new WebSocketService(model, webSocket);
 					window.webSocketService = webSocketService;
             	}else{
             		// 获取endpoint失败
             		console.log('error')
             	}
-
             },
             error: function(){
             	// 获取endpoint失败
@@ -154,8 +141,6 @@ var App = function(aSettings, aCanvas) {
             dataType: 'json',
             async: false
         })
-     	// alert('房间已经断开，请重新连接！');
-     	// window.location.reload();
 	}
 
 	app.onSocketMessage = function(e) {
@@ -276,10 +261,10 @@ var App = function(aSettings, aCanvas) {
 		}
 
 		var touch = e.changedTouches.item(0);
-    if (touch) {
-      mouse.x = touch.clientX;
-  		mouse.y = touch.clientY;
-    }
+		if (touch) {
+		  mouse.x = touch.clientX;
+		  mouse.y = touch.clientY;
+		}
 	}
 	app.touchend = function(e) {
 	  if(model.userTadpole) {
@@ -330,8 +315,6 @@ var App = function(aSettings, aCanvas) {
 		for(var i = 0; i < 150; i++) {
 			model.waterParticles.push(new WaterParticle());
 		}
-
-
 
 		model.camera = new Camera(canvas, context, model.userTadpole.x, model.userTadpole.y);
 

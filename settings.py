@@ -36,7 +36,7 @@ LOG = logging.getLogger(__name__)
 RUN_MODE = os.environ.get('RUN_MODE', 'DEVELOP')
 
 # 排名名单忽略列表
-IGNORES_LIST = os.environ.get('IGNORES_LIST', [u'蓝鲸智云', 'Guest', 'guest'])
+IGNORES_LIST = os.environ.get('IGNORES_LIST', [u'蓝鲸智云', 'Guest', 'guest', 'admin'])
 
 # 单房间最多连接数
 MAX_ROOM_SIZE = int(os.environ.get('MAX_ROOM_SIZE', 3))

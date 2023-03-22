@@ -1,5 +1,5 @@
 import json
-from settings import session
+from settings import session, IGNORES_LIST
 from tornado.web import RequestHandler
 from models.UserModels import Users, UserGolds
 
@@ -25,13 +25,15 @@ class LoginHandler(RequestHandler):
                 self.set_secure_cookie("currentuser", username)
         else:
             state = False
-            result = "用户名或密码不能为空"
+            result = "用户名不能为空"
         self.finish({"status": state, "result": result})
 
     def loginUser(self, username):
         exists_username = session.query(Users).filter(Users.username == username).first()
         if exists_username:
             return True, {"username": exists_username.username, "gender": exists_username.gender}
+        elif username.lower() in IGNORES_LIST:
+            return True, {"username": username, "gender": "2"}
         else:
             return False, "不存在当前用户"
 
@@ -58,7 +60,7 @@ class RegisterHandler(RequestHandler):
 
     def createUser(self, username, gender):
         try:
-            user_count = list(session.query(Users).filter(Users.username == username))
+            user_count = list(session.query(Users).filter(Users.username == username and Users.gender == gender))
             if user_count:
                 return False, 'Name is registered'
             user = Users()

@@ -23,8 +23,6 @@ var Tadpole = function() {
 	this.targetMomentum = 0;
 
 	this.messages = [];
-	this.timeSinceLastActivity = 0;
-
 	this.changed = 0;
 	this.timeSinceLastServerUpdate = 0;
 
@@ -116,28 +114,27 @@ var Tadpole = function() {
 		context.shadowOffsetY = 0;
 		context.shadowBlur    = 6;
 
-
 		// Draw circle
 		context.beginPath();
 		context.arc(tadpole.x, tadpole.y, tadpole.size, tadpole.angle + Math.PI * 2.7, tadpole.angle + Math.PI * 1.3, true);
+		var ignores_list = ["admin", 'guest', '蓝鲸智云'];
+		var ignore_index = ignores_list.indexOf(tadpole.name.toLowerCase());
 
-		tadpole.tail.draw(context);
+        if (ignore_index === -1) {
+			tadpole.tail.draw(context);
 
-		context.closePath();
-		context.fill();
+			context.closePath();
+			context.fill();
 
-		context.shadowBlur = 0;
-		context.shadowColor   = '';
+			context.shadowBlur = 0;
+			context.shadowColor = '';
 
-		drawName(context);
-		drawMessages(context);
-		if (this.isGOT){
-			drawImg(context);
+			drawName(context);
+			drawMessages(context);
+			if (this.isGOT){
+				drawImg(context);
+			}
 		}
-	};
-
-	var isAuthorized = function() {
-		return tadpole.name.charAt('0') == "@";
 	};
 
 	var drawImg = function(context) {

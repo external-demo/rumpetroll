@@ -66,26 +66,21 @@ var WebSocketService = function (model, webSocket) {
             async: false
         })
         sank.innerHTML = html
-        // console.log(sank.innerHTML)
         $('#game_over').show();
     }
 
     function getSpeicalTime(timestamp) {
         var now = new Date(timestamp);
-        // now.setMinutes(now.getMinutes() + over_time / 60);
         now.setSeconds(now.getSeconds() + over_time);
         var dateStr = now.getFullYear() + '/' + (now.getMonth() + 1) + '/' + now.getDate() + ' ' + now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
-        // console.log(dateStr)
         return dateStr;
     }
 
     var timer = 0;
 
     function countDown(time, day_elem, hour_elem, minute_elem, second_elem) {
-        //if(typeof end_time == "string")
         clearInterval(timer);
         var end_time = new Date(time).getTime();//月份是实际月份-1
-        //current_time = new Date().getTime(),
         var sys_second = (end_time - new Date().getTime());
         var hourElem = $(hour_elem);
         var minuteElem = $(minute_elem);
@@ -119,7 +114,6 @@ var WebSocketService = function (model, webSocket) {
 
     this.updateHandler = function (data) {
         var newtp = false;
-        // console.log('ddd',data)
         if (!model.tadpoles[data.id]) {
 
             newtp = true;
@@ -187,16 +181,14 @@ var WebSocketService = function (model, webSocket) {
                 $('#tip_box').hide();
             }, 2000);
         }
-
-        // if (is_token && !data.test){
         $('#timer_wrapper').show();
-        // 	if (data.timestamp && data.new_loop){
         if (data.timestamp) {
-            countDown(getSpeicalTime(data.timestamp), "#timer_wrapper .day", "#timer_wrapper .hour", "#timer_wrapper .minute", "#timer_wrapper .second");
-            // console.log("运行完毕 日期：", data.timestamp);
+            countDown(getSpeicalTime(data.timestamp),
+                "#timer_wrapper .day",
+                "#timer_wrapper .hour",
+                "#timer_wrapper .minute",
+                "#timer_wrapper .second");
         }
-        // }
-        // }
     }
 
     this.eatGoldHandler = function (data) {
@@ -208,7 +200,6 @@ var WebSocketService = function (model, webSocket) {
         if (tadpole) {
             tadpole.size++;
         }
-
     }
 
     this.closedHandler = function (data) {
@@ -263,12 +254,19 @@ var WebSocketService = function (model, webSocket) {
     }
 
     this.sendGold = function (gold) {
-        var sendObj = {"golds": {"345418978": {"y": -61, "x": 1278, "goldId": 345418978}, "807802035": {"y": 1905, "x": -498, "goldId": 807802035}, "651628678": {"y": 1072, "x": -415, "goldId": 651628678}, "733221962": {"y": 167, "x": -586, "goldId": 733221962}, "273225771": {"y": 46, "x": 1323, "goldId": 273225771}, "763344482": {"y": 1040, "x": -450, "goldId": 763344482}, "772095891": {"y": -1232, "x": -1305, "goldId": 772095891}, "975904981": {"y": -279, "x": -1570, "goldId": 975904981}, "206601049": {"y": -1624, "x": -459, "goldId": 206601049}, "455766205": {"y": -1871, "x": -1072, "goldId": 455766205}}, "type": "gold"};
-        // var sendObj = {
-        // 	type: 'gold',
-        // 	golds: gold
-        // };
-        // console.log('send', sendObj)
+        var sendObj = {
+            "golds": {
+                "345418978": {"y": -61, "x": 1278, "goldId": 345418978},
+                "807802035": {"y": 1905, "x": -498, "goldId": 807802035},
+                "651628678": {"y": 1072, "x": -415, "goldId": 651628678},
+                "733221962": {"y": 167, "x": -586, "goldId": 733221962},
+                "273225771": {"y": 46, "x": 1323, "goldId": 273225771},
+                "763344482": {"y": 1040, "x": -450, "goldId": 763344482},
+                "772095891": {"y": -1232, "x": -1305, "goldId": 772095891},
+                "975904981": {"y": -279, "x": -1570, "goldId": 975904981},
+                "206601049": {"y": -1624, "x": -459, "goldId": 206601049},
+                "455766205": {"y": -1871, "x": -1072, "goldId": 455766205}
+            }, "type": "gold"};
         webSocket.send(JSON.stringify(sendObj));
     }
 

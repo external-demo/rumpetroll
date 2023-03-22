@@ -25,7 +25,7 @@ $(document).ready(function(){
     //click login
     $('.login').on('click',function(){
         if($('#nickname').val().length > 0 && $('#gender').val() != ''){
-            $('form').submit()
+            $('form').submit();
         }
     });
 
