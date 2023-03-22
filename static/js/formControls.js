@@ -1,168 +1,158 @@
 // Settings controls
 
-(function($){
+(function ($) {
+  $.fn.initChat = function () {
+    var input = $(this).find("#chat");
+    var submitBtn = $(this).find("#submit");
+    var chatText = $("#chatText");
+    var chatBox = $("#chat_box");
+    var hidden = true;
+    var messageHistory = [];
+    var messagePointer = -1;
+    var winWidth = chatBox.width();
+    input.width(winWidth - 65 - 10 - 40);
+    if (!is_token) {
+      chatBox.css("opacity", "0.3");
+    } else {
+      chatBox.addClass("pc-chatBox");
+      chatBox.css("opacity", "0.3");
+    }
 
-	$.fn.initChat = function() {
-		var input = $(this).find('#chat');
-		var submitBtn = $(this).find('#submit')
-		var chatText = $("#chatText");
-		var chatBox = $('#chat_box');
-		var hidden = true;
-		var messageHistory = [];
-		var messagePointer = -1;
-		var winWidth = chatBox.width();
-		input.width(winWidth - 65 - 10 - 40);
-		if (!is_token){
-			chatBox.css('opacity','0.3');
-		}else{
-			chatBox.addClass('pc-chatBox')
-			chatBox.css('opacity','0.3');
-		}
+    var closechat = function () {
+      hidden = true;
+      // input.css("opacity","0.5");
+      messagePointer = messageHistory.length;
+      input.val("");
+      chatText.text("");
+    };
 
-		var closechat = function() {
-			hidden = true;
-			// input.css("opacity","0.5");
-			messagePointer = messageHistory.length;
-			input.val('');
-			chatText.text('');
+    var updateDimensions = function () {
+      chatText.text(input.val());
+      // var width = chatText.width() + 30;
+      // input.css({
+      // 	width: width,
+      // 	marginLeft: (width/2)*-1
+      // });
+    };
 
-		}
+    // input.blur(function(e) {
+    // 	setTimeout(function(){
+    // 		input.focus();
+    // 		console.log('auto focus');
+    // 	}, 0.1);
+    // });
+    input.focus(function () {
+      console.log("focus");
+    });
+    input.bind("touchstart", function () {
+      // input.focus();
+      chatBox.addClass("focus");
+      // messageHistory.push('hello world');
+      //  		messagePointer = messageHistory.length;
+      // app.sendMessage('hello world');
+      // return false;
+    });
+    input.bind("click", function () {
+      // input.focus();
+      chatBox.addClass("focus");
+      // messageHistory.push('hello world');
+      //  		messagePointer = messageHistory.length;
+      // app.sendMessage('hello world');
+      // return false;
+    });
+    // input.bind('keydown',function(){
+    // 	alert(input.val());
+    // })
+    input.keydown(function (e) {
+      // alert(input.val())
+      if (input.val().length > 0) {
+        //set timeout because event occurs before text is entered
+        setTimeout(updateDimensions, 0.1);
+        // input.css({"opacity":"1"});
+      } else {
+        closechat();
+      }
 
-		var updateDimensions = function(){
-			chatText.text(input.val());
-			// var width = chatText.width() + 30;
-			// input.css({
-			// 	width: width,
-			// 	marginLeft: (width/2)*-1
-			// });
-		};
+      if (!hidden) {
+        e.stopPropagation();
+        if (messageHistory.length > 0) {
+          if (e.keyCode == keys.up) {
+            if (messagePointer > 0) {
+              messagePointer--;
+              input.val(messageHistory[messagePointer]);
+            }
+          } else if (e.keyCode == keys.down) {
+            if (messagePointer < messageHistory.length - 1) {
+              messagePointer++;
+              input.val(messageHistory[messagePointer]);
+            } else {
+              closechat();
+              return;
+            }
+          }
+        }
+      }
+    });
+    submitBtn.bind("touchstart", function () {
+      if (input.val().length > 0) {
+        messageHistory.push(input.val());
+        messagePointer = messageHistory.length;
+        app.sendMessage(input.val());
+        // app.sendGold();
+      }
+      closechat();
+      input.blur();
+      chatBox.removeClass("focus");
+      return false;
+    });
+    submitBtn.bind("click", function () {
+      if (input.val().length > 0) {
+        messageHistory.push(input.val());
+        messagePointer = messageHistory.length;
+        app.sendMessage(input.val());
+        // app.sendGold();
+      }
+      closechat();
+      input.blur();
+      chatBox.removeClass("focus");
+      return false;
+    });
+    input.keyup(function (e) {
+      var k = e.keyCode;
+      if (input.val().length >= 45) {
+        input.val(input.val().substr(0, 45));
+      }
 
-		// input.blur(function(e) {
-		// 	setTimeout(function(){
-		// 		input.focus();
-		// 		console.log('auto focus');
-		// 	}, 0.1);
-		// });
-		input.focus(function(){
-			console.log('focus')
-		});
-		input.bind('touchstart',function(){
-			// input.focus();
-			chatBox.addClass('focus');
-			// messageHistory.push('hello world');
-   //  		messagePointer = messageHistory.length;
-			// app.sendMessage('hello world');
-			// return false;
-		});
-		input.bind('click',function(){
-			// input.focus();
-			chatBox.addClass('focus');
-			// messageHistory.push('hello world');
-   //  		messagePointer = messageHistory.length;
-			// app.sendMessage('hello world');
-			// return false;
-		})
-		// input.bind('keydown',function(){
-		// 	alert(input.val());
-		// })
-		input.keydown(function(e){
-			// alert(input.val())
-			if(input.val().length > 0) {
-				//set timeout because event occurs before text is entered
-				setTimeout(updateDimensions,0.1);
-				// input.css({"opacity":"1"});
-			} else {
-				closechat();
-			}
+      if (input.val().length > 0) {
+        updateDimensions();
+        input.css("opacity", "1");
+        hidden = false;
+      } else {
+        closechat();
+      }
+      if (!hidden) {
+        if (
+          k == keys.esc ||
+          k == keys.enter ||
+          (k == keys.space && input.val().length > 35)
+        ) {
+          if (k != keys.esc && input.val().length > 0) {
+            messageHistory.push(input.val());
+            messagePointer = messageHistory.length;
+            app.sendMessage(input.val());
+            // app.sendGold();
+          }
+          closechat();
+        }
 
-			if(!hidden) {
+        e.stopPropagation();
+      }
+    });
 
-				e.stopPropagation();
-				if(messageHistory.length > 0) {
-					if(e.keyCode == keys.up)
-					{
-						if(messagePointer > 0)
-						{
-							messagePointer--;
-							input.val(messageHistory[messagePointer]);
-						}
-					}
-					else if(e.keyCode == keys.down)
-					{
-						if(messagePointer < messageHistory.length-1)
-						{
-							messagePointer++;
-							input.val(messageHistory[messagePointer]);
-						}
-						else
-						{
-							closechat();
-							return;
-						}
-					}
-				}
-			}
-		});
-		submitBtn.bind('touchstart',function(){
-			if(input.val().length > 0) {
-			    messageHistory.push(input.val());
-	    		messagePointer = messageHistory.length;
-				app.sendMessage(input.val());
-				// app.sendGold();
-			}
-			closechat();
-			input.blur();
-			chatBox.removeClass('focus')
-			return false;
-		});
-		submitBtn.bind('click',function(){
-			if(input.val().length > 0) {
-			    messageHistory.push(input.val());
-	    		messagePointer = messageHistory.length;
-				app.sendMessage(input.val());
-				// app.sendGold();
-			}
-			closechat();
-			input.blur();
-			chatBox.removeClass('focus')
-			return false;
-		});
-		input.keyup(function(e) {
+    // input.focus();
+  };
 
-			var k = e.keyCode;
-			if(input.val().length >= 45)
-			{
-				input.val(input.val().substr(0,45));
-			}
-
-			if(input.val().length > 0) {
-				updateDimensions();
-				input.css("opacity","1");
-				hidden = false;
-			} else {
-				closechat();
-			}
-			if(!hidden) {
-				if(k == keys.esc || k == keys.enter || (k == keys.space && input.val().length > 35)) {
-					if(k != keys.esc && input.val().length > 0) {
-					    messageHistory.push(input.val());
-			    		messagePointer = messageHistory.length;
-						app.sendMessage(input.val());
-						// app.sendGold();
-					}
-					closechat();
-				}
-
-				e.stopPropagation();
-
-			}
-
-		});
-
-		// input.focus();
-	}
-
-	$(function() {
-		//$('#chat').initChat();
-	});
+  $(function () {
+    //$('#chat').initChat();
+  });
 })(jQuery);
