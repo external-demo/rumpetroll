@@ -135,23 +135,19 @@ var Tadpole = function () {
       tadpole.angle + Math.PI * 1.3,
       true
     );
-    var ignores_list = ["admin", "guest", "蓝鲸智云"];
-    var ignore_index = ignores_list.indexOf(tadpole.name.toLowerCase());
 
-    if (ignore_index === -1) {
-      tadpole.tail.draw(context);
+    tadpole.tail.draw(context);
 
-      context.closePath();
-      context.fill();
+    context.closePath();
+    context.fill();
 
-      context.shadowBlur = 0;
-      context.shadowColor = "";
+    context.shadowBlur = 0;
+    context.shadowColor = "";
 
-      drawName(context);
-      drawMessages(context);
-      if (this.isGOT) {
-        drawImg(context);
-      }
+    drawName(context);
+    drawMessages(context);
+    if (this.isGOT) {
+      drawImg(context);
     }
   };
 
