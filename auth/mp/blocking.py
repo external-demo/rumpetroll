@@ -37,7 +37,7 @@ def get_nickname(openid):
         url = '{}?openid={}'.format(url, openid)
         resp = signed_urlopen(url, timeout=5).read()
         resp = json.loads(resp)
-        rd.hset(HNAME, openid, json.dumps(resp['data']))
+        RD.hset(HNAME, openid, json.dumps(resp['data']))
         nickname, sex = resp['data']['nickname'], resp['data']['sex']
         return (nickname, sex)
     except Exception:

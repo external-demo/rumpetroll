@@ -215,7 +215,7 @@ class LoginHandler(tornado.web.RequestHandler):
         else:
             location = '{}?next=http://{}/rumpetroll/'.format(
                 get_login_url(self.request),
-                                                              self.request.host
+                self.request.host
             )
 
         self.redirect(location)
