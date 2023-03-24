@@ -2,7 +2,7 @@ import json
 
 from tornado.web import RequestHandler
 
-from models.UserModels import Users
+from models.usermodels import Users
 from settings import IGNORES_LIST, SESSION
 
 

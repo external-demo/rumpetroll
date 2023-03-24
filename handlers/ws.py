@@ -9,7 +9,7 @@ import time
 import tornado.websocket
 
 import settings
-from common.manager import namespace
+from common.manager import NAMESPACE
 from common.structure import CloseData, InitData
 from common.utils import object_to_json
 from handlers.utils import status_uploader
@@ -40,7 +40,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         self.room_num = self.get_room()
         self.room = self.room_num
         self._id = id(self)
-        self.pipe = settings.rd.pipeline()
+        self.pipe = settings.RD.pipeline()
 
     def get_room(self):
         """
@@ -90,10 +90,10 @@ class WSHandler(tornado.websocket.WebSocketHandler):
                 #     # default size, in Tadpole.js
                 #     _message['size'] = 3
                 #     message = json.dumps(_message)
-                for client in namespace.get_participants(room_num):
+                for client in NAMESPACE.get_participants(room_num):
                     client.add_pending_message(message)
             else:
-                for client in namespace.get_participants(room_num):
+                for client in NAMESPACE.get_participants(room_num):
                     if not client._is_close:
                         client.write_message(message)
         except Exception:
@@ -132,7 +132,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         if self.is_messager:
             return
 
-        namespace.enter_room(self)
+        NAMESPACE.enter_room(self)
 
         welcome = InitData(self._id)
         welcome.room_num = self.room_num
@@ -141,7 +141,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         self.write_message(self.golds)
 
         LOG.info(
-            f'client[{self._id}] has been opened, room: {self.room_num} total: {namespace.stat["online"]}'
+            f'client[{self._id}] has been opened, room: {self.room_num} total: {NAMESPACE.stat["online"]}'
         )
 
     def on_eat_gold(self, message):
@@ -156,11 +156,11 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         is_got = message.get('isGOT', False)
         name = message.get('name', '')
 
-        tag = namespace.golds[message['goldId']]['tag']
+        tag = NAMESPACE.golds[message['goldId']]['tag']
         if tag == 'test':
             return
 
-        room = namespace.golds[message['goldId']]['room']
+        room = NAMESPACE.golds[message['goldId']]['room']
 
         st = time.time()
         resp = (
@@ -178,13 +178,13 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         )
 
         # 处理排行榜
-        namespace.incr_rank(openid, 1, name=name, is_got=is_got)
+        NAMESPACE.incr_rank(openid, 1, name=name, is_got=is_got)
 
         # 处理豆子统计信息
-        namespace.incr_gold('global', -1)
-        namespace.incr_gold(room, -1)
+        NAMESPACE.incr_gold('global', -1)
+        NAMESPACE.incr_gold(room, -1)
 
-        namespace.golds.pop(message['goldId'])
+        NAMESPACE.golds.pop(message['goldId'])
 
     def on_add_gold(self, message):
         """
@@ -213,22 +213,22 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             WSHandler.stage = 3
             LOG.debug('set stage to [%s]', WSHandler.stage)
 
-        namespace.add_golds(num, is_test)
+        NAMESPACE.add_golds(num, is_test)
 
         new_loop = False
-        if not namespace.marked_timestamp and not is_test:
-            namespace.marked_timestamp = int(time.time() * 1000)
+        if not NAMESPACE.marked_timestamp and not is_test:
+            NAMESPACE.marked_timestamp = int(time.time() * 1000)
             io_loop = tornado.ioloop.IOLoop.current()
             io_loop.call_later(OVERTIME, clean_golds)
             new_loop = True
 
         self.write_message(u'添加%s个gold成功！' % num)
-        for room in namespace.rooms:
-            golds = dict(filter(lambda x: x[1]['room'] == room, namespace.golds.items()))
+        for room in NAMESPACE.rooms:
+            golds = dict(filter(lambda x: x[1]['room'] == room, NAMESPACE.golds.items()))
             _message = {
                 'type': 'gold',
                 'golds': golds,
-                'timestamp': namespace.marked_timestamp,
+                'timestamp': NAMESPACE.marked_timestamp,
                 'is_created': True,
                 'new_loop': new_loop,
                 'test': is_test,
@@ -242,7 +242,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             message = json.loads(raw_message)
             msg_type = message.get('type')
 
-            if message.get('type') == 'eatGold' and message.get('goldId') in namespace.golds:
+            if message.get('type') == 'eatGold' and message.get('goldId') in NAMESPACE.golds:
                 self.on_eat_gold(message)
                 self.broadcast(msg_type, raw_message)
 
@@ -260,15 +260,15 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         """
         function
         """
-        golds = dict(filter(lambda x: x[1]['room'] == self.room_num, namespace.golds.items()))
-        if namespace.marked_timestamp:
+        golds = dict(filter(lambda x: x[1]['room'] == self.room_num, NAMESPACE.golds.items()))
+        if NAMESPACE.marked_timestamp:
             new_loop = True
         else:
             new_loop = False
         message = {
             'type': 'gold',
             'golds': golds,
-            'timestamp': namespace.marked_timestamp,
+            'timestamp': NAMESPACE.marked_timestamp,
             'new_loop': new_loop
         }
         return json.dumps(message)
@@ -283,19 +283,19 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         msg_type = 'closed'
         self.broadcast(msg_type, message)
 
-        namespace.leave_room(self)
+        NAMESPACE.leave_room(self)
 
         LOG.info('client[%s] has been closed, room: %s remain: %s',
                  self._id,
                  self.room_num,
-                 namespace.stat['online'])
+                 NAMESPACE.stat['online'])
 
 
 def send_message_to_clients():
     """
     function
     """
-    for client in namespace.clients:
+    for client in NAMESPACE.clients:
         client.send_pending_message()
 
 
@@ -303,7 +303,7 @@ def send_ping_to_clients():
     """
     function
     """
-    for client in namespace.clients:
+    for client in NAMESPACE.clients:
         client.ping(b'ping')
 
 
@@ -311,26 +311,26 @@ def update_node_status():
     """
     function
     """
-    status_uploader.upload_status(namespace.name, 'golds', namespace.golds_stat)
-    status_uploader.upload_status(namespace.name, 'rank', namespace.rank)
-    status_uploader.upload_status(namespace.name, 'online', namespace.stat)
+    status_uploader.upload_status(NAMESPACE.name, 'golds', NAMESPACE.golds_stat)
+    status_uploader.upload_status(NAMESPACE.name, 'rank', NAMESPACE.rank)
+    status_uploader.upload_status(NAMESPACE.name, 'online', NAMESPACE.stat)
 
 
 def clean_golds():
     """清除豆子"""
     # noinspection PyBroadException
     try:
-        message = {'type': 'gold', 'golds': [], 'timestamp': namespace.marked_timestamp}
+        message = {'type': 'gold', 'golds': [], 'timestamp': NAMESPACE.marked_timestamp}
         message = json.dumps(message)
 
-        for client in namespace.clients:
+        for client in NAMESPACE.clients:
             client.write_message(message)
 
-        for room in namespace.golds_stat:
-            namespace.incr_gold(room, reset=True)
+        for room in NAMESPACE.golds_stat:
+            NAMESPACE.incr_gold(room, reset=True)
 
-        namespace.golds.clear()
-        namespace.marked_timestamp = None
+        NAMESPACE.golds.clear()
+        NAMESPACE.marked_timestamp = None
         LOG.info('clean golds success')
     except Exception:    # [broad-exception-caught]
         LOG.exception('clean golds error')

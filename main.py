@@ -10,7 +10,7 @@ import tornado.web
 from tornado.options import options
 
 import settings
-from common.manager import namespace
+from common.manager import NAMESPACE
 from handlers.ws import (
     send_message_to_clients,
     send_ping_to_clients,
@@ -52,7 +52,7 @@ SCHEDULER_NODE_STATUS = tornado.ioloop.PeriodicCallback(update_node_status, 1000
 SCHEDULER_NODE_STATUS.start()
 
 # Scheduler for namespace heartbeat
-SCHEDULER_NAMESPACE = tornado.ioloop.PeriodicCallback(namespace.heartbeat, 1000, io_loop=MAIN_LOOP)
+SCHEDULER_NAMESPACE = tornado.ioloop.PeriodicCallback(NAMESPACE.heartbeat, 1000, io_loop=MAIN_LOOP)
 SCHEDULER_NAMESPACE.start()
 
 

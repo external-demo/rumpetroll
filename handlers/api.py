@@ -22,7 +22,7 @@ from tornado import gen
 import settings
 from auth import non_blocking as wx_client
 from common import export, utils_func
-from common.manager import namespace
+from common.manager import NAMESPACE
 from common.retrying import Retrying
 from handlers import utils as handler_utils
 from handlers.utils import authenticated, get_rank
@@ -125,7 +125,7 @@ class GetStatHandler(APIHandler):
         peak_at = None
         online = 0
         peak = 0
-        _namespaces = namespace.get_global_namespaces()
+        _namespaces = NAMESPACE.get_global_namespaces()
         for _namespace, stat in responses.items():
             if _namespace in _namespaces:
                 online += stat['online']
@@ -190,7 +190,7 @@ class GoldsHandler(APIHandler):
     @authenticated
     def get(self):
         num = self.get_argument('num', '')
-        test = self.get_argument('test', '0')  # noqa
+        # test = self.get_argument('test', '0')  # noqa
         clean = self.get_argument('clean', '0')
         if clean == '1':
             try:
@@ -306,7 +306,7 @@ class GetEndpointHandler(APIHandler):
     @authenticated
     def get(self):
         try:
-            _namespace, room, cid = namespace.find_best_room()
+            _namespace, room, cid = NAMESPACE.find_best_room()
             endpoint = self.get_endpoint(self.request, _namespace, room, cid)
             data = {'result': True, 'data': {'endpoint': endpoint}, 'message': u"获取endpoint成功"}
         except ValueError as error:
@@ -316,7 +316,7 @@ class GetEndpointHandler(APIHandler):
     @staticmethod
     def get_endpoint(request, _namespace, room, cid):
         """Get websocket url from node host"""
-        sid = sid = uuid.uuid4().hex
+        sid = uuid.uuid4().hex
         server, port = _namespace.split(':')
         server_id = server.split('.')[-1]
         ctx = {

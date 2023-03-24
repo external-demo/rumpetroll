@@ -1,4 +1,4 @@
-from models.UserModels import UserGolds, Users
+from models.usermodels import UserGolds, Users
 
 
 def init_data():

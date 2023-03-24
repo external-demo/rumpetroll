@@ -12,7 +12,7 @@ from tornado import gen
 from tornado.websocket import websocket_connect
 
 import settings
-from common.manager import namespace
+from common.manager import NAMESPACE
 from common.utils_func import func_control
 from settings import RD
 
@@ -107,7 +107,7 @@ def add_golds_client_loop(num, test=False):
 
 @gen.coroutine
 def add_golds_client(num, test=False):
-    _namespaces = namespace.get_global_namespaces()
+    _namespaces = NAMESPACE.get_global_namespaces()
     for node in _namespaces:
         url = '%s://%s/rumpetroll/socket.io/?messager=1&room=1' % (settings.WSS, node)
         LOG.debug('send add golds message to %s', url)
@@ -121,7 +121,7 @@ def add_golds_client(num, test=False):
 @gen.coroutine
 def clean_golds_client():
     """清除豆子"""
-    _namespaces = namespace.get_global_namespaces()
+    _namespaces = NAMESPACE.get_global_namespaces()
     for node in _namespaces:
         url = '{0}://{1}/rumpetroll/{2}/ws?messager=1'.format(settings.WSS,
                                                               settings.HOST,
