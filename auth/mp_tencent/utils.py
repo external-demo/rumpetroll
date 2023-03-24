@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import logging
 import urllib
 
@@ -21,5 +22,5 @@ def get_oauth_redirect_url(url, state='authenticated'):
     sorted_params = sorted(params.items(), key=lambda x: x[0])
     params = urllib.urlencode(sorted_params)
     redirect_uri = '{}?{}#wechat_redirect'.format(constants.WECHAT_OAUTH_URL, params)
-    LOG.info('redirect_url is: %s' % redirect_uri)
+    LOG.info(f'redirect_url is: {redirect_uri}')
     return redirect_uri

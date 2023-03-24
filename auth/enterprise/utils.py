@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import logging
 import urllib
 

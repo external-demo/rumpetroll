@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
-# Copyright 2017 Tencent
+"""
+# Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import json
 import logging
 import os
@@ -8,7 +9,7 @@ import os
 import requests
 
 from common.signer import signed_urlopen
-from settings import rd
+from settings import RD
 
 HNAME = 'WEIXIN_OPEN_INFO'
 LOG = logging.getLogger(__name__)

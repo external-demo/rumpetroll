@@ -1,14 +1,19 @@
 # user login and register model
-import os
 import logging
-import tornado.ioloop as ioloop
+
 import tornado.httpserver as httpserver
+import tornado.ioloop as ioloop
 import tornado.web as web
-from urls import handlers
 from settings_user_server import settings
+
+from urls import handlers
 
 
 class Application(web.Application):
+    """
+    入口方法
+    """
+
     def __init__(self):
         web.Application.__init__(self, handlers, **settings)
 

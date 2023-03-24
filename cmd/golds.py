@@ -8,7 +8,6 @@ import json
 import logging
 import urllib.request as urllib2
 
-
 LOG_FORMAT = '[%(asctime)s] %(levelname)s: %(message)s'
 LOG = logging.getLogger(__name__)
 

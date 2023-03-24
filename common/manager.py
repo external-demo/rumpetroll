@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import datetime
 import json
 import logging
@@ -31,7 +32,7 @@ class Namespace(object):
         self.redisdb = redisdb
         self.host = options.address
         self.port = options.port
-        self.name = '{}:{}'.format(self.host, self.port)
+        self.name = f'{self.host}:{self.port}'
         self.pipeline = redisdb.pipeline()
 
         self.rooms = {}
@@ -46,7 +47,10 @@ class Namespace(object):
         self.rank = {}
 
     def heartbeat(self, verbose=False):
-        st = time.time()
+        """
+        function
+        """
+        current_time = time.time()
 
         # 存活信息
         self.pipeline.zadd(self.RK_NAMESPACE_HEARTBEAT_KEY, self.name, time.time())
@@ -56,18 +60,17 @@ class Namespace(object):
 
         # 同步房间client数量
         # 接入层完成，同步会稍微影响计数
-        # for room, clients in self.rooms.items():
-        #     self.pipeline.zadd(self.RK_ROOM_CLIENTS_COUNTER_KEY, room, len(clients))
-        # if self.rooms:
-        #    self.pipeline.hmset(self.RK_ROOM_NAMESPACK_KEY, dict((room, self.name) for room in self.rooms))
         self.pipeline.execute()
 
         self.heartbeat_clean()
 
         if verbose:
-            LOG.debug('heartbeat finish in %.3f(ms)', (time.time() - st) * 1000)
+            LOG.debug('heartbeat finish in %.3f(ms)', (time.time() - current_time) * 1000)
 
     def heartbeat_clean(self):
+        """
+        clean
+        """
         _alive_namespaces = self.get_alive_namespaces()
 
         # 清空非存活的namespace
@@ -127,6 +130,9 @@ class Namespace(object):
         return {str(key, "utf-8"): json.loads(value) for key, value in ret.items()}
 
     def update_stat(self):
+        """
+        function
+        """
         self.stat['online'] = len([i for i in self.clients])
         if self.stat['online'] > self.stat['peak']:
             self.stat['peak'] = self.stat['online']
@@ -134,7 +140,13 @@ class Namespace(object):
             LOG.info('new peak: %s', self.stat['peak'])
 
     def enter_room(self, client):
-        LOG.debug('clients enter room, client=%s, room=%s, user=%s', client, client.room, client.current_user)
+        """
+        function
+        """
+        LOG.debug('clients enter room, client=%s, room=%s, user=%s',
+                  client,
+                  client.room,
+                  client.current_user)
 
         if client.room not in self.rooms:
             self.rooms[client.room] = set()
@@ -143,23 +155,34 @@ class Namespace(object):
 
     def leave_room(self, client):
         """Remove a client from a room."""
-        LOG.debug('clients leave room, client=%s, room=%s, user=%s', client, client.room, client.current_user)
+        LOG.debug('clients leave room, client=%s, room=%s, user=%s',
+                  client,
+                  client.room,
+                  client.current_user)
 
         try:
             self.rooms[client.room].remove(client)
             self.update_stat()
         except KeyError:
-            LOG.exception('leave room error, rooms:%s, room:%s, client:%s', self.rooms, client.room, client)
+            LOG.exception('leave room error, rooms:%s, room:%s, client:%s',
+                          self.rooms,
+                          client.room,
+                          client)
 
         return self.redisdb.zincrby(self.RK_ROOM_CLIENTS_COUNTER_KEY, client.room, -1)
 
     @property
     def status(self):
+        """
+        function
+        """
         data = json.dumps(self.rooms, cls=NamespaceEncoder)
         return data
 
-    # 游戏相关处理逻辑
     def incr_gold(self, room='global', count=-1, reset=False):
+        """
+        游戏相关处理逻辑
+        """
         if room not in self.golds_stat:
             self.golds_stat[room] = {'total': 0, 'remain': 0, 'percent': 0}
 
@@ -184,6 +207,9 @@ class Namespace(object):
             stat['percent'] = round(stat['remain'] * 1.0 / stat['total'], 4)
 
     def incr_rank(self, user_id, count, **kwargs):
+        """
+        function
+        """
         if user_id in self.rank:
             _rank = self.rank[user_id]
         else:
@@ -210,13 +236,17 @@ class Namespace(object):
 
 
 class NamespaceEncoder(json.JSONEncoder):
+    """
+    namespace encode
+    """
+
     def default(self, obj):
         if isinstance(obj, set):
             return [i._id for i in obj]
         return json.JSONEncoder.default(self, obj)
 
 
-namespace = Namespace(settings.rd)
+NAMESPACE = Namespace(settings.RD)
 
 
 def smoothness_rand_gold(num, **kwargs):
@@ -233,25 +263,25 @@ def smoothness_rand_gold(num, **kwargs):
     # 计算每个格子坐标范围
     m_step = (settings.MAX_OF_MATRIX - settings.MIN_OF_MATRIX) / settings.DIVISION_OF_MATRIX
     _remain = (settings.MAX_OF_MATRIX - settings.MIN_OF_MATRIX) % settings.DIVISION_OF_MATRIX
-    S = []  # noqa
-    for y in range(settings.DIVISION_OF_MATRIX):
-        for x in range(settings.DIVISION_OF_MATRIX):
-            s = {
-                'x_min': settings.MIN_OF_MATRIX + x * m_step,
-                'x_max': settings.MIN_OF_MATRIX + (x + 1) * m_step,
-                'y_min': settings.MAX_OF_MATRIX - (y + 1) * m_step,
-                'y_max': settings.MAX_OF_MATRIX - y * m_step,
-            }
-            S.append(s)
+    divisions = []  # noqa
+    for division_y in range(settings.DIVISION_OF_MATRIX):
+        for division_x in range(settings.DIVISION_OF_MATRIX):
+            divisions.append({
+                'x_min': settings.MIN_OF_MATRIX + division_x * m_step,
+                'x_max': settings.MIN_OF_MATRIX + (division_x + 1) * m_step,
+                'y_min': settings.MAX_OF_MATRIX - (division_y + 1) * m_step,
+                'y_max': settings.MAX_OF_MATRIX - division_y * m_step,
+            })
         # 补最后空余坐标
-        S[-1]['x_max'] += _remain
-    for y in range(1, settings.DIVISION_OF_MATRIX + 1):
-        S[-y]['y_min'] -= _remain
+        divisions[-1]['x_max'] += _remain
+    for division in range(1, settings.DIVISION_OF_MATRIX + 1):
+        divisions[-division]['y_min'] -= _remain
 
     for idx, num_golds in enumerate(num_box):
-        for i in range(num_golds):
+        for num_glod in range(num_golds):
+            print(num_glod)
             key = random.randint(100000000, 999999999)
-            box = S[idx]
+            box = divisions[idx]
             # 金币对象
             gold = {
                 'x': random.randrange(box['x_min'], box['x_max']),

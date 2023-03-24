@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import logging
 import logging.config
 import os
@@ -89,28 +90,25 @@ MYSQL_USERNAME = os.environ.get("MYSQL_USERNAME", 'root')
 MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", '')
 
 # 数据连接 URL
-DB_URI = 'mysql+pymysql://{}:{}@{}/{}?charset=utf8'.format(
-    MYSQL_USERNAME,
-    MYSQL_PASSWORD,
-    MYSQL_HOSTNAME,
-    MYSQL_DATABASE,
-)
+DB_URI = f'mysql+pymysql://{MYSQL_USERNAME}:' \
+         f'{MYSQL_PASSWORD}@{MYSQL_HOSTNAME}/{MYSQL_DATABASE}?charset=utf8'
 
-pool = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, password=REDIS_PASSWORD)
-rd = redis.Redis(connection_pool=pool)
 
-engine = create_engine(DB_URI)
-Base = declarative_base(engine)
-Session = sessionmaker(engine)
-session = Session()
+POOL = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, password=REDIS_PASSWORD)
+RD = redis.Redis(connection_pool=POOL)
 
-NAMESPACE_NAME = '{}:{}'.format(options.address, options.port)
+ENGINE = create_engine(DB_URI)
+BASE = declarative_base(ENGINE)
+SESSION = sessionmaker(ENGINE)
+SESSION = SESSION()
 
-region = make_region().configure(
+NAMESPACE_NAME = f'{options.address}:{options.port}'
+
+REGION = make_region().configure(
     'dogpile.cache.redis',
     expiration_time=7200,
     arguments={
-        'connection_pool': pool,
+        'connection_pool': POOL,
     },
 )
 
@@ -120,7 +118,7 @@ TITLE = u"BlueKing"
 # 认证模块
 AUTH_MODULE = os.environ.get('AUTH_MODULE', 'dummy')
 
-settings = dict(
+SETTINGS = dict(
     template_path=os.path.join(BASE_DIR, "templates"),
     static_path=os.path.join(BASE_DIR, "static"),
     xsrf_cookies=False,
@@ -134,9 +132,7 @@ LOGGING_CONFIG = {
     'disable_existing_loggers': False,
     'formatters': {
         'simple': {
-            'format': '[%(asctime)s] {NAMESPACE_NAME} %(levelname)s  %(name)s: %(message)s'.format(
-                **{'NAMESPACE_NAME': NAMESPACE_NAME}
-            )  # noqa
+            'format': f'[%(asctime)s] {NAMESPACE_NAME} %(levelname)s  %(name)s: %(message)s'
         }
     },
     'handlers': {

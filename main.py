@@ -1,12 +1,14 @@
-# -*- coding: utf-8 -*-
+"""
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import logging
 
 import tornado.httpserver
 import tornado.ioloop
 import tornado.web
 from tornado.options import options
+
 import settings
 from common.manager import namespace
 from handlers.ws import (
@@ -16,47 +18,57 @@ from handlers.ws import (
 )
 from urls import handlers
 
-
 LOG = logging.getLogger(__name__)
 
 
 class Application(tornado.web.Application):
+    """
+    应用入口
+    """
     def __init__(self):
-        tornado.web.Application.__init__(self, handlers, **settings.settings)
+        tornado.web.Application.__init__(self, handlers, **settings.SETTINGS)
 
 
 # Scheduler start
 
 # 1000ms / 24fps
-interval_ms = 42
+INTERVAL_MS = 42
 
-main_loop = tornado.ioloop.IOLoop.instance()
-scheduler = tornado.ioloop.PeriodicCallback(send_message_to_clients, interval_ms, io_loop=main_loop)
-scheduler.start()
+MAIN_LOOP = tornado.ioloop.IOLoop.instance()
+SCHEDULER = tornado.ioloop.PeriodicCallback(send_message_to_clients, INTERVAL_MS, io_loop=MAIN_LOOP)
+SCHEDULER.start()
 
 # 不让自动断开，默认2分钟没有任何数据交互会断开
-ping_interval_ms = 10 * 1000
-ping_scheduler = tornado.ioloop.PeriodicCallback(send_ping_to_clients, ping_interval_ms, io_loop=main_loop)
-ping_scheduler.start()
-
+PING_INTERVAL_MS = 10 * 1000
+PING_SCHEDULER = tornado.ioloop.PeriodicCallback(
+    send_ping_to_clients,
+    PING_INTERVAL_MS,
+    io_loop=MAIN_LOOP
+)
+PING_SCHEDULER.start()
 
 # Scheduler for node status
-scheduler_node_status = tornado.ioloop.PeriodicCallback(update_node_status, 1000, io_loop=main_loop)
-scheduler_node_status.start()
-
+SCHEDULER_NODE_STATUS = tornado.ioloop.PeriodicCallback(update_node_status, 1000, io_loop=MAIN_LOOP)
+SCHEDULER_NODE_STATUS.start()
 
 # Scheduler for namespace heartbeat
-scheduler_namespace = tornado.ioloop.PeriodicCallback(namespace.heartbeat, 1000, io_loop=main_loop)
-scheduler_namespace.start()
+SCHEDULER_NAMESPACE = tornado.ioloop.PeriodicCallback(namespace.heartbeat, 1000, io_loop=MAIN_LOOP)
+SCHEDULER_NAMESPACE.start()
 
 
 def main():
+    """
+    function
+    """
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(options.port, address=options.address)
-    main_loop.start()
+    MAIN_LOOP.start()
 
 
 def main_process():
+    """
+    function
+    """
     options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.bind(options.PORT)

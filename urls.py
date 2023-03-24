@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import tornado
 
 import settings
@@ -31,5 +32,7 @@ handlers = [
     (r"/rumpetroll/api/func_controller/", api.FunctionController),
     (r"/rumpetroll/api/clean/", api.CleanHandler),
     # for debug static, product use nginx
-    (r'/rumpetroll/static/(.*)', tornado.web.StaticFileHandler, {'path': settings.settings['static_path']}),
+    (r'/rumpetroll/static/(.*)', tornado.web.StaticFileHandler, {
+        'path': settings.SETTINGS['static_path']
+    }),
 ]

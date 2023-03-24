@@ -10,8 +10,7 @@ import random
 import socket
 import time
 from functools import wraps
-
-from urllib.parse import urlparse, urlencode
+from urllib.parse import urlencode, urlparse
 from urllib.request import urlopen
 
 LOG = logging.getLogger(__name__)

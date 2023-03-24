@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
-# Copyright 2017 Tencent
+"""
+# Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import json
 import logging
 import time
@@ -33,4 +34,7 @@ def http_get(url, params={}):
 
 
 def object_to_json(obj):
+    """
+    function
+    """
     return json.dumps(obj.__dict__)

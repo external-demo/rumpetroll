@@ -4,10 +4,12 @@
 import base64
 import json
 import logging
-import settings
+
 import tornado.web
-from tornado import gen
 from httpx import post
+from tornado import gen
+
+import settings
 from auth import non_blocking as wx_client
 from auth import utils as wx_utils
 from handlers.utils import authenticated, get_rank, is_started
@@ -36,6 +38,9 @@ def get_websocket_url(request):
 
 
 class IndexHandler(tornado.web.RequestHandler):
+    """
+    index api
+    """
     @gen.coroutine
     @is_started
     @tornado.web.addslash
@@ -69,6 +74,9 @@ class IndexHandler(tornado.web.RequestHandler):
 
 
 class LoginHandlerWX(tornado.web.RequestHandler):
+    """
+    login api
+    """
     @gen.coroutine
     @is_started
     def get(self):
@@ -92,7 +100,11 @@ class LoginHandlerWX(tornado.web.RequestHandler):
                 self.redirect(location)
                 raise gen.Return()
             else:
-                ctx = {'static_url': settings.STATIC_URL, 'message': u"登录已经失效，请刷新后重试！", 'SETTINGS': settings}
+                ctx = {
+                    'static_url': settings.STATIC_URL,
+                    'message': u"登录已经失效，请刷新后重试！",
+                    'SETTINGS': settings
+                }
                 self.render("wx_error.html", **ctx)
                 raise gen.Return()
 
@@ -112,6 +124,9 @@ class LoginHandlerWX(tornado.web.RequestHandler):
 
 
 class RegisterHandler(tornado.web.RequestHandler):
+    """
+    register api
+    """
     @gen.coroutine
     @is_started
     def get(self):
@@ -136,9 +151,13 @@ class RegisterHandler(tornado.web.RequestHandler):
                 "gender": gender
             })
             if not register_res:
-                location = error_location + "?type=register_server_error&token={0}".format(settings.TOKEN)
+                location = error_location + "?type=register_server_error&token={0}".format(
+                    settings.TOKEN
+                )
             elif not register_res.get("status", False):
-                location = error_location + "?type=register_error&token={0}".format(settings.TOKEN)
+                location = error_location + "?type=register_error&token={0}".format(
+                    settings.TOKEN
+                )
         else:
             location = register_location
         self.redirect(location)
@@ -147,11 +166,14 @@ class RegisterHandler(tornado.web.RequestHandler):
         try:
             rep_data = post(url=get_register_server_url(), json=data, verify=False, timeout=30)
             return rep_data.json()
-        except:
+        except BaseException:
             return {}
 
 
 class LoginHandler(tornado.web.RequestHandler):
+    """
+    login api
+    """
     @gen.coroutine
     @is_started
     def get(self):
@@ -181,15 +203,20 @@ class LoginHandler(tornado.web.RequestHandler):
                 "gender": gender
             })
             if not login_res:
-                location = "http://{0}/rumpetroll/error/?type=server_error&token={1}".format(self.request.host, settings.TOKEN)
+                location = "http://{0}/rumpetroll/error/?type=server_error&token={1}".format(
+                    self.request.host, settings.TOKEN)
             elif not login_res.get("status", False):
-                location = "http://{0}/rumpetroll/error/?type=login_error&token={1}".format(self.request.host, settings.TOKEN)
+                location = "http://{0}/rumpetroll/error/?type=login_error&token={1}".format(
+                    self.request.host, settings.TOKEN)
             else:
                 openid = base64.b64encode(username.encode('utf-8'))
                 self.set_cookie('openid', openid)
                 self.set_cookie('gender', login_res.get("gender", gender))
         else:
-            location = '{}?next=http://{}/rumpetroll/'.format(get_login_url(self.request), self.request.host)
+            location = '{}?next=http://{}/rumpetroll/'.format(
+                get_login_url(self.request),
+                                                              self.request.host
+            )
 
         self.redirect(location)
 
@@ -197,11 +224,14 @@ class LoginHandler(tornado.web.RequestHandler):
         try:
             req_data = post(url=get_login_server_url(), json=data, verify=False, timeout=60)
             return req_data.json()
-        except:
+        except BaseException:
             return {}
 
 
 class AdminHandler(tornado.web.RequestHandler):
+    """
+    admin api
+    """
     @authenticated
     def get(self):
         ctx = {
@@ -215,9 +245,12 @@ class AdminHandler(tornado.web.RequestHandler):
 
 
 class RankHandler(tornado.web.RequestHandler):
+    """
+    rank api
+    """
     @authenticated
     def get(self):
-        info = settings.rd.hgetall('WEIXIN_OPEN_INFO')
+        info = settings.RD.hgetall('WEIXIN_OPEN_INFO')
         user_info = {key: json.loads(value) for key, value in info.items()}
 
         data = get_rank(-1)
@@ -226,28 +259,52 @@ class RankHandler(tornado.web.RequestHandler):
                 LOG.warning('user[%s] not in user_info %s, has been ignore', i['name'], user_info)
                 continue
             i.update(user_info[i['name']])
-        ctx = {'data': data, 'version': settings.STATIC_VERSION, 'static_url': settings.STATIC_URL, 'SETTINGS': settings}
+        ctx = {
+            'data': data,
+            'version': settings.STATIC_VERSION,
+            'static_url': settings.STATIC_URL,
+            'SETTINGS': settings}
         self.render("ranger4.html", **ctx)
 
 
 class ErrorHandler(tornado.web.RequestHandler):
+    """
+    error message
+    """
     @authenticated
     def get(self):
         message1, message2, button, url = u'场面太火爆', u'游戏服务器人员已满，请稍后重试！', u'我挤', '/rumpetroll/'
         tps = self.get_query_argument("type", "")
         if tps:
             if "login_error" == tps:
-                message1, message2, button, url = u"登录错误！", u'无当前用户名。', u'重新登录或注册', get_login_url(self.request)
+                message1, message2, button, url = u"登录错误！", \
+                                                  u'无当前用户名。', \
+                                                  u'重新登录或注册', \
+                                                  get_login_url(self.request)
             elif "server_error" == tps:
-                message1, message2, button, url = u"登录服务错误！", u"当前游戏服务出现问题，无法登录。", u'重新登录', get_login_url(self.request)
+                message1, message2, button, url = u"登录服务错误！", \
+                                                  u"当前游戏服务出现问题，无法登录。", \
+                                                  u'重新登录', \
+                                                  get_login_url(self.request)
             elif "register_server_error" == tps:
-                message1, message2, button, url = u"注册服务错误！", u"当前游戏服务出现问题，无法注册。", u'重新注册', get_register_url(self.request)
+                message1, message2, button, url = u"注册服务错误！",\
+                                                  u"当前游戏服务出现问题，无法注册。", \
+                                                  u'重新注册', get_register_url(self.request)
             elif "register_error" == tps:
-                message1, message2, button, url = u"注册错误！", u'用户名已被注册不可用。', u'重新注册', get_register_url(self.request)
+                message1, message2, button, url = u"注册错误！", \
+                                                  u'用户名已被注册不可用。', \
+                                                  u'重新注册', \
+                                                  get_register_url(self.request)
             elif "secondpwd_notexists" == tps:
-                message1, message2, button, url = u"注册错误！", u'两次输入的密码不一致。', u'重新注册', get_register_url(self.request)
+                message1, message2, button, url = u"注册错误！", \
+                                                  u'两次输入的密码不一致。', \
+                                                  u'重新注册', \
+                                                  get_register_url(self.request)
             elif "inuse_username" == tps:
-                message1, message2, button, url = u"注册错误！", u"用户名已被注册，可直接登录。", u'重新登录', get_login_url(self.request)
+                message1, message2, button, url = u"注册错误！", \
+                                                  u"用户名已被注册，可直接登录。", \
+                                                  u'重新登录', \
+                                                  get_login_url(self.request)
         ctx = {
             'static_url': settings.STATIC_URL,
             'message1': message1,

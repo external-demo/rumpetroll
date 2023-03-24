@@ -1,4 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
+# Copyright 2016 Tencent
+# Author: 蓝鲸智云
+"""
 import datetime
 import json
 import logging
@@ -23,17 +26,23 @@ from common.manager import namespace
 from common.retrying import Retrying
 from handlers import utils as handler_utils
 from handlers.utils import authenticated, get_rank
+
 LOG = logging.getLogger(__name__)
 
 
 class APIHandler(tornado.web.RequestHandler):
+    """
+    api handler
+    """
+
     def json_response(self, json_data):
         self.set_header('Content-Type', 'application/json')
         self.write(json.dumps(json_data))
 
 
 class GetStatHandler(APIHandler):
-    """A router view, send requests to every node which defined in settings,
+    """
+    A router view, send requests to every node which defined in settings,
     the merge result.
     """
 
@@ -90,7 +99,6 @@ class GetStatHandler(APIHandler):
         }
 
     def merge_resp_golds(self, responses, show_detail):
-        # LOG.info('merge_resp_golds: %s' % responses)
         merged_data = {
             'remain': 0,
             'total': 0,
@@ -141,6 +149,9 @@ class GetStatHandler(APIHandler):
 
 
 class GetUserHandler(APIHandler):
+    """
+    get user api
+    """
     @authenticated
     def get(self):
         try:
@@ -154,6 +165,9 @@ class GetUserHandler(APIHandler):
 
 
 class RankDataHandler(APIHandler):
+    """
+    user api
+    """
     @gen.coroutine
     @authenticated
     def get(self):
@@ -169,6 +183,9 @@ class RankDataHandler(APIHandler):
 
 
 class GoldsHandler(APIHandler):
+    """
+    golds api
+    """
     @gen.coroutine
     @authenticated
     def get(self):
@@ -224,6 +241,9 @@ class GoldsHandler(APIHandler):
 
 
 class GetUserNameHandler(APIHandler):
+    """
+    get user name api
+    """
     @gen.coroutine
     @authenticated
     def get(self):
@@ -254,6 +274,9 @@ class GetUserNameHandler(APIHandler):
 
 
 class ExportHandler(APIHandler):
+    """
+    export api
+    """
     @authenticated
     def get(self):
         num = self.get_argument('num', '20')
@@ -277,6 +300,9 @@ class ExportHandler(APIHandler):
 
 
 class GetEndpointHandler(APIHandler):
+    """
+    endpoint api
+    """
     @authenticated
     def get(self):
         try:

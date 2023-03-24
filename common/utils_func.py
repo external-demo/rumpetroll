@@ -5,7 +5,7 @@ import datetime
 import json
 import logging
 
-from settings import rd as redis_client
+from settings import RD as redis_client
 
 FUNCTION_KEY = 'rumpetroll::function_control'
 

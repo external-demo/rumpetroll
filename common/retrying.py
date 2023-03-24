@@ -10,10 +10,16 @@ LOG = logging.getLogger(__name__)
 
 
 class Retrying(Exception):
+    """
+    exception retry
+    """
     pass
 
 
 def retry(func):
+    """
+    function
+    """
     @wraps(func)
     def _wrapped_func(*args, **kwargs):
         try:

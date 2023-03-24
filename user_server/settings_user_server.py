@@ -1,5 +1,6 @@
-from settings import PORT, DEBUG
 import os
+
+from settings import DEBUG, PORT
 
 BASE_DIR = os.path.dirname(__file__)
 

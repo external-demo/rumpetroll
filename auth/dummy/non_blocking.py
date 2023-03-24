@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
-# Copyright 2017 Tencent
+"""
+# Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import base64
 import json
 import logging
@@ -8,13 +9,13 @@ import logging
 from tornado import gen
 
 from common import constants
-from settings import rd
+from settings import RD
 
 LOG = logging.getLogger(__name__)
 
 
 @gen.coroutine
-def get_userid(code, access_token=None, use_cache=True):
+def get_userid():
     """获取企业号userid
     对应是否需要访问代理, 最后做统一处理
     """
@@ -23,7 +24,7 @@ def get_userid(code, access_token=None, use_cache=True):
 
 
 @gen.coroutine
-def get_userinfo(user_id, access_token=None, use_cache=True, gender=2):
+def get_userinfo(user_id, gender=2):
     """获取用户RTX信息"""
     try:
         username = str(base64.b64decode(user_id), "utf-8") or 'Guest'
@@ -36,5 +37,5 @@ def get_userinfo(user_id, access_token=None, use_cache=True, gender=2):
         gender = constants.FEMALE
 
     data = (username, gender)
-    rd.hset('WEIXIN_OPEN_INFO', user_id, json.dumps({"nickname": username, 'gender': gender}))
+    RD.hset('WEIXIN_OPEN_INFO', user_id, json.dumps({"nickname": username, 'gender': gender}))
     raise gen.Return(data)

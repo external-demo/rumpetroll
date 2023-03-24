@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
-# Copyright 2017 Tencent
+"""
+# Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import json
 import logging
 
@@ -10,7 +11,7 @@ from auth.mp import constants
 from common.retrying import Retrying
 from common.signer import get_signed_url
 from common.utils import http_get
-from settings import rd, region
+from settings import RD, REGION
 
 LOG = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ LOG = logging.getLogger(__name__)
 def get_access_token(use_cache=True):
     """获取调用接口凭证，有频率限制，最好有缓存"""
     if use_cache:
-        access_token = region.get('access_token')
+        access_token = REGION.get('access_token')
         LOG.debug('get_access_token use cache: %s' % access_token)
     else:
         access_token = None
@@ -35,7 +36,7 @@ def get_access_token(use_cache=True):
             access_token = None
         else:
             access_token = result['data'].get('access_token')
-            region.set('access_token', access_token)
+            REGION.set('access_token', access_token)
     raise gen.Return(access_token)
 
 
@@ -51,7 +52,7 @@ def get_userinfo(user_id, access_token=None, use_cache=True):
     cache_key = 'get_userinfo::%s' % user_id
 
     if use_cache:
-        result = region.get(cache_key)
+        result = REGION.get(cache_key)
         LOG.debug('get_userinfo[%s] use cache: %s', user_id, result)
     else:
         result = None
@@ -63,7 +64,7 @@ def get_userinfo(user_id, access_token=None, use_cache=True):
             if use_cache is True:
                 raise Retrying
         else:
-            region.set(cache_key, result)
-            rd.hset('WEIXIN_OPEN_INFO', result['openid'], json.dumps(result))
+            REGION.set(cache_key, result)
+            RD.hset('WEIXIN_OPEN_INFO', result['openid'], json.dumps(result))
 
     raise gen.Return((result.get('nickname', 'Guest'), result.get('sex', '1')))

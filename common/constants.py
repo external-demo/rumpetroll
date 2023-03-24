@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
-# Copyright 2017 IFOOTH
-# Author: 蓝鲸智云 <thezero12@hotmail.com>
-
+"""
+# Copyright 2016 Tencent
+# Author: 蓝鲸智云
+"""
 # 女性
 FEMALE = 2
 # 男性

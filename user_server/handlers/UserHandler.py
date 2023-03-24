@@ -1,7 +1,9 @@
 import json
-from settings import session, IGNORES_LIST
+
 from tornado.web import RequestHandler
-from models.UserModels import Users, UserGolds
+
+from models.UserModels import Users
+from settings import IGNORES_LIST, SESSION
 
 
 class LoginHandler(RequestHandler):
@@ -29,7 +31,7 @@ class LoginHandler(RequestHandler):
         self.finish({"status": state, "result": result})
 
     def loginUser(self, username):
-        exists_username = session.query(Users).filter(Users.username == username).first()
+        exists_username = SESSION.query(Users).filter(Users.username == username).first()
         if exists_username:
             return True, {"username": exists_username.username, "gender": exists_username.gender}
         elif username.lower() in IGNORES_LIST:
@@ -60,15 +62,17 @@ class RegisterHandler(RequestHandler):
 
     def createUser(self, username, gender):
         try:
-            user_count = list(session.query(Users).filter(Users.username == username and Users.gender == gender))
+            user_count = list(SESSION.query(Users).filter(
+                Users.username == username and Users.gender == gender
+            ))
             if user_count:
                 return False, 'Name is registered'
             user = Users()
             user.username = username
             user.password = ""
             user.gender = gender
-            session.add(user)
-            session.commit()
+            SESSION.add(user)
+            SESSION.commit()
             return True, "ok"
         except Exception as e:
             return False, e
@@ -100,7 +104,7 @@ class ForgetHandler(RequestHandler):
         password_new = req_data.get("password_new", "")
         if not username or not password_new or not password_old:
             status, result = False, "用户名或密码不能为空"
-        exists_username = session.query(Users).filter(Users.username == username).first()
+        exists_username = SESSION.query(Users).filter(Users.username == username).first()
         if exists_username and exists_username.auth_password(password_old):
             user = Users()
             user.password = password_new

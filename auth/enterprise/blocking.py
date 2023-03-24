@@ -1,6 +1,7 @@
-# -*- coding: utf-8 -*-
+"""
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
+"""
 import json
 import logging
 import time
@@ -8,7 +9,7 @@ import time
 import requests
 
 from auth.enterprise import constants
-from settings import rd
+from settings import RD
 
 LOG = logging.getLogger(__name__)
 # Use connection pool
@@ -63,5 +64,5 @@ def get_userinfo(user_id, access_token=None):
     if result.get('errcode') != 0:
         LOG.error(u"获取用户RTX信息失败: %s" % result)
     else:
-        rd.hset('WEIXIN_OPEN_INFO', result['name'], json.dumps(result))
+        RD.hset('WEIXIN_OPEN_INFO', result['name'], json.dumps(result))
     return (result.get('name', 'Guest'), result.get('gender', '1'))

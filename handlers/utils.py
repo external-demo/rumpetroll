@@ -14,7 +14,7 @@ from tornado.websocket import websocket_connect
 import settings
 from common.manager import namespace
 from common.utils_func import func_control
-from settings import rd
+from settings import RD
 
 LOG = logging.getLogger(__name__)
 
@@ -64,14 +64,17 @@ class NodeDispatcher(object):
                 LOG.debug('Try entering node_name=%s, failed, will try next...' % node_name)
                 continue
             else:
-                LOG.debug('Found best node %.2fms, node_name=%s', (time.time() - st) * 1000, node_name)
+                LOG.debug('Found best node %.2fms, node_name=%s',
+                          (time.time() - st) * 1000,
+                          node_name
+                          )
                 return node_name
         else:
             LOG.error('All available nodes tried, can not found vacant one.')
             raise ValueError(u"游戏服务器人员已满，请稍后重试！")
 
 
-node_dispatcher = NodeDispatcher(rd)
+node_dispatcher = NodeDispatcher(RD)
 
 
 class StatusUploader(object):
@@ -92,7 +95,7 @@ class StatusUploader(object):
         return {key: json.loads(value) for key, value in ret.items()}
 
 
-status_uploader = StatusUploader(rd)
+status_uploader = StatusUploader(RD)
 
 
 @gen.coroutine
@@ -120,7 +123,10 @@ def clean_golds_client():
     """清除豆子"""
     _namespaces = namespace.get_global_namespaces()
     for node in _namespaces:
-        url = '{0}://{1}/rumpetroll/{2}/ws?messager=1'.format(settings.WSS, settings.HOST, node['url'].split(':')[-1])
+        url = '{0}://{1}/rumpetroll/{2}/ws?messager=1'.format(settings.WSS,
+                                                              settings.HOST,
+                                                              node['url'].split(':')[-1]
+                                                              )
         LOG.debug('send clean golds message to %s', url)
         conn = yield websocket_connect(url)
         message = {'type': 'cleanGold', 'token': settings.TOKEN}
@@ -207,6 +213,6 @@ def check_white(open_id):
         else:
             LOG.warning('check_white Failed, %s', rtx)
             return False
-    except Exception:
+    except FileExistsError:
         LOG.exception('check_white error, %s', open_id)
         return False
