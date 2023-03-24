@@ -20,9 +20,9 @@ LOG = logging.getLogger(__name__)
 
 
 @gen.coroutine
-def http_get(url, params={}):
+def http_get(url, params):
     st = time.time()
-    if params:
+    if isinstance(params, dict):
         params = urllib.urlencode(params)
         url = '{}?{}'.format(url, params)
     LOG.debug('curl -X GET "%s"', url)

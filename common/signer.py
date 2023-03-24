@@ -56,7 +56,7 @@ def signer(_func):
 signed_urlopen = signer(urlopen)
 
 
-def get_signed_url(url, app_code, secret_key, params={}, data=None):
+def get_signed_url(url, app_code, secret_key, params, data=None):
     """获取签名URL"""
     _request = urlparse(url)
     query = dict(urlparse.parse_qsl(_request.query))
