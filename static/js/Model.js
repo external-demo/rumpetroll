@@ -1,4 +1,4 @@
-var Model = function () {
+let Model = function () {
   this.tadpoles = {};
   this.userTadpole;
   this.camera;

@@ -23,7 +23,7 @@ var Camera = function (aCanvas, aContext, x, y) {
     var grad = context.createLinearGradient(0, 0, 0, 250);
     // grad.addColorStop(0,'#010207');    // 红
     // grad.addColorStop(0.1,'#0b2b36'); // 绿
-    grad.addColorStop(1, "#000"); // 紫
+    grad.addColorStop(1, '#000'); // 紫
     /* 将这个渐变设置为fillStyle */
     context.fillStyle = grad;
     context.fillRect(0, 0, canvas.width, canvas.height);
@@ -49,7 +49,7 @@ var Camera = function (aCanvas, aContext, x, y) {
 
     var delta = {
       x: (model.userTadpole.x - model.camera.x) / 30,
-      y: (model.userTadpole.y - model.camera.y) / 30,
+      y: (model.userTadpole.y - model.camera.y) / 30
     };
 
     if (Math.abs(delta.x) + Math.abs(delta.y) > 0.1) {
@@ -76,12 +76,12 @@ var Camera = function (aCanvas, aContext, x, y) {
     return [
       {
         x: camera.x - canvas.width / 2 / camera.zoom,
-        y: camera.y - canvas.height / 2 / camera.zoom,
+        y: camera.y - canvas.height / 2 / camera.zoom
       },
       {
         x: camera.x + canvas.width / 2 / camera.zoom,
-        y: camera.y + canvas.height / 2 / camera.zoom,
-      },
+        y: camera.y + canvas.height / 2 / camera.zoom
+      }
     ];
   };
 
@@ -90,12 +90,12 @@ var Camera = function (aCanvas, aContext, x, y) {
     return [
       {
         x: camera.x - canvas.width / 2 / camera.minZoom,
-        y: camera.y - canvas.height / 2 / camera.minZoom,
+        y: camera.y - canvas.height / 2 / camera.minZoom
       },
       {
         x: camera.x + canvas.width / 2 / camera.minZoom,
-        y: camera.y + canvas.height / 2 / camera.minZoom,
-      },
+        y: camera.y + canvas.height / 2 / camera.minZoom
+      }
     ];
   };
 
@@ -104,12 +104,12 @@ var Camera = function (aCanvas, aContext, x, y) {
     return [
       {
         x: camera.x - canvas.width / 2 / camera.maxZoom,
-        y: camera.y - canvas.height / 2 / camera.maxZoom,
+        y: camera.y - canvas.height / 2 / camera.maxZoom
       },
       {
         x: camera.x + canvas.width / 2 / camera.maxZoom,
-        y: camera.y + canvas.height / 2 / camera.maxZoom,
-      },
+        y: camera.y + canvas.height / 2 / camera.maxZoom
+      }
     ];
   };
 
@@ -118,7 +118,7 @@ var Camera = function (aCanvas, aContext, x, y) {
   };
 
   var debugBounds = function (bounds, text) {
-    context.strokeStyle = "#fff";
+    context.strokeStyle = '#fff';
     context.beginPath();
     context.moveTo(bounds[0].x, bounds[0].y);
     context.lineTo(bounds[0].x, bounds[1].y);
@@ -130,8 +130,8 @@ var Camera = function (aCanvas, aContext, x, y) {
   };
 
   var drawDebug = function () {
-    debugBounds(camera.getInnerBounds(), "Maximum zoom camera bounds");
-    debugBounds(camera.getOuterBounds(), "Minimum zoom camera bounds");
-    debugBounds(camera.getBounds(), "Current zoom camera bounds");
+    debugBounds(camera.getInnerBounds(), 'Maximum zoom camera bounds');
+    debugBounds(camera.getOuterBounds(), 'Minimum zoom camera bounds');
+    debugBounds(camera.getBounds(), 'Current zoom camera bounds');
   };
 };

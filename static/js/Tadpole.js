@@ -5,7 +5,7 @@ var Tadpole = function () {
   this.y = Math.random() * 300 - 150;
   this.size = 3;
 
-  this.name = "";
+  this.name = '';
   this.age = 0;
   // isGOT true为GOT大会签到人员， False不是
   this.isGOT = false;
@@ -52,13 +52,7 @@ var Tadpole = function () {
     }
 
     // Update tadpole hover/mouse state
-    if (
-      Math.sqrt(
-        Math.pow(tadpole.x - mouse.worldx, 2) +
-          Math.pow(tadpole.y - mouse.worldy, 2)
-      ) <
-      tadpole.size + 2
-    ) {
+    if (Math.sqrt(Math.pow(tadpole.x - mouse.worldx, 2) + Math.pow(tadpole.y - mouse.worldy, 2)) < tadpole.size + 2) {
       tadpole.hover = true;
       mouse.tadpole = tadpole;
     } else {
@@ -76,13 +70,11 @@ var Tadpole = function () {
 
     var prevState = {
       angle: tadpole.angle,
-      momentum: tadpole.momentum,
+      momentum: tadpole.momentum
     };
 
     // Angle to targetx and targety (mouse position)
-    var anglediff =
-      Math.atan2(angleTargetY - tadpole.y, angleTargetX - tadpole.x) -
-      tadpole.angle;
+    var anglediff = Math.atan2(angleTargetY - tadpole.y, angleTargetX - tadpole.x) - tadpole.angle;
     while (anglediff < -Math.PI) {
       anglediff += Math.PI * 2;
     }
@@ -101,8 +93,7 @@ var Tadpole = function () {
       tadpole.momentum = 0;
     }
 
-    tadpole.changed +=
-      Math.abs((prevState.angle - tadpole.angle) * 3) + tadpole.momentum;
+    tadpole.changed += Math.abs((prevState.angle - tadpole.angle) * 3) + tadpole.momentum;
 
     if (tadpole.changed > 1) {
       this.timeSinceLastServerUpdate = 0;
@@ -110,15 +101,12 @@ var Tadpole = function () {
   };
 
   this.draw = function (context) {
-    var opacity = Math.max(
-      Math.min(20 / Math.max(tadpole.timeSinceLastServerUpdate - 300, 1), 1),
-      0.2
-    ).toFixed(3);
-    context.fillStyle = "rgba(255,255,255," + opacity + ")";
-    context.shadowColor = "rgba(255, 255, 255, " + opacity * 0.7 + ")";
+    var opacity = Math.max(Math.min(20 / Math.max(tadpole.timeSinceLastServerUpdate - 300, 1), 1), 0.2).toFixed(3);
+    context.fillStyle = 'rgba(255,255,255,' + opacity + ')';
+    context.shadowColor = 'rgba(255, 255, 255, ' + opacity * 0.7 + ')';
     if (this.gender && this.gender == 2) {
-      context.fillStyle = "rgba(245, 126, 245," + opacity + ")";
-      context.shadowColor = "rgba(245, 126, 245, " + opacity * 0.7 + ")";
+      context.fillStyle = 'rgba(245, 126, 245,' + opacity + ')';
+      context.shadowColor = 'rgba(245, 126, 245, ' + opacity * 0.7 + ')';
     }
 
     context.shadowOffsetX = 0;
@@ -127,14 +115,7 @@ var Tadpole = function () {
 
     // Draw circle
     context.beginPath();
-    context.arc(
-      tadpole.x,
-      tadpole.y,
-      tadpole.size,
-      tadpole.angle + Math.PI * 2.7,
-      tadpole.angle + Math.PI * 1.3,
-      true
-    );
+    context.arc(tadpole.x, tadpole.y, tadpole.size, tadpole.angle + Math.PI * 2.7, tadpole.angle + Math.PI * 1.3, true);
 
     tadpole.tail.draw(context);
 
@@ -142,7 +123,7 @@ var Tadpole = function () {
     context.fill();
 
     context.shadowBlur = 0;
-    context.shadowColor = "";
+    context.shadowColor = '';
 
     drawName(context);
     drawMessages(context);
@@ -158,13 +139,10 @@ var Tadpole = function () {
   };
 
   var drawName = function (context) {
-    var opacity = Math.max(
-      Math.min(20 / Math.max(tadpole.timeSinceLastServerUpdate - 300, 1), 1),
-      0.2
-    ).toFixed(3);
-    context.fillStyle = "rgba(160,160,160," + opacity + ")";
+    var opacity = Math.max(Math.min(20 / Math.max(tadpole.timeSinceLastServerUpdate - 300, 1), 1), 0.2).toFixed(3);
+    context.fillStyle = 'rgba(160,160,160,' + opacity + ')';
     context.font = 10 + "px 'Microsoft YaHei'";
-    context.textBaseline = "hanging";
+    context.textBaseline = 'hanging';
     var width = context.measureText(tadpole.name).width;
     context.fillText(tadpole.name, tadpole.x - width / 2, tadpole.y + 8);
   };

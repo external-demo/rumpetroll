@@ -3,12 +3,12 @@
 // MIT License
 
 function parseUri(str) {
-  var o = parseUri.options,
-    m = o.parser[o.strictMode ? "strict" : "loose"].exec(str),
+  let o = parseUri.options,
+    m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str),
     uri = {},
     i = 14;
 
-  while (i--) uri[o.key[i]] = m[i] || "";
+  while (i--) uri[o.key[i]] = m[i] || '';
 
   uri[o.q.name] = {};
   uri[o.key[12]].replace(o.q.parser, function ($0, $1, $2) {
@@ -21,29 +21,30 @@ function parseUri(str) {
 parseUri.options = {
   strictMode: false,
   key: [
-    "source",
-    "protocol",
-    "authority",
-    "userInfo",
-    "user",
-    "password",
-    "host",
-    "port",
-    "relative",
-    "path",
-    "directory",
-    "file",
-    "query",
-    "anchor",
+    'source',
+    'protocol',
+    'authority',
+    'userInfo',
+    'user',
+    'password',
+    'host',
+    'port',
+    'relative',
+    'path',
+    'directory',
+    'file',
+    'query',
+    'anchor'
   ],
   q: {
-    name: "queryKey",
-    parser: /(?:^|&)([^&=]*)=?([^&]*)/g,
+    name: 'queryKey',
+    parser: /(?:^|&)([^&=]*)=?([^&]*)/g
   },
   parser: {
+    // eslint-disable-next-line no-useless-escape
     strict:
       /^(?:([^:\/?#]+):)?(?:\/\/((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?))?((((?:[^?#\/]*\/)*)([^?#]*))(?:\?([^#]*))?(?:#(.*))?)/,
     loose:
-      /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/,
-  },
+      /^(?:(?![^:@]+:[^:@\/]*@)([^:\/?#.]+):)?(?:\/\/)?((?:(([^:@]*)(?::([^:@]*))?)?@)?([^:\/?#]*)(?::(\d*))?)(((\/(?:[^?#](?![^?#\/]*\.[^?#\/.]+(?:[?#]|$)))*\/?)?([^?#\/]*))(?:\?([^#]*))?(?:#(.*))?)/
+  }
 };

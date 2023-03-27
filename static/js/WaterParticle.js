@@ -22,7 +22,7 @@ var WaterParticle = function () {
 
   wp.draw = function (context) {
     // Draw circle
-    context.fillStyle = "rgba(226,219,226," + wp.opacity + ")";
+    context.fillStyle = 'rgba(226,219,226,' + wp.opacity + ')';
     //context.fillStyle = '#fff';
     context.beginPath();
     context.arc(wp.x, wp.y, this.z * this.size, 0, Math.PI * 2, true);

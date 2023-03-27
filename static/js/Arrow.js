@@ -13,10 +13,7 @@ var Arrow = function (tadpole, camera) {
   this.opacity = 1;
 
   this.update = function () {
-    arrow.angle = Math.atan2(
-      tadpole.y - arrow.camera.y,
-      tadpole.x - arrow.camera.x
-    );
+    arrow.angle = Math.atan2(tadpole.y - arrow.camera.y, tadpole.x - arrow.camera.x);
   };
 
   this.draw = function (context, canvas) {
@@ -53,7 +50,7 @@ var Arrow = function (tadpole, camera) {
       var side2 = calcPoint(x, y, this.angle, 0.5, size);
 
       // Draw arrow
-      context.fillStyle = "rgba(132,188,80," + arrow.opacity + ")";
+      context.fillStyle = 'rgba(132,188,80,' + arrow.opacity + ')';
       context.beginPath();
       context.moveTo(point.x, point.y);
       context.lineTo(side1.x, side1.y);
@@ -66,7 +63,7 @@ var Arrow = function (tadpole, camera) {
   var calcPoint = function (x, y, angle, angleMultiplier, length) {
     return {
       x: x + Math.cos(angle + Math.PI * angleMultiplier) * length,
-      y: y + Math.sin(angle + Math.PI * angleMultiplier) * length,
+      y: y + Math.sin(angle + Math.PI * angleMultiplier) * length
     };
   };
 };

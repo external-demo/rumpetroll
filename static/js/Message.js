@@ -3,7 +3,7 @@ var Message = function (msg) {
 
   this.age = 1;
   this.maxAge = 300;
-  var chatText = $("#chatText");
+  var chatText = $('#chatText');
 
   this.message = msg;
 
@@ -23,7 +23,7 @@ var Message = function (msg) {
       width: context.measureText(message.message).width + paddingW * 2,
       height: fontsize + paddingH * 2 + 2,
       x: x,
-      y: y - i * (fontsize + paddingH * 2 + 1) - 20,
+      y: y - i * (fontsize + paddingH * 2 + 1) - 20
     };
 
     var fadeDuration = 20;
@@ -31,22 +31,10 @@ var Message = function (msg) {
     var opacity = (message.maxAge - message.age) / fadeDuration;
     opacity = opacity < 1 ? opacity : 1;
 
-    context.fillStyle = "rgba(255,255,255," + opacity / 1.3 + ")";
-    drawRoundedRectangle(
-      context,
-      messageBox.x,
-      messageBox.y,
-      messageBox.width,
-      messageBox.height,
-      10
-    );
-    context.fillStyle = "rgba(0,0,0,1)";
-    context.fillText(
-      message.message,
-      messageBox.x + paddingW,
-      messageBox.y + paddingH,
-      100
-    );
+    context.fillStyle = 'rgba(255,255,255,' + opacity / 1.3 + ')';
+    drawRoundedRectangle(context, messageBox.x, messageBox.y, messageBox.width, messageBox.height, 10);
+    context.fillStyle = 'rgba(0,0,0,1)';
+    context.fillText(message.message, messageBox.x + paddingW, messageBox.y + paddingH, 100);
   };
 
   var drawRoundedRectangle = function (ctx, x, y, w, h, r) {

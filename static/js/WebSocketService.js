@@ -12,13 +12,13 @@ var WebSocketService = function (model, webSocket) {
     model.userTadpole.id = data.id;
     var roomNum = data.room_num;
 
-    $("#room_num")
-      .text("ROOM" + roomNum)
+    $('#room_num')
+      .text('ROOM' + roomNum)
       .show();
 
     //获取当前用户的姓名
     $.ajax({
-      url: "/rumpetroll/api/get_username/",
+      url: '/rumpetroll/api/get_username/',
       data: { token: token },
       success: function (data) {
         // console.log(data);
@@ -28,58 +28,58 @@ var WebSocketService = function (model, webSocket) {
         model.userTadpole.openid = data.openid;
       },
       error: function () {
-        model.userTadpole.name = "Guest " + data.id;
+        model.userTadpole.name = 'Guest ' + data.id;
       },
-      dataType: "json",
-      async: false,
+      dataType: 'json',
+      async: false
     });
     model.tadpoles[data.id] = model.tadpoles[-1];
     // console.log(model.tadpoles)
     delete model.tadpoles[-1];
 
-    $("#chat_box").initChat();
+    $('#chat_box').initChat();
   };
 
   function sankData() {
-    $("#timer_wrapper").hide();
-    var sank = document.getElementById("sank_data");
-    var html = "";
-    sank.innerHTML = "";
+    $('#timer_wrapper').hide();
+    var sank = document.getElementById('sank_data');
+    var html = '';
+    sank.innerHTML = '';
     $.ajax({
-      url: "/rumpetroll/api/rank/",
+      url: '/rumpetroll/api/rank/',
       data: { token: token },
       success: function (data) {
         console.log(data, data.length);
         for (let i = 0; i < data.length; i++) {
           console.log(i);
-          console.log(data[i]["name"], data[i]["golds"]);
+          console.log(data[i]['name'], data[i]['golds']);
           index = i + 1;
           if (index > 3)
             html +=
               '<tr style="height: 60px;"><td>' +
               index +
-              "</td><td>" +
-              data[i]["name"] +
-              "</td><td>" +
-              data[i]["golds"] +
-              "</td></tr>";
+              '</td><td>' +
+              data[i]['name'] +
+              '</td><td>' +
+              data[i]['golds'] +
+              '</td></tr>';
           else
             html +=
               '<tr style="height: 60px;"><td style="background: url(../static/images/num' +
               index +
               '.png) no-repeat center center;"></td><td>' +
-              data[i]["name"] +
-              "</td><td>" +
-              data[i]["golds"] +
-              "</td></tr>";
+              data[i]['name'] +
+              '</td><td>' +
+              data[i]['golds'] +
+              '</td></tr>';
         }
       },
       error: function () {},
-      dataType: "json",
-      async: false,
+      dataType: 'json',
+      async: false
     });
     sank.innerHTML = html;
-    $("#game_over").show();
+    $('#game_over').show();
   }
 
   function getSpeicalTime(timestamp) {
@@ -87,15 +87,15 @@ var WebSocketService = function (model, webSocket) {
     now.setSeconds(now.getSeconds() + over_time);
     var dateStr =
       now.getFullYear() +
-      "/" +
+      '/' +
       (now.getMonth() + 1) +
-      "/" +
+      '/' +
       now.getDate() +
-      " " +
+      ' ' +
       now.getHours() +
-      ":" +
+      ':' +
       now.getMinutes() +
-      ":" +
+      ':' +
       now.getSeconds();
     return dateStr;
   }
@@ -109,7 +109,7 @@ var WebSocketService = function (model, webSocket) {
     var hourElem = $(hour_elem);
     var minuteElem = $(minute_elem);
     var secondElem = $(second_elem);
-    var haomiaoElem = $("#haomiao");
+    var haomiaoElem = $('#haomiao');
 
     timer = setInterval(function () {
       sys_second = end_time - new Date().getTime();
@@ -119,15 +119,15 @@ var WebSocketService = function (model, webSocket) {
         var minute = Math.floor((sys_second / 1000 / 60) % 60);
         var second = Math.floor((sys_second / 1000) % 60);
         var haomiao = Math.floor(sys_second % 1000);
-        day_elem && $(day_elem).text(day + "天"); //计算天
-        hourElem.text(hour < 10 ? "0" + hour : hour + "时"); //计算小时
-        minuteElem.text(minute < 10 ? "0" + minute : minute + ""); //计算分
-        secondElem.text(second < 10 ? "0" + second : second + ""); // 计算秒
+        day_elem && $(day_elem).text(day + '天'); //计算天
+        hourElem.text(hour < 10 ? '0' + hour : hour + '时'); //计算小时
+        minuteElem.text(minute < 10 ? '0' + minute : minute + ''); //计算分
+        secondElem.text(second < 10 ? '0' + second : second + ''); // 计算秒
         haomiaoElem.text(haomiao); // 计算秒
       } else {
-        minuteElem.text("00"); //计算分
-        secondElem.text("00"); // 计算秒
-        haomiaoElem.text("00"); // 计算秒
+        minuteElem.text('00'); //计算分
+        secondElem.text('00'); // 计算秒
+        haomiaoElem.text('00'); // 计算秒
         clearInterval(timer);
         sankData();
       }
@@ -196,22 +196,22 @@ var WebSocketService = function (model, webSocket) {
       return false;
     }
     if (data.is_created) {
-      $("#tip_box").show();
-      $("#tip_box").bind("touchstart", function () {
+      $('#tip_box').show();
+      $('#tip_box').bind('touchstart', function () {
         return false;
       });
       setTimeout(function () {
-        $("#tip_box").hide();
+        $('#tip_box').hide();
       }, 2000);
     }
-    $("#timer_wrapper").show();
+    $('#timer_wrapper').show();
     if (data.timestamp) {
       countDown(
         getSpeicalTime(data.timestamp),
-        "#timer_wrapper .day",
-        "#timer_wrapper .hour",
-        "#timer_wrapper .minute",
-        "#timer_wrapper .second"
+        '#timer_wrapper .day',
+        '#timer_wrapper .hour',
+        '#timer_wrapper .minute',
+        '#timer_wrapper .second'
       );
     }
   };
@@ -245,7 +245,7 @@ var WebSocketService = function (model, webSocket) {
   };
 
   this.processMessage = function (data) {
-    var fn = webSocketService[data.type + "Handler"];
+    var fn = webSocketService[data.type + 'Handler'];
     if (fn) {
       fn(data);
     }
@@ -253,25 +253,25 @@ var WebSocketService = function (model, webSocket) {
 
   this.connectionClosed = function () {
     webSocketService.hasConnection = false;
-    $("#cant-connect").fadeIn(300);
+    $('#cant-connect').fadeIn(300);
   };
 
   this.sendUpdate = function (tadpole) {
     var sendObj = {
-      type: "update",
+      type: 'update',
       x: tadpole.x.toFixed(1),
       y: tadpole.y.toFixed(1),
       angle: tadpole.angle.toFixed(3),
       momentum: tadpole.momentum.toFixed(3),
       size: tadpole.size,
-      openid: tadpole.openid,
+      openid: tadpole.openid
     };
 
     if (tadpole.name) {
-      sendObj["name"] = tadpole.name;
-      sendObj["id"] = tadpole.id;
-      sendObj["gender"] = tadpole.gender;
-      sendObj["isGOT"] = tadpole.isGOT;
+      sendObj['name'] = tadpole.name;
+      sendObj['id'] = tadpole.id;
+      sendObj['gender'] = tadpole.gender;
+      sendObj['isGOT'] = tadpole.isGOT;
     }
 
     webSocket.send(JSON.stringify(sendObj));
@@ -289,9 +289,9 @@ var WebSocketService = function (model, webSocket) {
         772095891: { y: -1232, x: -1305, goldId: 772095891 },
         975904981: { y: -279, x: -1570, goldId: 975904981 },
         206601049: { y: -1624, x: -459, goldId: 206601049 },
-        455766205: { y: -1871, x: -1072, goldId: 455766205 },
+        455766205: { y: -1871, x: -1072, goldId: 455766205 }
       },
-      type: "gold",
+      type: 'gold'
     };
     webSocket.send(JSON.stringify(sendObj));
   };
@@ -300,11 +300,11 @@ var WebSocketService = function (model, webSocket) {
     var sendObj = {
       id: tadpole.id,
       goldId: gold.id,
-      type: "eatGold",
+      type: 'eatGold',
       openid: tadpole.openid,
       name: tadpole.name,
       isGOT: tadpole.isGOT,
-      message: "+1",
+      message: '+1'
     };
     webSocket.send(JSON.stringify(sendObj));
   };
@@ -318,8 +318,8 @@ var WebSocketService = function (model, webSocket) {
 
     var sendObj = {
       id: model.userTadpole.id,
-      type: "message",
-      message: msg,
+      type: 'message',
+      message: msg
     };
 
     webSocket.send(JSON.stringify(sendObj));
@@ -327,9 +327,9 @@ var WebSocketService = function (model, webSocket) {
 
   this.authorize = function (token, verifier) {
     var sendObj = {
-      type: "authorize",
+      type: 'authorize',
       token: token,
-      verifier: verifier,
+      verifier: verifier
     };
 
     webSocket.send(JSON.stringify(sendObj));

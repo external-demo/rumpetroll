@@ -24,21 +24,15 @@ var TadpoleTail = function (tadpole) {
         anglediff -= Math.PI * 2;
       }
 
-      tailJoint.angle +=
-        (anglediff *
-          (jointSpacing * 3 + Math.min(tadpole.momentum / 2, Math.PI * 1.8))) /
-        8;
-      tailJoint.angle +=
-        Math.cos(animationRate - i / 3) * ((tadpole.momentum + 0.3) / 40);
+      tailJoint.angle += (anglediff * (jointSpacing * 3 + Math.min(tadpole.momentum / 2, Math.PI * 1.8))) / 8;
+      tailJoint.angle += Math.cos(animationRate - i / 3) * ((tadpole.momentum + 0.3) / 40);
 
       if (i == 0) {
         tailJoint.x = parentJoint.x + Math.cos(tailJoint.angle + Math.PI) * 5;
         tailJoint.y = parentJoint.y + Math.sin(tailJoint.angle + Math.PI) * 5;
       } else {
-        tailJoint.x =
-          parentJoint.x + Math.cos(tailJoint.angle + Math.PI) * jointSpacing;
-        tailJoint.y =
-          parentJoint.y + Math.sin(tailJoint.angle + Math.PI) * jointSpacing;
+        tailJoint.x = parentJoint.x + Math.cos(tailJoint.angle + Math.PI) * jointSpacing;
+        tailJoint.y = parentJoint.y + Math.sin(tailJoint.angle + Math.PI) * jointSpacing;
       }
     }
   };
@@ -52,15 +46,11 @@ var TadpoleTail = function (tadpole) {
       var falloff = (tail.joints.length - i) / tail.joints.length;
       var jointSize = (tadpole.size - 1.8) * falloff;
 
-      var x1 =
-        tailJoint.x + Math.cos(tailJoint.angle + Math.PI * 1.5) * jointSize;
-      var y1 =
-        tailJoint.y + Math.sin(tailJoint.angle + Math.PI * 1.5) * jointSize;
+      var x1 = tailJoint.x + Math.cos(tailJoint.angle + Math.PI * 1.5) * jointSize;
+      var y1 = tailJoint.y + Math.sin(tailJoint.angle + Math.PI * 1.5) * jointSize;
 
-      var x2 =
-        tailJoint.x + Math.cos(tailJoint.angle + Math.PI / 2) * jointSize;
-      var y2 =
-        tailJoint.y + Math.sin(tailJoint.angle + Math.PI / 2) * jointSize;
+      var x2 = tailJoint.x + Math.cos(tailJoint.angle + Math.PI / 2) * jointSize;
+      var y2 = tailJoint.y + Math.sin(tailJoint.angle + Math.PI / 2) * jointSize;
 
       path[0].push({ x: x1, y: y1 });
       path[1].push({ x: x2, y: y2 });
@@ -80,7 +70,7 @@ var TadpoleTail = function (tadpole) {
       tail.joints.push({
         x: 0,
         y: 0,
-        angle: Math.PI * 2,
+        angle: Math.PI * 2
       });
     }
   })();

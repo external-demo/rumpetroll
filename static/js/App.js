@@ -1,7 +1,7 @@
 var App = function (aSettings, aCanvas) {
-  var app = this;
+  let app = this;
 
-  var model,
+  let model,
     canvas,
     context,
     webSocket,
@@ -13,26 +13,18 @@ var App = function (aSettings, aCanvas) {
     if (messageQuota < 5 && model.userTadpole.age % 50 == 0) {
       messageQuota++;
     }
-    var userTadpole = model.userTadpole;
+    let userTadpole = model.userTadpole;
     // Update usertadpole
     if (keyNav.x != 0 || keyNav.y != 0) {
-      userTadpole.userUpdate(
-        model.tadpoles,
-        userTadpole.x + keyNav.x,
-        userTadpole.y + keyNav.y
-      );
+      userTadpole.userUpdate(model.tadpoles, userTadpole.x + keyNav.x, userTadpole.y + keyNav.y);
     } else {
-      var mvp = getMouseWorldPosition();
+      let mvp = getMouseWorldPosition();
       mouse.worldx = mvp.x;
       mouse.worldy = mvp.y;
       userTadpole.userUpdate(model.tadpoles, mouse.worldx, mouse.worldy);
     }
 
-    if (
-      userTadpole.age % 6 == 0 &&
-      userTadpole.changed > 1 &&
-      webSocketService.hasConnection
-    ) {
+    if (userTadpole.age % 6 == 0 && userTadpole.changed > 1 && webSocketService.hasConnection) {
       userTadpole.changed = 0;
       webSocketService.sendUpdate(userTadpole);
     }
@@ -40,29 +32,29 @@ var App = function (aSettings, aCanvas) {
     model.camera.update(model);
 
     // Update tadpoles
-    var tadpoles = model.tadpoles;
+    let tadpoles = model.tadpoles;
     for (id in tadpoles) {
       tadpoles[id].update(mouse);
     }
 
     // Update waterParticles
-    var waterParticles = model.waterParticles;
-    var camera = model.camera;
+    let waterParticles = model.waterParticles;
+    let camera = model.camera;
     for (i in waterParticles) {
       waterParticles[i].update(camera.getOuterBounds(), camera.zoom);
     }
 
     // Update golds
-    var golds = model.golds;
+    let golds = model.golds;
     for (i in golds) {
       golds[i].update(camera.getOuterBounds(), tadpoles);
     }
 
     // Update arrows
-    var arrows = model.arrows;
+    let arrows = model.arrows;
     for (i in arrows) {
-      var cameraBounds = camera.getBounds();
-      var arrow = arrows[i];
+      let cameraBounds = camera.getBounds();
+      let arrow = arrows[i];
       arrow.update();
     }
   };
@@ -71,19 +63,19 @@ var App = function (aSettings, aCanvas) {
     model.camera.setupContext();
 
     // Draw waterParticles
-    var waterParticles = model.waterParticles;
+    let waterParticles = model.waterParticles;
     for (i in waterParticles) {
       waterParticles[i].draw(context);
     }
 
     // Draw gold
-    var golds = model.golds;
+    let golds = model.golds;
     for (i in model.golds) {
       golds[i].draw(context);
     }
 
     // Draw tadpoles
-    var tadpoles = model.tadpoles;
+    let tadpoles = model.tadpoles;
     for (id in tadpoles) {
       tadpoles[id].draw(context);
     }
@@ -92,7 +84,7 @@ var App = function (aSettings, aCanvas) {
     model.camera.startUILayer();
 
     // Draw arrows
-    var arrows = model.arrows;
+    let arrows = model.arrows;
     for (i in arrows) {
       arrows[i].draw(context, canvas);
     }
@@ -110,17 +102,17 @@ var App = function (aSettings, aCanvas) {
     // app.reconnect();
     setTimeout(function () {
       hotcss.initView();
-      $("#chat_box").hide();
-      $("#timer_wrapper").hide();
-      $("#game_over").hide();
-      $("#dav_error").show();
+      $('#chat_box').hide();
+      $('#timer_wrapper').hide();
+      $('#game_over').hide();
+      $('#dav_error').show();
     }, 2500);
   };
 
   app.reconnect = function () {
     // 获取当前endpoint
     $.ajax({
-      url: "/rumpetroll/api/get_endpoint/",
+      url: '/rumpetroll/api/get_endpoint/',
       data: { token: token, room: room },
       success: function (data) {
         console.log(data);
@@ -134,30 +126,30 @@ var App = function (aSettings, aCanvas) {
           window.webSocketService = webSocketService;
         } else {
           // 获取endpoint失败
-          console.log("error");
+          console.log('error');
         }
       },
       error: function () {
         // 获取endpoint失败
-        console.log("error");
+        console.log('error');
       },
-      dataType: "json",
-      async: false,
+      dataType: 'json',
+      async: false
     });
   };
 
   app.onSocketMessage = function (e) {
     // Detect if message was in multi form
     if (/^__mul__/.test(e.data)) {
-      $.each(e.data.substr(9).split("\n"), function (i, json_str) {
+      $.each(e.data.substr(9).split('\n'), function (i, json_str) {
         try {
-          var data = JSON.parse(json_str);
+          let data = JSON.parse(json_str);
           webSocketService.processMessage(data);
         } catch (e) {}
       });
     } else {
       try {
-        var data = JSON.parse(e.data);
+        let data = JSON.parse(e.data);
         webSocketService.processMessage(data);
       } catch (e) {}
     }
@@ -171,12 +163,12 @@ var App = function (aSettings, aCanvas) {
   };
 
   app.sendGold = function () {
-    var gold = [];
+    let gold = [];
 
     for (var i = 0; i < 10; i++) {
-      var obj = {
+      let obj = {
         x: Math.random() * 300 - 150,
-        y: Math.random() * 300 - 150,
+        y: Math.random() * 300 - 150
       };
       gold[i] = obj;
     }
@@ -198,8 +190,7 @@ var App = function (aSettings, aCanvas) {
       return;
     }
     if (model.userTadpole && e.which == 1) {
-      model.userTadpole.momentum = model.userTadpole.targetMomentum =
-        model.userTadpole.maxMomentum;
+      model.userTadpole.momentum = model.userTadpole.targetMomentum = model.userTadpole.maxMomentum;
     }
   };
 
@@ -217,23 +208,19 @@ var App = function (aSettings, aCanvas) {
   app.keydown = function (e) {
     if (e.keyCode == keys.up) {
       keyNav.y = -1;
-      model.userTadpole.momentum = model.userTadpole.targetMomentum =
-        model.userTadpole.maxMomentum;
+      model.userTadpole.momentum = model.userTadpole.targetMomentum = model.userTadpole.maxMomentum;
       e.preventDefault();
     } else if (e.keyCode == keys.down) {
       keyNav.y = 1;
-      model.userTadpole.momentum = model.userTadpole.targetMomentum =
-        model.userTadpole.maxMomentum;
+      model.userTadpole.momentum = model.userTadpole.targetMomentum = model.userTadpole.maxMomentum;
       e.preventDefault();
     } else if (e.keyCode == keys.left) {
       keyNav.x = -1;
-      model.userTadpole.momentum = model.userTadpole.targetMomentum =
-        model.userTadpole.maxMomentum;
+      model.userTadpole.momentum = model.userTadpole.targetMomentum = model.userTadpole.maxMomentum;
       e.preventDefault();
     } else if (e.keyCode == keys.right) {
       keyNav.x = 1;
-      model.userTadpole.momentum = model.userTadpole.targetMomentum =
-        model.userTadpole.maxMomentum;
+      model.userTadpole.momentum = model.userTadpole.targetMomentum = model.userTadpole.maxMomentum;
       e.preventDefault();
     }
   };
@@ -258,11 +245,10 @@ var App = function (aSettings, aCanvas) {
     mouse.clicking = true;
 
     if (model.userTadpole) {
-      model.userTadpole.momentum = model.userTadpole.targetMomentum =
-        model.userTadpole.maxMomentum;
+      model.userTadpole.momentum = model.userTadpole.targetMomentum = model.userTadpole.maxMomentum;
     }
 
-    var touch = e.changedTouches.item(0);
+    let touch = e.changedTouches.item(0);
     if (touch) {
       mouse.x = touch.clientX;
       mouse.y = touch.clientY;
@@ -276,7 +262,7 @@ var App = function (aSettings, aCanvas) {
   app.touchmove = function (e) {
     e.preventDefault();
 
-    var touch = e.changedTouches.item(0);
+    let touch = e.changedTouches.item(0);
     if (touch) {
       mouse.x = touch.clientX;
       mouse.y = touch.clientY;
@@ -287,18 +273,14 @@ var App = function (aSettings, aCanvas) {
     resizeCanvas();
   };
 
-  var getMouseWorldPosition = function () {
+  let getMouseWorldPosition = function () {
     return {
-      x:
-        (mouse.x + (model.camera.x * model.camera.zoom - canvas.width / 2)) /
-        model.camera.zoom,
-      y:
-        (mouse.y + (model.camera.y * model.camera.zoom - canvas.height / 2)) /
-        model.camera.zoom,
+      x: (mouse.x + (model.camera.x * model.camera.zoom - canvas.width / 2)) / model.camera.zoom,
+      y: (mouse.y + (model.camera.y * model.camera.zoom - canvas.height / 2)) / model.camera.zoom
     };
   };
 
-  var resizeCanvas = function () {
+  let resizeCanvas = function () {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   };
@@ -306,7 +288,7 @@ var App = function (aSettings, aCanvas) {
   // Constructor
   (function () {
     canvas = aCanvas;
-    context = canvas.getContext("2d");
+    context = canvas.getContext('2d');
     resizeCanvas();
 
     model = new Model();
@@ -321,12 +303,7 @@ var App = function (aSettings, aCanvas) {
       model.waterParticles.push(new WaterParticle());
     }
 
-    model.camera = new Camera(
-      canvas,
-      context,
-      model.userTadpole.x,
-      model.userTadpole.y
-    );
+    model.camera = new Camera(canvas, context, model.userTadpole.x, model.userTadpole.y);
 
     model.arrows = {};
 

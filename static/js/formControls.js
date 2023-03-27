@@ -2,28 +2,28 @@
 
 (function ($) {
   $.fn.initChat = function () {
-    var input = $(this).find("#chat");
-    var submitBtn = $(this).find("#submit");
-    var chatText = $("#chatText");
-    var chatBox = $("#chat_box");
+    var input = $(this).find('#chat');
+    var submitBtn = $(this).find('#submit');
+    var chatText = $('#chatText');
+    var chatBox = $('#chat_box');
     var hidden = true;
     var messageHistory = [];
     var messagePointer = -1;
     var winWidth = chatBox.width();
     input.width(winWidth - 65 - 10 - 40);
     if (!is_token) {
-      chatBox.css("opacity", "0.3");
+      chatBox.css('opacity', '0.3');
     } else {
-      chatBox.addClass("pc-chatBox");
-      chatBox.css("opacity", "0.3");
+      chatBox.addClass('pc-chatBox');
+      chatBox.css('opacity', '0.3');
     }
 
     var closechat = function () {
       hidden = true;
       // input.css("opacity","0.5");
       messagePointer = messageHistory.length;
-      input.val("");
-      chatText.text("");
+      input.val('');
+      chatText.text('');
     };
 
     var updateDimensions = function () {
@@ -42,19 +42,19 @@
     // 	}, 0.1);
     // });
     input.focus(function () {
-      console.log("focus");
+      console.log('focus');
     });
-    input.bind("touchstart", function () {
+    input.bind('touchstart', function () {
       // input.focus();
-      chatBox.addClass("focus");
+      chatBox.addClass('focus');
       // messageHistory.push('hello world');
       //  		messagePointer = messageHistory.length;
       // app.sendMessage('hello world');
       // return false;
     });
-    input.bind("click", function () {
+    input.bind('click', function () {
       // input.focus();
-      chatBox.addClass("focus");
+      chatBox.addClass('focus');
       // messageHistory.push('hello world');
       //  		messagePointer = messageHistory.length;
       // app.sendMessage('hello world');
@@ -93,7 +93,7 @@
         }
       }
     });
-    submitBtn.bind("touchstart", function () {
+    submitBtn.bind('touchstart', function () {
       if (input.val().length > 0) {
         messageHistory.push(input.val());
         messagePointer = messageHistory.length;
@@ -102,10 +102,10 @@
       }
       closechat();
       input.blur();
-      chatBox.removeClass("focus");
+      chatBox.removeClass('focus');
       return false;
     });
-    submitBtn.bind("click", function () {
+    submitBtn.bind('click', function () {
       if (input.val().length > 0) {
         messageHistory.push(input.val());
         messagePointer = messageHistory.length;
@@ -114,7 +114,7 @@
       }
       closechat();
       input.blur();
-      chatBox.removeClass("focus");
+      chatBox.removeClass('focus');
       return false;
     });
     input.keyup(function (e) {
@@ -125,17 +125,13 @@
 
       if (input.val().length > 0) {
         updateDimensions();
-        input.css("opacity", "1");
+        input.css('opacity', '1');
         hidden = false;
       } else {
         closechat();
       }
       if (!hidden) {
-        if (
-          k == keys.esc ||
-          k == keys.enter ||
-          (k == keys.space && input.val().length > 35)
-        ) {
+        if (k == keys.esc || k == keys.enter || (k == keys.space && input.val().length > 35)) {
           if (k != keys.esc && input.val().length > 0) {
             messageHistory.push(input.val());
             messagePointer = messageHistory.length;

@@ -13,51 +13,47 @@ var initApp = function () {
   if (app != null) {
     return;
   }
-  var canvas = document.getElementById("canvas");
-  app = new App(settings, document.getElementById("canvas"));
+  var canvas = document.getElementById('canvas');
+  app = new App(settings, document.getElementById('canvas'));
 
-  window.addEventListener("resize", app.resize, false);
+  window.addEventListener('resize', app.resize, false);
 
-  document.addEventListener("mousemove", app.mousemove, false);
-  document.addEventListener("mousedown", app.mousedown, false);
-  document.addEventListener("mouseup", app.mouseup, false);
+  document.addEventListener('mousemove', app.mousemove, false);
+  document.addEventListener('mousedown', app.mousedown, false);
+  document.addEventListener('mouseup', app.mouseup, false);
 
-  canvas.addEventListener("touchstart", app.touchstart, false);
-  document.addEventListener("touchend", app.touchend, false);
-  document.addEventListener("touchcancel", app.touchend, false);
-  document.addEventListener("touchmove", app.touchmove, false);
+  canvas.addEventListener('touchstart', app.touchstart, false);
+  document.addEventListener('touchend', app.touchend, false);
+  document.addEventListener('touchcancel', app.touchend, false);
+  document.addEventListener('touchmove', app.touchmove, false);
 
-  document.addEventListener("keydown", app.keydown, false);
-  document.addEventListener("keyup", app.keyup, false);
+  document.addEventListener('keydown', app.keydown, false);
+  document.addEventListener('keyup', app.keyup, false);
 
-  document
-    .getElementById("authorize-user-button")
-    .addEventListener("click", function (e) {
-      app.authorize(null, null);
-      authWindow = window.open(
-        "auth.html",
-        "",
-        "width=950,height=460,menubar=no,toolbar=no,location=no,directories=no,status=no,scrollbars=yes,resizable=yes')"
-      );
-      return false;
-    });
+  document.getElementById('authorize-user-button').addEventListener('click', function (e) {
+    app.authorize(null, null);
+    authWindow = window.open(
+      'auth.html',
+      '',
+      "width=950,height=460,menubar=no,toolbar=no,location=no,directories=no,status=no,scrollbars=yes,resizable=yes')"
+    );
+    return false;
+  });
 
   setInterval(runLoop, 40);
 };
 
 var forceInit = function () {
   // initApp()
-  document.getElementById("unsupported-browser").style.display = "none";
+  document.getElementById('unsupported-browser').style.display = 'none';
   return false;
 };
 
 if (Modernizr.canvas && Modernizr.websockets) {
   initApp();
 } else {
-  document.getElementById("unsupported-browser").style.display = "block";
-  document
-    .getElementById("force-init-button")
-    .addEventListener("click", forceInit);
+  document.getElementById('unsupported-browser').style.display = 'block';
+  document.getElementById('force-init-button').addEventListener('click', forceInit);
 }
 
 var addStats = function () {
@@ -66,7 +62,7 @@ var addStats = function () {
   }
   // Draw fps
   var stats = new Stats();
-  document.getElementById("fps").appendChild(stats.domElement);
+  document.getElementById('fps').appendChild(stats.domElement);
 
   setInterval(function () {
     stats.update();
@@ -92,9 +88,9 @@ if (debug) {
 }
 
 $(function () {
-  $("a[rel=external]").click(function (e) {
+  $('a[rel=external]').click(function (e) {
     e.preventDefault();
-    window.open($(this).attr("href"));
+    window.open($(this).attr('href'));
   });
 });
 

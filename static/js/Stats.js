@@ -1,6 +1,6 @@
 var Stats = function () {
   var _container,
-    _mode = "fps",
+    _mode = 'fps',
     _frames = 0,
     _time = new Date().getTime(),
     _timeLastFrame = _time,
@@ -20,69 +20,59 @@ var Stats = function () {
     _msContext,
     _msImageData;
 
-  _container = document.createElement("div");
-  _container.style.fontFamily = "Helvetica, Arial, sans-serif";
-  _container.style.fontSize = "9px";
-  _container.style.backgroundColor = "#000020";
-  _container.style.opacity = "0.9";
-  _container.style.width = "80px";
-  _container.style.paddingTop = "2px";
-  _container.style.cursor = "pointer";
-  _container.addEventListener("click", swapMode, false);
+  _container = document.createElement('div');
+  _container.style.fontFamily = 'Helvetica, Arial, sans-serif';
+  _container.style.fontSize = '9px';
+  _container.style.backgroundColor = '#000020';
+  _container.style.opacity = '0.9';
+  _container.style.width = '80px';
+  _container.style.paddingTop = '2px';
+  _container.style.cursor = 'pointer';
+  _container.addEventListener('click', swapMode, false);
 
-  _fpsText = document.createElement("div");
-  _fpsText.innerHTML = "<strong>FPS</strong>";
-  _fpsText.style.color = "#00ffff";
-  _fpsText.style.marginLeft = "3px";
-  _fpsText.style.marginBottom = "3px";
+  _fpsText = document.createElement('div');
+  _fpsText.innerHTML = '<strong>FPS</strong>';
+  _fpsText.style.color = '#00ffff';
+  _fpsText.style.marginLeft = '3px';
+  _fpsText.style.marginBottom = '3px';
   _container.appendChild(_fpsText);
 
-  _fpsCanvas = document.createElement("canvas");
+  _fpsCanvas = document.createElement('canvas');
   _fpsCanvas.width = 74;
   _fpsCanvas.height = 30;
-  _fpsCanvas.style.display = "block";
-  _fpsCanvas.style.marginLeft = "3px";
-  _fpsCanvas.style.marginBottom = "3px";
+  _fpsCanvas.style.display = 'block';
+  _fpsCanvas.style.marginLeft = '3px';
+  _fpsCanvas.style.marginBottom = '3px';
   _container.appendChild(_fpsCanvas);
 
-  _fpsContext = _fpsCanvas.getContext("2d");
-  _fpsContext.fillStyle = "#101030";
+  _fpsContext = _fpsCanvas.getContext('2d');
+  _fpsContext.fillStyle = '#101030';
   _fpsContext.fillRect(0, 0, _fpsCanvas.width, _fpsCanvas.height);
 
-  _fpsImageData = _fpsContext.getImageData(
-    0,
-    0,
-    _fpsCanvas.width,
-    _fpsCanvas.height
-  );
+  _fpsImageData = _fpsContext.getImageData(0, 0, _fpsCanvas.width, _fpsCanvas.height);
 
-  _msText = document.createElement("div");
-  _msText.innerHTML = "<strong>MS</strong>";
-  _msText.style.color = "#00ffff";
-  _msText.style.marginLeft = "3px";
-  _msText.style.marginBottom = "3px";
-  _msText.style.display = "none";
+  _msText = document.createElement('div');
+  _msText.innerHTML = '<strong>MS</strong>';
+  _msText.style.color = '#00ffff';
+  _msText.style.marginLeft = '3px';
+  _msText.style.marginBottom = '3px';
+  _msText.style.display = 'none';
   _container.appendChild(_msText);
 
-  _msCanvas = document.createElement("canvas");
+  _msCanvas = document.createElement('canvas');
   _msCanvas.width = 74;
   _msCanvas.height = 30;
-  _msCanvas.style.display = "block";
-  _msCanvas.style.marginLeft = "3px";
-  _msCanvas.style.marginBottom = "3px";
-  _msCanvas.style.display = "none";
+  _msCanvas.style.display = 'block';
+  _msCanvas.style.marginLeft = '3px';
+  _msCanvas.style.marginBottom = '3px';
+  _msCanvas.style.display = 'none';
   _container.appendChild(_msCanvas);
 
-  _msContext = _msCanvas.getContext("2d");
-  _msContext.fillStyle = "#101030";
+  _msContext = _msCanvas.getContext('2d');
+  _msContext.fillStyle = '#101030';
   _msContext.fillRect(0, 0, _msCanvas.width, _msCanvas.height);
 
-  _msImageData = _msContext.getImageData(
-    0,
-    0,
-    _msCanvas.width,
-    _msCanvas.height
-  );
+  _msImageData = _msContext.getImageData(0, 0, _msCanvas.width, _msCanvas.height);
 
   function updateGraph(data, value) {
     var x, y, index;
@@ -114,23 +104,23 @@ var Stats = function () {
 
   function swapMode() {
     switch (_mode) {
-      case "fps":
-        _mode = "ms";
+      case 'fps':
+        _mode = 'ms';
 
-        _fpsText.style.display = "none";
-        _fpsCanvas.style.display = "none";
-        _msText.style.display = "block";
-        _msCanvas.style.display = "block";
+        _fpsText.style.display = 'none';
+        _fpsCanvas.style.display = 'none';
+        _msText.style.display = 'block';
+        _msCanvas.style.display = 'block';
 
         break;
 
-      case "ms":
-        _mode = "fps";
+      case 'ms':
+        _mode = 'fps';
 
-        _fpsText.style.display = "block";
-        _fpsCanvas.style.display = "block";
-        _msText.style.display = "none";
-        _msCanvas.style.display = "none";
+        _fpsText.style.display = 'block';
+        _fpsCanvas.style.display = 'block';
+        _msText.style.display = 'none';
+        _msCanvas.style.display = 'none';
 
         break;
     }
@@ -150,8 +140,7 @@ var Stats = function () {
 
       updateGraph(_msImageData.data, Math.min(30, 30 - (_ms / 200) * 30));
 
-      _msText.innerHTML =
-        "<strong>" + _ms + " MS</strong> (" + _msMin + "-" + _msMax + ")";
+      _msText.innerHTML = '<strong>' + _ms + ' MS</strong> (' + _msMin + '-' + _msMax + ')';
       _msContext.putImageData(_msImageData, 0, 0);
 
       _timeLastFrame = _time;
@@ -163,13 +152,12 @@ var Stats = function () {
 
         updateGraph(_fpsImageData.data, Math.min(30, 30 - (_fps / 100) * 30));
 
-        _fpsText.innerHTML =
-          "<strong>" + _fps + " FPS</strong> (" + _fpsMin + "-" + _fpsMax + ")";
+        _fpsText.innerHTML = '<strong>' + _fps + ' FPS</strong> (' + _fpsMin + '-' + _fpsMax + ')';
         _fpsContext.putImageData(_fpsImageData, 0, 0);
 
         _timeLastSecond = _time;
         _frames = 0;
       }
-    },
+    }
   };
 };
