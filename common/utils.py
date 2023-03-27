@@ -21,7 +21,7 @@ LOG = logging.getLogger(__name__)
 
 @gen.coroutine
 def http_get(url, params):
-    st = time.time()
+    current_time = time.time()
     if isinstance(params, dict):
         params = urllib.urlencode(params)
         url = '{}?{}'.format(url, params)
@@ -29,7 +29,7 @@ def http_get(url, params):
     resp = yield http_client.fetch(url, method='GET', request_timeout=5, validate_cert=False, **settings.HTTP_PROXY)
     body = resp.body
     result = json.loads(body)
-    LOG.debug('RESP: %.2fms %s', (time.time() - st) * 1000, body)
+    LOG.debug('RESP: %.2fms %s', (time.time() - current_time) * 1000, body)
     raise gen.Return(result)
 
 

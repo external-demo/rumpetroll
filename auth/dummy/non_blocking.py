@@ -2,6 +2,7 @@
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
 """
+# pylint: disable=broad-except
 import base64
 import json
 import logging
@@ -28,7 +29,7 @@ def get_userinfo(user_id, gender=2):
     """获取用户RTX信息"""
     try:
         username = str(base64.b64decode(user_id), "utf-8") or 'Guest'
-    except Exception as error:
+    except Exception as error:  # noqa
         LOG.error('user_id: %s not base64, %s', user_id, error)
         username = 'Guest'
 

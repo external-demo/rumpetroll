@@ -2,6 +2,7 @@
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
 """
+# pylint: disable=broad-except
 import json
 import logging
 import time
@@ -19,13 +20,13 @@ rpool = requests.Session()
 def _get_method(url, params):
     """GET方法封装"""
     try:
-        st = time.time()
+        current_time = time.time()
         resp = rpool.get(url, params=params, timeout=5, verify=False)
         LOG.debug('curl -X GET "%s"', resp.url)
         result = resp.json()
-        LOG.debug('RESP: %.2fms %s', (time.time() - st) * 1000, resp.text)
+        LOG.debug('RESP: %.2fms %s', (time.time() - current_time) * 1000, resp.text)
         return result
-    except Exception:
+    except Exception: # noqa
         LOG.exception('get url {}, {} error'.format(url, params))
         return {}
 

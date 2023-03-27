@@ -2,6 +2,7 @@
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
 """
+# pylint: disable=broad-except
 import json
 import logging
 import os

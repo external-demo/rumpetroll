@@ -19,7 +19,7 @@ def get_oauth_redirect_url(url, state='authenticated'):
         'scope': 'snsapi_base',
         'state': state,
     }
-    params = urllib.urlencode(params)
+    params = urllib.urlencode(params)  # noqa
     redirect_uri = '{}?{}#wechat_redirect'.format(constants.WECHAT_OAUTH_URL, params)
     LOG.info('redirect_url is: %s' % redirect_uri)
     return redirect_uri

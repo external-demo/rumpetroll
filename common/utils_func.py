@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright 2017 Tencent
 # Author: 蓝鲸智云
+# pylint: disable=broad-except
 import datetime
 import json
 import logging
@@ -21,7 +22,7 @@ def func_control(func_code):
         else:
             # 没找到，设置为未开启，白名单为空
             return (True, [])
-    except Exception:
+    except Exception:  # noqa
         LOG.warning('func_control %s error', func_code)
         return (True, [])
 
@@ -36,7 +37,7 @@ def get_func_control(func_code):
         else:
             # 没找到，设置为未开启，白名单为空
             return {}
-    except Exception:
+    except Exception: # noqa
         LOG.warning('get_func_control %s error', func_code)
         return {}
 

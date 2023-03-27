@@ -133,7 +133,7 @@ class Namespace(object):
         """
         function
         """
-        self.stat['online'] = len([i for i in self.clients])
+        self.stat['online'] = len(list(self.clients))
         if self.stat['online'] > self.stat['peak']:
             self.stat['peak'] = self.stat['online']
             self.stat['peak_at'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')

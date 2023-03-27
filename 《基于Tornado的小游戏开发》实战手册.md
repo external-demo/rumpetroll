@@ -562,7 +562,7 @@ templates目录下分别新建error.html、login.html、register.html、rumpetro
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{{ SETTINGS.TITLE }}</title>
-    <script src="{{ static_url }}static/js/hotcss.js?v={{ version }}"></script>
+    <script src="{{ static_url }}static/libs/hotcss.js?v={{ version }}"></script>
     <link rel="stylesheet" href="{{ static_url }}static/css/common.css?v={{ version }}">
     <link rel="stylesheet" href="{{ static_url }}static/css/error.css?v={{ version }}">
     <script type="text/javascript" charset="utf-8">

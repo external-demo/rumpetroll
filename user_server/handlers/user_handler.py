@@ -1,3 +1,4 @@
+# pylint: disable=broad-except
 import json
 
 from tornado.web import RequestHandler
@@ -10,10 +11,6 @@ class LoginHandler(RequestHandler):
     """
     用户登录
     """
-
-    def get(self):
-        pass
-
     def post(self):
         req_data = json.loads(self.request.body)
         username = req_data.get("username", "")
@@ -22,7 +19,7 @@ class LoginHandler(RequestHandler):
             if rememberme == 'on':
                 self.set_secure_cookie("username", username)
                 self.set_secure_cookie("rememberme", "T")
-            state, result = self.loginUser(username)
+            state, result = self.login_user(username)
             if state:
                 self.set_secure_cookie("currentuser", username)
         else:
@@ -30,7 +27,7 @@ class LoginHandler(RequestHandler):
             result = "用户名不能为空"
         self.finish({"status": state, "result": result})
 
-    def loginUser(self, username):
+    def login_user(self, username):
         exists_username = SESSION.query(Users).filter(Users.username == username).first()
         if exists_username:
             return True, {"username": exists_username.username, "gender": exists_username.gender}
@@ -44,10 +41,6 @@ class RegisterHandler(RequestHandler):
     """
     用户注册
     """
-
-    def get(self):
-        pass
-
     def post(self):
         result = "注册成功"
         req_data = json.loads(self.request.body)
@@ -55,12 +48,12 @@ class RegisterHandler(RequestHandler):
         gender = req_data.get("gender", "1")
         if not username:
             result = "注册失败，用户名不能为空"
-        state, res = self.createUser(username, gender)
+        state, res = self.create_user(username, gender)
         if not state:
             result = res
         self.finish({"result": result, "status": state})
 
-    def createUser(self, username, gender):
+    def create_user(self, username, gender):
         try:
             user_count = list(SESSION.query(Users).filter(
                 Users.username == username and Users.gender == gender
@@ -74,8 +67,8 @@ class RegisterHandler(RequestHandler):
             SESSION.add(user)
             SESSION.commit()
             return True, "ok"
-        except Exception as e:
-            return False, e
+        except Exception as create_exc:  # noqa
+            return False, create_exc
 
 
 class LogoutHandler(RequestHandler):
@@ -92,10 +85,6 @@ class ForgetHandler(RequestHandler):
     """
     密码修改
     """
-
-    def get(self):
-        pass
-
     def post(self):
         status, result = True, "修改成功"
         req_data = json.loads(self.request.body)

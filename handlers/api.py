@@ -2,6 +2,7 @@
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
 """
+# pylint: disable=broad-except
 import datetime
 import json
 import logging
@@ -54,7 +55,7 @@ class GetStatHandler(APIHandler):
         show_detail = detail == '1'
 
         if meter == 'rank':
-            resp = self.merge_resp_rank(responses, show_detail)
+            resp = self.merge_resp_rank()
         elif meter == 'golds':
             resp = self.merge_resp_golds(responses, show_detail)
         elif meter == 'online':
@@ -63,10 +64,10 @@ class GetStatHandler(APIHandler):
             resp = {'data': [], 'result': False, 'message': u'meter is invalid'}
         self.json_response(resp)
 
-    def merge_resp_rank(self, responses, show_detail):
-        all_clients = settings.rd.hgetall('WEIXIN_OPEN_INFO')
-        all_timestamps = settings.rd.hgetall('rumpetroll::h_eat_gold_timestamp')
-        all_golds = dict(settings.rd.zrange('rumpetroll::zs_eat_gold_counter', 0, -1, withscores=True))
+    def merge_resp_rank(self):
+        all_clients = settings.RD.hgetall('WEIXIN_OPEN_INFO')
+        all_timestamps = settings.RD.hgetall('rumpetroll::h_eat_gold_timestamp')
+        all_golds = dict(settings.RD.zrange('rumpetroll::zs_eat_gold_counter', 0, -1, withscores=True))
         data = {}
         for openid, info in all_clients.items():
             if not openid:
@@ -155,7 +156,7 @@ class GetUserHandler(APIHandler):
     @authenticated
     def get(self):
         try:
-            info = settings.rd.hgetall('WEIXIN_OPEN_INFO')
+            info = settings.RD.hgetall('WEIXIN_OPEN_INFO')
             data = {key: json.loads(value) for key, value in info.items()}
             result = {'result': True, 'message': '', 'data': data}
             self.json_response(result)
@@ -171,7 +172,7 @@ class RankDataHandler(APIHandler):
     @gen.coroutine
     @authenticated
     def get(self):
-        info = settings.rd.hgetall('WEIXIN_OPEN_INFO')
+        info = settings.RD.hgetall('WEIXIN_OPEN_INFO')
         user_info = {key: json.loads(value) for key, value in info.items()}
         data = get_rank(-1)
         for i in data:
@@ -385,6 +386,6 @@ class CleanHandler(APIHandler):
     def post(self):
         _data = {}
         for key in self.REDIS_KEYS:
-            _data[key] = settings.rd.delete(key)
+            _data[key] = settings.RD.delete(key)
         data = {'result': True, 'data': _data, 'message': u'redis清理成功'}
         self.json_response(data)

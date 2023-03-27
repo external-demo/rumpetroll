@@ -1,4 +1,4 @@
-from handlers.UserHandler import ForgetHandler, LoginHandler, RegisterHandler
+from handlers.user_handler import ForgetHandler, LoginHandler, RegisterHandler
 
 handlers = [
     ("/login", LoginHandler),

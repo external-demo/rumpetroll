@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
+# pylint: disable=broad-except
 import json
 import logging
 import re
@@ -162,7 +163,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
         room = NAMESPACE.golds[message['goldId']]['room']
 
-        st = time.time()
+        current_time = time.time()
         resp = (
             self.pipe.zincrby('rumpetroll::zs_eat_gold_counter', openid, 1)
             .hset('rumpetroll::h_eat_gold_timestamp', openid, time.time())
@@ -172,7 +173,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             'client[%s|%s] eat gold: %.2fms, %s, %s',
             self._id,
             openid,
-            (time.time() - st) * 1000,
+            (time.time() - current_time) * 1000,
             resp,
             message
         )
@@ -252,7 +253,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
             else:
                 self.broadcast(msg_type, raw_message)
 
-        except Exception:
+        except Exception:  # noqa
             LOG.exception('on_message error')
 
     @property
@@ -332,5 +333,5 @@ def clean_golds():
         NAMESPACE.golds.clear()
         NAMESPACE.marked_timestamp = None
         LOG.info('clean golds success')
-    except Exception:    # [broad-exception-caught]
+    except Exception:   # noqa
         LOG.exception('clean golds error')

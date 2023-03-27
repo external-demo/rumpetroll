@@ -46,7 +46,7 @@ class NodeDispatcher(object):
         return self.redisdb.zadd(self.RK_CLIENTS_COUNTER, node_name, count)
 
     def find_best_node(self):
-        st = time.time()
+        current_time = time.time()
         online_counts = self.redisdb.zrange(self.RK_CLIENTS_COUNTER, 0, -1, withscores=True)
         online_counts = dict(online_counts)
 
@@ -63,12 +63,11 @@ class NodeDispatcher(object):
             if self.try_enter(node_name) > self.max_clients_per_node:
                 LOG.debug('Try entering node_name=%s, failed, will try next...' % node_name)
                 continue
-            else:
-                LOG.debug('Found best node %.2fms, node_name=%s',
-                          (time.time() - st) * 1000,
-                          node_name
-                          )
-                return node_name
+            LOG.debug('Found best node %.2fms, node_name=%s',
+                      (time.time() - current_time) * 1000,
+                      node_name
+                      )
+            return node_name
         else:
             LOG.error('All available nodes tried, can not found vacant one.')
             raise ValueError(u"游戏服务器人员已满，请稍后重试！")
@@ -148,7 +147,7 @@ def get_rank(num):
                 else:
                     merged_data[openid]['golds'] += _data['golds']
     data = merged_data.values()
-    LOG.debug('get_rank raw data: %s', data)
+    LOG.debug('get_rank raw data: %s  num: %s', data, num)
     data = filter(lambda x: x.get('name') not in settings.IGNORES_LIST, data)
     LOG.debug('IGNORES_LIST data: %s', data)
 
@@ -191,8 +190,7 @@ def is_started(view_func):
             ctx = {'static_url': settings.STATIC_URL, 'version': settings.STATIC_VERSION, 'SETTINGS': settings}
             self.render("start.html", **ctx)
             raise gen.Return()
-        else:
-            view_func(self, *args, **kwargs)
+        view_func(self, *args, **kwargs)
 
     return _wrapped_view
 
@@ -203,8 +201,13 @@ def check_white(open_id):
     if not open_id:
         return False
     try:
-        name = open(os.path.join(settings.BASE_DIR, 'etc/name.csv')).read().splitlines()
-        department = open(os.path.join(settings.BASE_DIR, 'etc/department.csv')).read().splitlines()
+        name, department = [], []
+        with open(os.path.join(settings.BASE_DIR, 'etc/name.csv'), encoding='utf-8') as name_file:
+            name = name_file.read().splitlines()
+
+        with open(os.path.join(settings.BASE_DIR, 'etc/department.csv'), encoding='utf-8') as department_file:
+            department = department_file.read().splitlines()
+
         department = dict(i.split(',')[::-1] for i in department)
         rtx = department.get(open_id)
         if rtx in name:

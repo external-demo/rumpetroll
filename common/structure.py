@@ -7,7 +7,7 @@ import json
 
 class SyncPosition(object):
     """
-    data
+    sync position
     """
     def __init__(self, gson=""):
         self.__dict__ = json.loads(gson)
@@ -15,7 +15,7 @@ class SyncPosition(object):
 
 class SyncData(object):
     """
-    data
+    sync data
     """
     def __init__(self):
         self.type = "message"
@@ -24,7 +24,7 @@ class SyncData(object):
 
 class InitData(object):
     """
-    data
+    init data
     """
     def __init__(self, id):
         self.type = "welcome"
@@ -33,8 +33,8 @@ class InitData(object):
 
 class CloseData(object):
     """
-    data
+    close data
     """
     def __init__(self, id):
         self.type = "closed"
-        self.id = id
+        self.id = id  # noqa

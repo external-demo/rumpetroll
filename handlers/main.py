@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
+# pylint: disable=broad-except,R1720
 import base64
 import json
 import logging
@@ -37,10 +38,29 @@ def get_websocket_url(request):
     return '%s://%s/rumpetroll/socket.io/' % (settings.WSS, request.host)
 
 
+class LoginRegister():
+    @staticmethod
+    def login(data: dict) -> dict:
+        try:
+            req_data = post(url=get_login_server_url(), json=data, verify=False, timeout=60)
+            return req_data.json()
+        except BaseException: # noqa
+            return {}
+
+    @staticmethod
+    def register(data: dict) -> dict:
+        try:
+            rep_data = post(url=get_register_server_url(), json=data, verify=False, timeout=30)
+            return rep_data.json()
+        except BaseException: # noqa
+            return {}
+
+
 class IndexHandler(tornado.web.RequestHandler):
     """
     index api
     """
+
     @gen.coroutine
     @is_started
     @tornado.web.addslash
@@ -57,6 +77,7 @@ class IndexHandler(tornado.web.RequestHandler):
             self.set_cookie('gender', gender)
 
         elif openid == '':
+            self.set_header('X-Frame-Options', 'DENY')
             url = '{}?next=http://{}{}'.format(get_login_url(self.request), self.request.host, self.request.uri)
             self.redirect(url)
             raise gen.Return()
@@ -77,6 +98,7 @@ class LoginHandlerWX(tornado.web.RequestHandler):
     """
     login api
     """
+
     @gen.coroutine
     @is_started
     def get(self):
@@ -97,6 +119,7 @@ class LoginHandlerWX(tornado.web.RequestHandler):
             if result['user_id']:
                 openid = result['user_id']
                 self.set_cookie('openid', openid)
+                self.set_header('X-Frame-Options', 'DENY')
                 self.redirect(location)
                 raise gen.Return()
             else:
@@ -109,6 +132,7 @@ class LoginHandlerWX(tornado.web.RequestHandler):
                 raise gen.Return()
 
         elif not state:
+            self.set_header('X-Frame-Options', 'DENY')
             url = 'http://{}{}'.format(self.request.host, self.request.uri)
             self.redirect(wx_utils.get_oauth_redirect_url(url))
             raise gen.Return()
@@ -123,10 +147,11 @@ class LoginHandlerWX(tornado.web.RequestHandler):
         raise gen.Return()
 
 
-class RegisterHandler(tornado.web.RequestHandler):
+class RegisterHandler(tornado.web.RequestHandler, LoginRegister):
     """
     register api
     """
+
     @gen.coroutine
     @is_started
     def get(self):
@@ -160,20 +185,15 @@ class RegisterHandler(tornado.web.RequestHandler):
                 )
         else:
             location = register_location
+        self.set_header('X-Frame-Options', 'DENY')
         self.redirect(location)
 
-    def register(self, data: dict) -> dict:
-        try:
-            rep_data = post(url=get_register_server_url(), json=data, verify=False, timeout=30)
-            return rep_data.json()
-        except BaseException:
-            return {}
 
-
-class LoginHandler(tornado.web.RequestHandler):
+class LoginHandler(tornado.web.RequestHandler, LoginRegister):
     """
     login api
     """
+
     @gen.coroutine
     @is_started
     def get(self):
@@ -198,14 +218,14 @@ class LoginHandler(tornado.web.RequestHandler):
         gender = self.get_argument('gender')
 
         if username and (len(username) >= 1) and (gender in ['1', '2']):
-            login_res = self.login({
+            login_res = self.register({
                 "username": username,
                 "gender": gender
             })
             if not login_res:
                 location = "http://{0}/rumpetroll/error/?type=server_error&token={1}".format(
                     self.request.host, settings.TOKEN)
-            elif not login_res.get("status", False):
+            elif not login_res.get("status", False) and ("Name is registered" != login_res.get("result")):
                 location = "http://{0}/rumpetroll/error/?type=login_error&token={1}".format(
                     self.request.host, settings.TOKEN)
             else:
@@ -217,21 +237,15 @@ class LoginHandler(tornado.web.RequestHandler):
                 get_login_url(self.request),
                 self.request.host
             )
-
+        self.set_header('X-Frame-Options', 'DENY')
         self.redirect(location)
-
-    def login(self, data: dict) -> dict:
-        try:
-            req_data = post(url=get_login_server_url(), json=data, verify=False, timeout=60)
-            return req_data.json()
-        except BaseException:
-            return {}
 
 
 class AdminHandler(tornado.web.RequestHandler):
     """
     admin api
     """
+
     @authenticated
     def get(self):
         ctx = {
@@ -248,6 +262,7 @@ class RankHandler(tornado.web.RequestHandler):
     """
     rank api
     """
+
     @authenticated
     def get(self):
         info = settings.RD.hgetall('WEIXIN_OPEN_INFO')
@@ -271,6 +286,7 @@ class ErrorHandler(tornado.web.RequestHandler):
     """
     error message
     """
+
     @authenticated
     def get(self):
         message1, message2, button, url = u'场面太火爆', u'游戏服务器人员已满，请稍后重试！', u'我挤', '/rumpetroll/'
@@ -287,7 +303,7 @@ class ErrorHandler(tornado.web.RequestHandler):
                                                   u'重新登录', \
                                                   get_login_url(self.request)
             elif "register_server_error" == tps:
-                message1, message2, button, url = u"注册服务错误！",\
+                message1, message2, button, url = u"注册服务错误！", \
                                                   u"当前游戏服务出现问题，无法注册。", \
                                                   u'重新注册', get_register_url(self.request)
             elif "register_error" == tps:
