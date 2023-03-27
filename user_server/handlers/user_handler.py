@@ -1,6 +1,7 @@
 # pylint: disable=broad-except
 import json
 
+from sqlalchemy.sql import and_
 from tornado.web import RequestHandler
 
 from models.usermodels import Users
@@ -11,6 +12,7 @@ class LoginHandler(RequestHandler):
     """
     用户登录
     """
+
     def post(self):
         req_data = json.loads(self.request.body)
         username = req_data.get("username", "")
@@ -41,6 +43,7 @@ class RegisterHandler(RequestHandler):
     """
     用户注册
     """
+
     def post(self):
         result = "注册成功"
         req_data = json.loads(self.request.body)
@@ -55,9 +58,7 @@ class RegisterHandler(RequestHandler):
 
     def create_user(self, username, gender):
         try:
-            user_count = list(SESSION.query(Users).filter(
-                Users.username == username and Users.gender == gender
-            ))
+            user_count = SESSION.query(Users).filter(and_(Users.username == username, Users.gender == gender)).first()
             if user_count:
                 return False, 'Name is registered'
             user = Users()
@@ -85,6 +86,7 @@ class ForgetHandler(RequestHandler):
     """
     密码修改
     """
+
     def post(self):
         status, result = True, "修改成功"
         req_data = json.loads(self.request.body)

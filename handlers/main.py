@@ -216,18 +216,25 @@ class LoginHandler(tornado.web.RequestHandler, LoginRegister):
 
         username = self.get_argument('username')
         gender = self.get_argument('gender')
-
+        data = {
+            "username": username,
+            "gender": gender
+        }
         if username and (len(username) >= 1) and (gender in ['1', '2']):
-            login_res = self.register({
-                "username": username,
-                "gender": gender
-            })
+            login_res = self.login(data)
             if not login_res:
                 location = "http://{0}/rumpetroll/error/?type=server_error&token={1}".format(
                     self.request.host, settings.TOKEN)
             elif not login_res.get("status", False) and ("Name is registered" != login_res.get("result")):
-                location = "http://{0}/rumpetroll/error/?type=login_error&token={1}".format(
-                    self.request.host, settings.TOKEN)
+                register_state = self.register(data)
+                if not register_state:
+                    location = "http://{0}/rumpetroll/error/?type=login_error&token={1}".format(
+                        self.request.host, settings.TOKEN
+                    )
+                else:
+                    openid = base64.b64encode(username.encode('utf-8'))
+                    self.set_cookie('openid', openid)
+                    self.set_cookie('gender', login_res.get("gender", gender))
             else:
                 openid = base64.b64encode(username.encode('utf-8'))
                 self.set_cookie('openid', openid)
