@@ -30,13 +30,17 @@ class LoginHandler(RequestHandler):
         self.finish({"status": state, "result": result})
 
     def login_user(self, username):
+        gender = "2"
         exists_username = SESSION.query(Users).filter(Users.username == username).first()
         if exists_username:
-            return True, {"username": exists_username.username, "gender": exists_username.gender}
-        elif username.lower() in IGNORES_LIST:
-            return True, {"username": username, "gender": "2"}
-        else:
+            username = exists_username.username
+            gender = exists_username.gender
+        SESSION.rollback()
+        SESSION.connection().invalidate()
+        SESSION.close()
+        if not exists_username:
             return False, "不存在当前用户"
+        return True, {"username": username, "gender": gender}
 
 
 class RegisterHandler(RequestHandler):
@@ -61,12 +65,16 @@ class RegisterHandler(RequestHandler):
             user_count = SESSION.query(Users).filter(and_(Users.username == username, Users.gender == gender)).first()
             if user_count:
                 return False, 'Name is registered'
+
             user = Users()
             user.username = username
             user.password = ""
             user.gender = gender
             SESSION.add(user)
             SESSION.commit()
+            SESSION.rollback()
+            SESSION.connection().invalidate()
+            SESSION.close()
             return True, "ok"
         except Exception as create_exc:  # noqa
             return False, create_exc
