@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 var settings = new Settings();
 var debug = false;
 var isStatsOn = false;

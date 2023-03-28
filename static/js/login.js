@@ -1,9 +1,4 @@
-/*
- * @Author:
- * @Date:
- * @Last Modified by:
- * @Last Modified time:
- */
+/* eslint-disable no-var */
 
 $(document).ready(function () {
   function update_btn() {

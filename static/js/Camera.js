@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 var Camera = function (aCanvas, aContext, x, y) {
   var camera = this;
 

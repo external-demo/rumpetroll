@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 $(function () {
   $('.music').bind('touchstart', function (event) {
     var _this = $(this);

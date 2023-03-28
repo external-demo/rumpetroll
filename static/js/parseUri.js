@@ -1,7 +1,5 @@
 // parseUri 1.2.2
-// (c) Steven Levithan <stevenlevithan.com>
-// MIT License
-
+/* eslint-disable no-var */
 function parseUri(str) {
   let o = parseUri.options,
     m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str),

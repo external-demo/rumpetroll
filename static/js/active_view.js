@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 (function (window, document) {
   'use strict';
 

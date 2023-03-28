@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 var WebSocketService = function (model, webSocket) {
   var webSocketService = this;
 
@@ -49,9 +50,7 @@ var WebSocketService = function (model, webSocket) {
       url: '/rumpetroll/api/rank/',
       data: { token: token },
       success: function (data) {
-        console.log(data, data.length);
         for (let i = 0; i < data.length; i++) {
-          console.log(i);
           console.log(data[i]['name'], data[i]['golds']);
           index = i + 1;
           if (index > 3)

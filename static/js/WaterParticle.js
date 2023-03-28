@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 var WaterParticle = function () {
   var wp = this;
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 var App = function (aSettings, aCanvas) {
   let app = this;
 

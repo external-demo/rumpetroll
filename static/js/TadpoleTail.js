@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 var TadpoleTail = function (tadpole) {
   var tail = this;
   tail.joints = [];

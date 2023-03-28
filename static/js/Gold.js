@@ -1,16 +1,17 @@
-const Gold = function (conf) {
-  const gold = this;
+/* eslint-disable no-var */
+var Gold = function (conf) {
+  var gold = this;
   gold.id = conf.goldId;
   gold.x = conf.x;
   gold.y = conf.y;
   gold.z = Math.random() * 0.8;
   gold.size = 8;
   gold.opacity = 1;
-  const offset = gold.size;
+  var offset = gold.size;
   gold.update = function (bounds, tadpoles) {
     if (!gold.hide) {
       for (id in tadpoles) {
-        const tadpole = tadpoles[id];
+        var tadpole = tadpoles[id];
         if (Math.abs(tadpole.x - gold.x) < offset && Math.abs(tadpole.y - gold.y) < offset) {
           gold.hide = true;
           tadpole.size = tadpole.size + 1;
