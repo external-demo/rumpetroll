@@ -1,4 +1,4 @@
-/* eslint-disable no-var */
+/* eslint-disable */
 var Stats = function () {
   var _container,
     _mode = 'fps',

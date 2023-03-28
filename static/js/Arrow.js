@@ -1,4 +1,4 @@
-/* eslint-disable no-var */
+/* eslint-disable */
 var Arrow = function (tadpole, camera) {
   var arrow = this;
 

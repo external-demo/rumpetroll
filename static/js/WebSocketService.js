@@ -1,4 +1,4 @@
-/* eslint-disable no-var */
+/* eslint-disable */
 var WebSocketService = function (model, webSocket) {
   var webSocketService = this;
 

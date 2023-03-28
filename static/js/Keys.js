@@ -1,3 +1,4 @@
+/* eslint-disable */
 let keys = {
   esc: 27,
   enter: 13,

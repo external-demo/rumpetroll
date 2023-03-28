@@ -1,5 +1,4 @@
-// parseUri 1.2.2
-/* eslint-disable no-var */
+/* eslint-disable */
 function parseUri(str) {
   let o = parseUri.options,
     m = o.parser[o.strictMode ? 'strict' : 'loose'].exec(str),

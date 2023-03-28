@@ -1,4 +1,4 @@
-/* eslint-disable no-var */
+/* eslint-disable */
 $(document).ready(function () {
   function update_btn() {
     if ($('#nickname').val().length > 0 && $('#gender').val() != '') {

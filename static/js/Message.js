@@ -1,4 +1,4 @@
-/* eslint-disable no-var */
+/* eslint-disable */
 var Message = function (msg) {
   var message = this;
 

@@ -57,18 +57,12 @@ SCHEDULER_NAMESPACE.start()
 
 
 def main():
-    """
-    function
-    """
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.listen(options.port, address=options.address)
     MAIN_LOOP.start()
 
 
 def main_process():
-    """
-    function
-    """
     options.parse_command_line()
     http_server = tornado.httpserver.HTTPServer(Application())
     http_server.bind(options.PORT)

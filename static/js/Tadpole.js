@@ -1,4 +1,4 @@
-/* eslint-disable no-var */
+/* eslint-disable */
 var Tadpole = function () {
   var tadpole = this;
 

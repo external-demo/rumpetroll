@@ -1,4 +1,4 @@
-/* eslint-disable no-var */
+/* eslint-disable */
 var Gold = function (conf) {
   var gold = this;
   gold.id = conf.goldId;
