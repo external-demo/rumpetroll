@@ -66,7 +66,7 @@ var WebSocketService = function (model, webSocket) {
             html +=
               '<tr style="height: 60px;"><td style="background: url(../static/images/num' +
               index +
-              '.png) no-repeat center center;"></td><td>' +
+              '.png) no-repeat center center; background-size:0.9rem auto"></td><td>' +
               data[i]['name'] +
               '</td><td>' +
               data[i]['golds'] +
