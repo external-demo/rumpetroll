@@ -60,9 +60,9 @@ STATIC_VERSION = os.environ.get('STATIC_VERSION', 11)
 BASE_DIR = os.path.dirname(__file__)
 
 TOKEN = 'tPp5GwAmMPIrzXhyyA8X'
-DEBUG = False
-WSS = "ws"
-HOST = "127.0.0.1"
+DEBUG = bool(os.environ.get('DEBUG', False))
+WSS = os.environ.get("WSS", "ws")
+HOST = os.environ.get("HOST", "127.0.0.1")
 
 HTTP_PROXY = {}
 
