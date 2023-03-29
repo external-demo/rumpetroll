@@ -22,13 +22,14 @@ USER_SERVER_PORT = 30000
 SERVICE_SERVER_PORT = 40000
 USER_SERVER_HOST = os.environ.get("USER_SERVER_HOST", "127.0.0.1")
 SERVICE_SERVER_HOST = os.environ.get("SERVICE_SERVER_HOST", "127.0.0.1")
+HOST = os.environ.get("HOST", "127.0.0.1")
 
 if MODULE == "USER_SERVER":
     PORT = 30000
 elif MODULE == "SERVICE_SERVER":
     PORT = 40000
 define("port", default=PORT, help="run on the given port", type=int)
-define("address", default="127.0.0.1", help="bind address", type=str)
+define("address", default=HOST, help="bind address", type=str)
 options.parse_command_line()
 
 LOG = logging.getLogger(__name__)
@@ -62,7 +63,6 @@ BASE_DIR = os.path.dirname(__file__)
 TOKEN = 'tPp5GwAmMPIrzXhyyA8X'
 DEBUG = bool(os.environ.get('DEBUG', False))
 WSS = os.environ.get("WSS", "ws")
-HOST = os.environ.get("HOST", "127.0.0.1")
 
 HTTP_PROXY = {}
 
