@@ -86,17 +86,20 @@ class GetStatHandler(APIHandler):
             if not info or not info.get('nickname'):
                 continue
 
-            data[openid] = {'is_got': False, 'openid': openid}
+            data[openid] = {'is_got': False, 'openid': str(openid, encoding="utf-8")}
             data[openid]['name'] = info['nickname']
             data[openid]['golds'] = golds
-            data[openid]['last_time'] = all_timestamps.get(openid, None)
+            data[openid]['last_time'] = str(all_timestamps.get(openid, None), encoding="utf-8")
 
-        data = data.values()
+        # data = data.values()
+        result = []
+        for item in data:
+            result.append(data[item])
 
         return {
             'result': True,
             'message': u'获取排行统计成功',
-            'data': data,
+            'data': result,
         }
 
     def merge_resp_golds(self, responses, show_detail):
@@ -153,6 +156,7 @@ class GetUserHandler(APIHandler):
     """
     get user api
     """
+
     @authenticated
     def get(self):
         try:
@@ -172,14 +176,15 @@ class RankDataHandler(APIHandler):
     @gen.coroutine
     @authenticated
     def get(self):
-        info = settings.RD.hgetall('WEIXIN_OPEN_INFO')
-        user_info = {key: json.loads(value) for key, value in info.items()}
         data = get_rank(-1)
-        for i in data:
-            if i['name'] not in user_info:
-                LOG.warning('user[%s] not in user_info %s, has been ignore', i['name'], user_info)
-                continue
-            i.update(user_info[i['name']])
+        if data:
+            info = settings.RD.hgetall('WEIXIN_OPEN_INFO')
+            user_info = {key: json.loads(value) for key, value in info.items()}
+            for i in data:
+                if i['name'] not in user_info:
+                    LOG.warning('user[%s] not in user_info %s, has been ignore', i['name'], user_info)
+                    continue
+                i.update(user_info[i['name']])
         self.json_response(data)
 
 
@@ -187,6 +192,7 @@ class GoldsHandler(APIHandler):
     """
     golds api
     """
+
     @gen.coroutine
     @authenticated
     def get(self):
@@ -245,6 +251,7 @@ class GetUserNameHandler(APIHandler):
     """
     get user name api
     """
+
     @gen.coroutine
     @authenticated
     def get(self):
@@ -278,6 +285,7 @@ class ExportHandler(APIHandler):
     """
     export api
     """
+
     @authenticated
     def get(self):
         num = self.get_argument('num', '20')
@@ -304,6 +312,7 @@ class GetEndpointHandler(APIHandler):
     """
     endpoint api
     """
+
     @authenticated
     def get(self):
         try:
