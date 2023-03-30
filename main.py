@@ -27,7 +27,9 @@ class Application(tornado.web.Application):
     """
     def __init__(self):
         tornado.web.Application.__init__(self, handlers, **settings.SETTINGS)
-
+        user_online_key = "rumpetroll::user_online"
+        for user in settings.RD.hgetall(user_online_key):
+            settings.RD.hset(user_online_key, user, 0)
 
 # Scheduler start
 
