@@ -14,6 +14,7 @@ try:
 except ImportError:
     # py3
     from io import StringIO
+
     # py2
     # from StringIO import StringIO
 
@@ -39,6 +40,12 @@ class APIHandler(tornado.web.RequestHandler):
     def json_response(self, json_data):
         self.set_header('Content-Type', 'application/json')
         self.write(json.dumps(json_data))
+
+
+class PingHandler(APIHandler):
+    def get(self):
+        self.set_header('Content-Type', 'text')
+        self.write("pong")
 
 
 class GetStatHandler(APIHandler):
@@ -173,6 +180,7 @@ class RankDataHandler(APIHandler):
     """
     user api
     """
+
     @gen.coroutine
     @authenticated
     def get(self):
@@ -336,7 +344,7 @@ class GetEndpointHandler(APIHandler):
             'room': room,
             'sid': sid,
             'cid': cid,
-            'ws': settings.WSS
+            'ws': settings.WSS,
         }
         ws_url = '{ws}://{HOST}/rumpetroll/socket.io/{server_id}/{port}/?room={room}&sid={sid}&cid={cid}'.format(**ctx)
         return ws_url

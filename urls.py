@@ -31,8 +31,7 @@ handlers = [
     (r"/rumpetroll/api/export/", api.ExportHandler),
     (r"/rumpetroll/api/func_controller/", api.FunctionController),
     (r"/rumpetroll/api/clean/", api.CleanHandler),
+    (r"/ping", api.PingHandler),
     # for debug static, product use nginx
-    (r'/rumpetroll/static/(.*)', tornado.web.StaticFileHandler, {
-        'path': settings.SETTINGS['static_path']
-    }),
+    (r'/rumpetroll/static/(.*)', tornado.web.StaticFileHandler, {'path': settings.SETTINGS['static_path']}),
 ]
