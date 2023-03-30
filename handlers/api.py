@@ -178,7 +178,7 @@ class GetUserHandler(APIHandler):
 
 class RankDataHandler(APIHandler):
     """
-    user api
+    Rank data api
     """
 
     @gen.coroutine
@@ -272,7 +272,7 @@ class GetUserNameHandler(APIHandler):
         else:
             try:
                 gender = self.get_cookie('gender', '2')
-                name, gender = yield wx_client.get_userinfo(openid, gender=gender)
+                name, gender, is_allow_login = yield wx_client.get_userinfo(openid, gender=gender)
                 data = {'is_got': False, 'name': name, 'gender': gender, 'openid': openid}
             except Retrying:
                 LOG.warning('Retrying GetUserName: %s', openid)
@@ -282,8 +282,8 @@ class GetUserNameHandler(APIHandler):
                 except Exception:
                     LOG.exception('Retrying GetUserName %s error', openid)
                     data = {'is_got': False, 'name': 'Guest', 'gender': '1', 'openid': openid}
-            except Exception:
-                LOG.exception('GetUserNameHandler %s error', openid)
+            except Exception as e:
+                LOG.exception('GetUserNameHandler %s error %s', openid, e)
                 data = {'is_got': False, 'name': 'Guest', 'gender': '1', 'openid': openid}
 
         self.json_response(data)

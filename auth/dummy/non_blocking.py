@@ -37,6 +37,12 @@ def get_userinfo(user_id, gender=2):
     if username in ['BlueKing']:
         gender = constants.FEMALE
 
-    data = (username, gender)
-    RD.hset('WEIXIN_OPEN_INFO', user_id, json.dumps({"nickname": username, 'gender': gender}))
+    is_allow_login = 0
+    is_online = RD.hget('rumpetroll::user_online', user_id)
+    is_online = int(is_online) if is_online else 0
+    if not is_online:
+        is_allow_login = 1  # 允许登录
+        RD.hset('rumpetroll::user_online', user_id, is_allow_login)
+
+    data = (username, gender, is_allow_login)
     raise gen.Return(data)

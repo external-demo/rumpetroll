@@ -283,9 +283,7 @@ class WSHandler(tornado.websocket.WebSocketHandler):
         LOG.info(message)
         msg_type = 'closed'
         self.broadcast(msg_type, message)
-
         NAMESPACE.leave_room(self)
-
         LOG.info('client[%s] has been closed, room: %s remain: %s',
                  self._id,
                  self.room_num,
@@ -293,25 +291,16 @@ class WSHandler(tornado.websocket.WebSocketHandler):
 
 
 def send_message_to_clients():
-    """
-    function
-    """
     for client in NAMESPACE.clients:
         client.send_pending_message()
 
 
 def send_ping_to_clients():
-    """
-    function
-    """
     for client in NAMESPACE.clients:
         client.ping(b'ping')
 
 
 def update_node_status():
-    """
-    function
-    """
     status_uploader.upload_status(NAMESPACE.name, 'golds', NAMESPACE.golds_stat)
     status_uploader.upload_status(NAMESPACE.name, 'rank', NAMESPACE.rank)
     status_uploader.upload_status(NAMESPACE.name, 'online', NAMESPACE.stat)

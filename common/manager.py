@@ -155,7 +155,7 @@ class Namespace(object):
 
     def leave_room(self, client):
         """Remove a client from a room."""
-        LOG.debug('clients leave room, client=%s, room=%s, user=%s',
+        LOG.debug('[clients leave room], client=%s, room=%s, user=%s',
                   client,
                   client.room,
                   client.current_user)
@@ -163,11 +163,18 @@ class Namespace(object):
         try:
             self.rooms[client.room].remove(client)
             self.update_stat()
+            self.redisdb.hset('rumpetroll::user_online', client.current_user, 0)
         except KeyError:
-            LOG.exception('leave room error, rooms:%s, room:%s, client:%s',
+            LOG.error('[leave room error], rooms:%s, room:%s, client:%s',
                           self.rooms,
                           client.room,
                           client)
+        except Exception as e:
+            LOG.error('[leave room error], rooms:%s, room:%s, client:%s, error:%s',
+                      self.rooms,
+                      client.room,
+                      client,
+                      str(e))
 
         return self.redisdb.zincrby(self.RK_ROOM_CLIENTS_COUNTER_KEY, client.room, -1)
 
@@ -230,9 +237,9 @@ class Namespace(object):
                 self.incr_gold('global', 1)
                 self.incr_gold(room, 1)
         if self.rooms:
-            LOG.info('add %s golds with tag=%s to rooms: %s', num, tag, self.rooms.keys())
+            LOG.info('[ADD GOLDS] add %s golds with tag=%s to rooms: %s', num, tag, self.rooms.keys())
         else:
-            LOG.info('has no active rooms, just ignored')
+            LOG.info('[ADD GOLDS] has no active rooms, just ignored')
 
 
 class NamespaceEncoder(json.JSONEncoder):
@@ -279,7 +286,6 @@ def smoothness_rand_gold(num, **kwargs):
 
     for idx, num_golds in enumerate(num_box):
         for num_glod in range(num_golds):
-            print(num_glod)
             key = random.randint(100000000, 999999999)
             box = divisions[idx]
             # 金币对象
