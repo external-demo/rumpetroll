@@ -238,10 +238,18 @@ class LoginHandler(tornado.web.RequestHandler, LoginRegister):
                     self.set_cookie('gender', login_res.get("gender", gender))
             else:
                 openid = base64.b64encode(username.encode('utf-8'))
-                self.set_cookie('openid', openid)
-                self.set_cookie('gender', login_res.get("gender", gender))
-                handlers_utils.add_golds_client(300)
-                LOG.debug(f'Login Success: {username}. add golds 300')
+                is_online = settings.RD.hget('rumpetroll::user_online', openid)
+                is_online = int(is_online) if is_online else 0
+                if is_online:
+                    self.clear_cookie('openid')
+                    self.clear_cookie('gender')
+                    location = "http://{0}/rumpetroll/error/?type=notallow_login&token={1}".format(
+                        self.request.host, settings.TOKEN)
+                else:
+                    self.set_cookie('openid', openid)
+                    self.set_cookie('gender', login_res.get("gender", gender))
+                    handlers_utils.add_golds_client(300)
+                    LOG.debug(f'Login Success: {username}. add golds 300')
         else:
             location = '{}?next=http://{}/rumpetroll/'.format(
                 get_login_url(self.request),
@@ -331,6 +339,12 @@ class ErrorHandler(tornado.web.RequestHandler):
                                                   u"用户名已被注册，可直接登录。", \
                                                   u'重新登录', \
                                                   get_login_url(self.request)
+            elif "notallow_login" == tps:
+                message1, message2, button, url = u"登录错误！", \
+                                                  u"当前游戏用户已在线，请重新使用新游戏用户登录。", \
+                                                  u'重新登录', \
+                                                  get_login_url(self.request)
+
         ctx = {
             'static_url': settings.STATIC_URL,
             'message1': message1,
