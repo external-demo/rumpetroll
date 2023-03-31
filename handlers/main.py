@@ -67,6 +67,12 @@ class MainHandler(tornado.web.RequestHandler):
         arg = super().get_argument(name, default=default, strip=strip)
         return arg
 
+    def redirect(self, url, permanent=False, status=None):
+        if not url.startswith('http://') and not url.startswith('https://'):
+            self.write('Invalid URL')
+            return
+        super().redirect(url, permanent, status)
+
 
 class IndexHandler(MainHandler):
     """
