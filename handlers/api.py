@@ -233,7 +233,7 @@ class GoldsHandler(APIHandler):
             return self.json_response(result)
 
         try:
-            handler_utils.add_golds_client(num, False)
+            handler_utils.add_golds_client(num, False, self.request.protocol)
             # 试玩需求
             # is_test = test == '1'
             # if is_test:
@@ -350,7 +350,7 @@ class GetEndpointHandler(APIHandler):
             'room': room,
             'sid': sid,
             'cid': cid,
-            'ws': settings.WSS,
+            'ws': settings.WSS_MAP.get(request.protocol),
         }
         ws_url = '{ws}://{HOST}/rumpetroll/socket.io/{server_id}/{port}/?room={room}&sid={sid}&cid={cid}'.format(**ctx)
         return ws_url

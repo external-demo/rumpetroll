@@ -36,7 +36,7 @@ def get_login_server_url():
 
 
 def get_websocket_url(request):
-    return '%s://%s/rumpetroll/socket.io/' % (settings.WSS, request.host)
+    return '%s://%s/rumpetroll/socket.io/' % (settings.WSS_MAP.get(request.protocol), request.host)
 
 
 class LoginRegister():
@@ -248,7 +248,7 @@ class LoginHandler(tornado.web.RequestHandler, LoginRegister):
                 else:
                     self.set_cookie('openid', openid)
                     self.set_cookie('gender', login_res.get("gender", gender))
-                    handlers_utils.add_golds_client(300)
+                    handlers_utils.add_golds_client(300, False, self.request.protocol)
                     LOG.debug(f'Login Success: {username}. add golds 300')
         else:
             location = '{}?next=http://{}/rumpetroll/'.format(
