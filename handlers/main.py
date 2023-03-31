@@ -57,7 +57,18 @@ class LoginRegister():
             return {}
 
 
-class IndexHandler(tornado.web.RequestHandler):
+class MainHandler(tornado.web.RequestHandler):
+    """
+    main handler
+    """
+
+    # 对输入参数进行白名单过滤
+    def get_argument(self, name, default=None, strip=True):
+        arg = super().get_argument(name, default=default, strip=strip)
+        return arg
+
+
+class IndexHandler(MainHandler):
     """
     index api
     """
@@ -95,7 +106,7 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render('rumpetroll.html', **ctx)
 
 
-class LoginHandlerWX(tornado.web.RequestHandler):
+class LoginHandlerWX(MainHandler):
     """
     login api
     """
@@ -148,7 +159,7 @@ class LoginHandlerWX(tornado.web.RequestHandler):
         raise gen.Return()
 
 
-class RegisterHandler(tornado.web.RequestHandler, LoginRegister):
+class RegisterHandler(MainHandler, LoginRegister):
     """
     register api
     """
@@ -190,7 +201,7 @@ class RegisterHandler(tornado.web.RequestHandler, LoginRegister):
         self.redirect(location)
 
 
-class LoginHandler(tornado.web.RequestHandler, LoginRegister):
+class LoginHandler(MainHandler, LoginRegister):
     """
     login api
     """
