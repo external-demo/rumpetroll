@@ -37,7 +37,7 @@ def get_func_control(func_code):
         else:
             # 没找到，设置为未开启，白名单为空
             return {}
-    except Exception: # noqa
+    except Exception:  # noqa
         LOG.warning('get_func_control %s error', func_code)
         return {}
 

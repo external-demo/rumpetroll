@@ -2,6 +2,6 @@
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
 """
-from . import blocking, non_blocking, utils
+from . import utils
 
-__all__ = ['utils', 'blocking', 'non_blocking']
+__all__ = ['utils']

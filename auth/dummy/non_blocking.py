@@ -4,7 +4,6 @@
 """
 # pylint: disable=broad-except
 import base64
-import json
 import logging
 
 from tornado import gen

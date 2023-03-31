@@ -45,7 +45,7 @@ class LoginRegister():
         try:
             req_data = post(url=get_login_server_url(), json=data, verify=False, timeout=60)
             return req_data.json()
-        except BaseException: # noqa
+        except BaseException:  # noqa
             return {}
 
     @staticmethod
@@ -53,7 +53,7 @@ class LoginRegister():
         try:
             rep_data = post(url=get_register_server_url(), json=data, verify=False, timeout=30)
             return rep_data.json()
-        except BaseException: # noqa
+        except BaseException:  # noqa
             return {}
 
 

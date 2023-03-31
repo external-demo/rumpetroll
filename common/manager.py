@@ -2,6 +2,7 @@
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
 """
+# pylint: disable=broad-except
 import datetime
 import json
 import logging
@@ -166,9 +167,9 @@ class Namespace(object):
             self.redisdb.hset('rumpetroll::user_online', client.current_user, 0)
         except KeyError:
             LOG.error('[leave room error], rooms:%s, room:%s, client:%s',
-                          self.rooms,
-                          client.room,
-                          client)
+                      self.rooms,
+                      client.room,
+                      client)
         except Exception as e:
             LOG.error('[leave room error], rooms:%s, room:%s, client:%s, error:%s',
                       self.rooms,
@@ -285,7 +286,7 @@ def smoothness_rand_gold(num, **kwargs):
         divisions[-division]['y_min'] -= _remain
 
     for idx, num_golds in enumerate(num_box):
-        for num_glod in range(num_golds):
+        for _ in range(num_golds):
             key = random.randint(100000000, 999999999)
             box = divisions[idx]
             # 金币对象

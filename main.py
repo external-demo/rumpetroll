@@ -25,6 +25,7 @@ class Application(tornado.web.Application):
     """
     应用入口
     """
+
     def __init__(self):
         tornado.web.Application.__init__(self, handlers, **settings.SETTINGS)
         user_online_key = "rumpetroll::user_online"
@@ -32,6 +33,7 @@ class Application(tornado.web.Application):
             settings.RD.hset(user_online_key, user, 0)
 
 # Scheduler start
+
 
 # 1000ms / 24fps
 INTERVAL_MS = 42

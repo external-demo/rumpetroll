@@ -273,7 +273,13 @@ class GetUserNameHandler(APIHandler):
             try:
                 gender = self.get_cookie('gender', '2')
                 name, gender, is_allow_login = yield wx_client.get_userinfo(openid, gender=gender)
-                data = {'is_got': False, 'name': name, 'gender': gender, 'openid': openid}
+                data = {
+                    'is_got': False,
+                    'name': name,
+                    'gender': gender,
+                    'openid': openid,
+                    "is_allow_login": is_allow_login
+                }
             except Retrying:
                 LOG.warning('Retrying GetUserName: %s', openid)
                 try:

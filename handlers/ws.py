@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright 2016 Tencent
 # Author: 蓝鲸智云
-# pylint: disable=broad-except
+# pylint: disable=broad-except,super-with-arguments
 import json
 import logging
 import re

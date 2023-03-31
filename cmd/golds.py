@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
-# Copyright 2016 Tencent
-# Author: 蓝鲸智云
-"""发送金币消息
 """
+Copyright 2016 Tencent
+Author: 蓝鲸智云
+发送金币消息
+"""
+# pylint: disable=broad-except
 import argparse
 import json
 import logging

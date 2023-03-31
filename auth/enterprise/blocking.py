@@ -26,7 +26,7 @@ def _get_method(url, params):
         result = resp.json()
         LOG.debug('RESP: %.2fms %s', (time.time() - current_time) * 1000, resp.text)
         return result
-    except Exception: # noqa
+    except Exception:  # noqa
         LOG.exception('get url {}, {} error'.format(url, params))
         return {}
 

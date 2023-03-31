@@ -2,6 +2,7 @@
 """
 校验提交模型字段是否符合规范
 """
+# pylint: disable=broad-except
 from __future__ import absolute_import, print_function, unicode_literals
 
 import argparse

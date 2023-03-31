@@ -5,7 +5,7 @@ from sqlalchemy.sql import and_
 from tornado.web import RequestHandler
 
 from models.usermodels import Users
-from settings import IGNORES_LIST, SESSION
+from settings import SESSION
 
 
 class LoginHandler(RequestHandler):
