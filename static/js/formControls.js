@@ -5,13 +5,16 @@
   $.fn.initChat = function () {
     var input = $(this).find('#chat');
     var submitBtn = $(this).find('#submit');
+    var clean_rank = $(this).find('#clean_rank');
+    var send_golds = $(this).find('#send_golds');
     var chatText = $('#chatText');
     var chatBox = $('#chat_box');
     var hidden = true;
     var messageHistory = [];
     var messagePointer = -1;
     var winWidth = chatBox.width();
-    input.width(winWidth - 65 - 10 - 40);
+    // input.width(winWidth - 65*3 - 10 - 40*2);
+    input.width(winWidth / 2);
     if (!is_token) {
       chatBox.css('opacity', '0.3');
     } else {
@@ -118,6 +121,35 @@
       chatBox.removeClass('focus');
       return false;
     });
+
+    clean_rank.bind('click', function () {
+      $.ajax({
+        url: '/rumpetroll/api/clean/?token=' + token,
+        async: 'true',
+        dataType: 'json',
+        success: function (data) {
+          console.log('[request]:clean', data);
+        },
+        error: function () {
+          console.log('清除成绩出错');
+        }
+      });
+    });
+
+    send_golds.bind('click', function () {
+      $.ajax({
+        url: '/rumpetroll/api/gold/?num=500&token=' + token,
+        async: 'true',
+        dataType: 'json',
+        success: function (data) {
+          console.log('[request]:send golods', data);
+        },
+        error: function () {
+          console.log('发送金币错误');
+        }
+      });
+    });
+
     input.keyup(function (e) {
       var k = e.keyCode;
       if (input.val().length >= 45) {

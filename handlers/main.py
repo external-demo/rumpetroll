@@ -13,7 +13,6 @@ from tornado import gen
 import settings
 from auth import non_blocking as wx_client
 from auth import utils as wx_utils
-from handlers import utils as handlers_utils
 from handlers.utils import authenticated, get_rank, is_started
 
 LOG = logging.getLogger(__name__)
@@ -253,7 +252,7 @@ class LoginHandler(MainHandler, LoginRegister):
                     openid = base64.b64encode(username.encode('utf-8'))
                     self.set_cookie('openid', openid)
                     self.set_cookie('gender', login_res.get("gender", gender))
-                    handlers_utils.add_golds_client(300, False, self.request.protocol)
+                    # handlers_utils.add_golds_client(300, False, self.request.protocol)
                     LOG.debug(f'Login Success: {username}. add golds 300')
             else:
                 openid = base64.b64encode(username.encode('utf-8'))
@@ -267,7 +266,7 @@ class LoginHandler(MainHandler, LoginRegister):
                 else:
                     self.set_cookie('openid', openid)
                     self.set_cookie('gender', login_res.get("gender", gender))
-                    handlers_utils.add_golds_client(300, False, self.request.protocol)
+                    # handlers_utils.add_golds_client(300, False, self.request.protocol)
                     LOG.debug(f'Login Success: {username}. add golds 300')
         else:
             location = '{}?next=http://{}/rumpetroll/'.format(
