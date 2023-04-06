@@ -1,3 +1,5 @@
 .idea
 *.pyc
 environ.sh
+.codecc
+.vscode
