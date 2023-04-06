@@ -233,7 +233,7 @@ class GoldsHandler(APIHandler):
             return self.json_response(result)
 
         try:
-            handler_utils.add_golds_client(num, False)
+            handler_utils.add_golds_client(num, False, self.request.protocol)
             # 试玩需求
             # is_test = test == '1'
             # if is_test:
@@ -350,7 +350,7 @@ class GetEndpointHandler(APIHandler):
             'room': room,
             'sid': sid,
             'cid': cid,
-            'ws': settings.WSS,
+            'ws': settings.WSS_MAP.get(request.protocol),
         }
         ws_url = '{ws}://{HOST}/rumpetroll/socket.io/{server_id}/{port}/?room={room}&sid={sid}&cid={cid}'.format(**ctx)
         return ws_url
@@ -397,7 +397,7 @@ class FunctionController(APIHandler):
 
 
 class CleanHandler(APIHandler):
-    """清楚数据开关"""
+    """清除数据开关"""
 
     KEY_PREFIX = 'rumpetroll::*'
     REDIS_KEYS = [
@@ -406,9 +406,15 @@ class CleanHandler(APIHandler):
     ]
 
     @authenticated
-    def post(self):
+    def get(self):
         _data = {}
         for key in self.REDIS_KEYS:
             _data[key] = settings.RD.delete(key)
+
+        key = 'rumpetroll::zs_nodes_status::rank'
+        for namespace in settings.RD.hgetall(key):
+            settings.RD.hset(key, namespace, json.dumps({}))
+            _data[key] = 1
+
         data = {'result': True, 'data': _data, 'message': u'redis清理成功'}
         self.json_response(data)

@@ -36,7 +36,7 @@ def get_login_server_url():
 
 
 def get_websocket_url(request):
-    return '%s://%s/rumpetroll/socket.io/' % (settings.WSS, request.host)
+    return '%s://%s/rumpetroll/socket.io/' % (settings.WSS_MAP.get(request.protocol), request.host)
 
 
 class LoginRegister():
@@ -57,7 +57,24 @@ class LoginRegister():
             return {}
 
 
-class IndexHandler(tornado.web.RequestHandler):
+class MainHandler(tornado.web.RequestHandler):
+    """
+    main handler
+    """
+
+    # 对输入参数进行白名单过滤
+    def get_argument(self, name, default=None, strip=True):
+        arg = super().get_argument(name, default=default, strip=strip)
+        return arg
+
+    def redirect(self, url, permanent=False, status=None):
+        if not url.startswith('http://') and not url.startswith('https://'):
+            self.write('Invalid URL')
+            return
+        super().redirect(url, permanent, status)
+
+
+class IndexHandler(MainHandler):
     """
     index api
     """
@@ -95,7 +112,7 @@ class IndexHandler(tornado.web.RequestHandler):
         self.render('rumpetroll.html', **ctx)
 
 
-class LoginHandlerWX(tornado.web.RequestHandler):
+class LoginHandlerWX(MainHandler):
     """
     login api
     """
@@ -148,7 +165,7 @@ class LoginHandlerWX(tornado.web.RequestHandler):
         raise gen.Return()
 
 
-class RegisterHandler(tornado.web.RequestHandler, LoginRegister):
+class RegisterHandler(MainHandler, LoginRegister):
     """
     register api
     """
@@ -190,7 +207,7 @@ class RegisterHandler(tornado.web.RequestHandler, LoginRegister):
         self.redirect(location)
 
 
-class LoginHandler(tornado.web.RequestHandler, LoginRegister):
+class LoginHandler(MainHandler, LoginRegister):
     """
     login api
     """
@@ -248,7 +265,6 @@ class LoginHandler(tornado.web.RequestHandler, LoginRegister):
                 else:
                     self.set_cookie('openid', openid)
                     self.set_cookie('gender', login_res.get("gender", gender))
-                    handlers_utils.add_golds_client(300)
                     LOG.debug(f'Login Success: {username}. add golds 300')
         else:
             location = '{}?next=http://{}/rumpetroll/'.format(

@@ -105,10 +105,10 @@ def add_golds_client_loop(num, test=False):
 
 
 @gen.coroutine
-def add_golds_client(num, test=False):
+def add_golds_client(num, test=False, protocol = 'http'):
     _namespaces = NAMESPACE.get_global_namespaces()
     for node in _namespaces:
-        url = '%s://%s/rumpetroll/socket.io/?messager=1&room=1' % (settings.WSS, node)
+        url = '%s://%s/rumpetroll/socket.io/?messager=1&room=1' % (settings.WSS_MAP.get(protocol), node)
         LOG.debug('send add golds message to %s', url)
         conn = yield websocket_connect(url)
         message = {'type': 'addGold', 'num': num, 'token': settings.TOKEN, 'test': test}
@@ -118,17 +118,17 @@ def add_golds_client(num, test=False):
 
 
 @gen.coroutine
-def clean_golds_client():
+def clean_golds_client(test=False):
     """清除豆子"""
     _namespaces = NAMESPACE.get_global_namespaces()
     for node in _namespaces:
-        url = '{0}://{1}/rumpetroll/{2}/ws?messager=1'.format(settings.WSS,
-                                                              settings.HOST,
-                                                              node['url'].split(':')[-1]
-                                                              )
+        url = '{0}://{1}/rumpetroll/socket.io/?messager=1&room=1'.format(
+            settings.WSS,
+            node
+        )
         LOG.debug('send clean golds message to %s', url)
         conn = yield websocket_connect(url)
-        message = {'type': 'cleanGold', 'token': settings.TOKEN}
+        message = {'type': 'cleanGold', 'token': settings.TOKEN, 'test': test}
         conn.write_message(json.dumps(message))
         conn.close()
     LOG.info('clean golds success')
