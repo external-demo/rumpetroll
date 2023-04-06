@@ -11,8 +11,6 @@ stages:
         steps:
           - uses: syncLocalCode@latest
             name: 同步文件到云端插件
-            with:
-              syncGitRepository: true
           - uses: CodeccCheckAtomDebug@4.*
             name: 腾讯代码分析
             with:
