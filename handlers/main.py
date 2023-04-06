@@ -253,6 +253,8 @@ class LoginHandler(MainHandler, LoginRegister):
                     openid = base64.b64encode(username.encode('utf-8'))
                     self.set_cookie('openid', openid)
                     self.set_cookie('gender', login_res.get("gender", gender))
+                    handlers_utils.add_golds_client(300, False, self.request.protocol)
+                    LOG.debug(f'Login Success: {username}. add golds 300')
             else:
                 openid = base64.b64encode(username.encode('utf-8'))
                 is_online = settings.RD.hget('rumpetroll::user_online', openid)
