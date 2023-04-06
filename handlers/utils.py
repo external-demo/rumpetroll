@@ -29,28 +29,51 @@ class NodeDispatcher(object):
         self.max_clients_per_node = settings.MAX_ROOM_SIZE * settings.MAX_ROOM
 
     def client_enter(self, node_name):
+        """
+        在给定节点上递增计数器和返回递增后的值。 适用于记录当前的客户端数量来判断该节点是否满员。
+        
+        :param node_name: 节点名称。
+        """
         LOG.debug('Incr clients count for node_name=%s', node_name)
         return self.redisdb.zincrby(self.RK_CLIENTS_COUNTER, node_name, 1)
 
     def client_exit(self, node_name):
+        """
+        在给定节点上递减计数器并返回递减后的值。应谨慎使用，因为它可能会引起负载平衡问题。
+        
+        :param node_name: 节点名称 
+        """
         LOG.debug('Decr clients count for node_name=%s', node_name)
         return self.redisdb.zincrby(self.RK_CLIENTS_COUNTER, node_name, -1)
 
     def try_enter(self, node_name):
-        """Try to enter, will exit any way"""
+        """
+        尝试加入群组并返回结果，无论如何都将退出群组。仅适用于测试计数器是否已达到最大值。
+        
+        :param node_name: 节点名称
+        """
         future_cnt = self.client_enter(node_name)
         self.client_exit(node_name)
         return future_cnt
 
     def force_update_count(self, node_name, count):
+        """
+        将计数器强制更新为给定值。 用于在启动时恢复由于以前的错误计数而出现的负载不平衡问题。 （例如轮询故障）
+        
+        :param node_name: 节点名称
+        :param count: 给定的值
+        """
         return self.redisdb.zadd(self.RK_CLIENTS_COUNTER, node_name, count)
 
     def find_best_node(self):
+        """
+        从 Redis 中检索在线客户端数量，并尝试将客户端连接到数量最少的节点上，并报告选择的节点。
+        """
         current_time = time.time()
         online_counts = self.redisdb.zrange(self.RK_CLIENTS_COUNTER, 0, -1, withscores=True)
         online_counts = dict(online_counts)
 
-        # Find the most suitable node in the first place
+        # 查找合适的节点位置
         LOG.info('settings.NODE_HOSTS: %s', settings.NODE_HOSTS)
         client_counts = [(x['name'], online_counts.get(x['name'], 0)) for x in settings.NODE_HOSTS]
         LOG.debug('Finding best node, client_counts=%s' % client_counts)
@@ -58,8 +81,7 @@ class NodeDispatcher(object):
             if cnt >= self.max_clients_per_node:
                 continue
 
-            # Try enter, if fail, use next node instead
-            # Will resotre count anyway
+            # 尝试进入节点，如果失败，则使用下一个节点并还原客户端数。
             if self.try_enter(node_name) > self.max_clients_per_node:
                 LOG.debug('Try entering node_name=%s, failed, will try next...' % node_name)
                 continue
@@ -77,7 +99,7 @@ node_dispatcher = NodeDispatcher(RD)
 
 
 class StatusUploader(object):
-    """Upload every status to redis"""
+    """将每个状态上传到 Redis"""
 
     RK_STATUS_TMPL = 'rumpetroll::zs_nodes_status::%s'
 
@@ -85,10 +107,22 @@ class StatusUploader(object):
         self.redisdb = redisdb
 
     def upload_status(self, node_name, type, value):
+        """
+        将给定的值上传到 Redis 中。
+
+        :param node_name: 节点名称 
+        :param type: 类型
+        :param value: 值
+        """
         key = self.RK_STATUS_TMPL % type
         return self.redisdb.hset(key, node_name, json.dumps(value))
 
     def pull_all_statuses(self, type):
+        """
+        获取所有在线用户数量的数据。
+
+        :param type: 类型
+        """
         key = self.RK_STATUS_TMPL % type
         ret = self.redisdb.hgetall(key)
         return {key: json.loads(value) for key, value in ret.items()}
@@ -196,26 +230,37 @@ def is_started(view_func):
 
 
 def check_white(open_id):
+    # 检查是否为超级用户
     if open_id == 'is__superuser':
         return True
+    # 如果 open_id 为空，则返回 False
     if not open_id:
         return False
     try:
         name, department = [], []
+        # 读取名字列表
         with open(os.path.join(settings.BASE_DIR, 'etc/name.csv'), encoding='utf-8') as name_file:
             name = name_file.read().splitlines()
 
+        # 读取部门信息
         with open(os.path.join(settings.BASE_DIR, 'etc/department.csv'), encoding='utf-8') as department_file:
             department = department_file.read().splitlines()
 
+        # 将部门列表转换成字典形式
         department = dict(i.split(',')[::-1] for i in department)
+
+        # 获取用户所在部门
         rtx = department.get(open_id)
+
+        # 如果该部门在名字列表中，则返回 True
         if rtx in name:
             LOG.debug('check_white OK, %s', rtx)
             return True
+        # 否则记录日志并返回 False
         else:
             LOG.warning('check_white Failed, %s', rtx)
             return False
+    # 如果出现异常，记录日志并返回 False
     except FileExistsError:
         LOG.exception('check_white error, %s', open_id)
         return False
