@@ -397,7 +397,7 @@ class FunctionController(APIHandler):
 
 
 class CleanHandler(APIHandler):
-    """清楚数据开关"""
+    """清除数据开关"""
 
     KEY_PREFIX = 'rumpetroll::*'
     REDIS_KEYS = [
@@ -406,9 +406,15 @@ class CleanHandler(APIHandler):
     ]
 
     @authenticated
-    def post(self):
+    def get(self):
         _data = {}
         for key in self.REDIS_KEYS:
             _data[key] = settings.RD.delete(key)
+
+        key = 'rumpetroll::zs_nodes_status::rank'
+        for namespace in settings.RD.hgetall(key):
+            settings.RD.hset(key, namespace, json.dumps({}))
+            _data[key] = 1
+
         data = {'result': True, 'data': _data, 'message': u'redis清理成功'}
         self.json_response(data)
