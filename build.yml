@@ -20,7 +20,13 @@ stages:
               languages: # 工程语言, 可取值："C_CPP", "JAVA", "C_SHARP", "JS", "OC", "PYTHON", "PHP", "RUBY", "GOLANG", "SWIFT", "TYPESCRIPT", "KOTLIN", "LUA", "OTHERS"
                 - "JS"
                 - "PYTHON"
+              languageRuleSetMap:
+                JS_RULE:
+                - "opensource_js"
+                PYTHON_RULE:
+                - "opensource_python"
               customPath:
                 - ".*/static/assets/bootstrap/.*"
-              checkerSetType: "openScan" #openScan对应按开源治理要求配置规则集，epcScan对应按PCG EPC要求配置，normal对应自主配置规则集
-              toolScanType: "0" # 扫描方式。0是全量扫描，1是增量扫描。
+              checkerSetType: "normal"
+              pyVersion: "py3"
+              toolScanType: "1" # 扫描方式。0是全量扫描，1是增量扫描。
