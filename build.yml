@@ -7,7 +7,7 @@ stages:
         runs-on:
           pool-name: docker-on-devcloud  #docker-on-devcloud、docker、local、agentless
           container:
-            image: mirrors.tencent.com/ci/tlinux3_ci:2.1.0
+            image: mirrors.tencent.com/ci/tlinux3_ci:2.3.0
         steps:
           - uses: syncLocalCode@latest
             name: 同步文件到云端插件
