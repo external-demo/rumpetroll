@@ -70,7 +70,8 @@ header {
   font-weight: bold; }
 
 #nickname::placeholder {
-  color:#ceb478 }
+  color:#ceb478 ;
+  opacity: 0.7 }
 
 #pwd {
   height: 2rem;
