@@ -42,7 +42,6 @@ var WebSocketService = function (model, webSocket) {
   };
 
   function sankData() {
-    $('#timer_wrapper').hide();
     var sank = document.getElementById('sank_data');
     var html = '';
     sank.innerHTML = '';
@@ -127,7 +126,11 @@ var WebSocketService = function (model, webSocket) {
         secondElem.text('00'); // 计算秒
         haomiaoElem.text('00'); // 计算秒
         clearInterval(timer);
-        sankData();
+        $('#timer_wrapper').hide();
+        var sank_timer = setInterval(function () {
+          sankData();
+          clearInterval(sank_timer)
+        },6000);
       }
     }, 42);
   }
