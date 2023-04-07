@@ -50,8 +50,7 @@ var WebSocketService = function (model, webSocket) {
       url: '/rumpetroll/api/rank/',
       data: { token: token },
       success: function (data) {
-        for (let i = 0; i < data.length; i++) {
-          console.log(data[i]['name'], data[i]['golds']);
+        for (let i = 0; i < 10; i++) {
           index = i + 1;
           if (index > 3)
             html +=
