@@ -11,6 +11,8 @@ stages:
         steps:
           - uses: syncLocalCode@latest
             name: 同步文件到云端插件
+            with:
+              syncGitRepository: true
           - uses: CodeccCheckAtomDebug@4.*
             name: 腾讯代码分析
             with:
@@ -18,11 +20,14 @@ stages:
               languages: # 工程语言, 可取值："C_CPP", "JAVA", "C_SHARP", "JS", "OC", "PYTHON", "PHP", "RUBY", "GOLANG", "SWIFT", "TYPESCRIPT", "KOTLIN", "LUA", "OTHERS"
                 - "JS"
                 - "PYTHON"
+                - "JAVA"
               languageRuleSetMap:
                 JS_RULE:
                 - "opensource_js"
                 PYTHON_RULE:
                 - "opensource_python"
+                JAVA_RULE:
+                - "standard_java"
               customPath:
                 - ".*/static/assets/bootstrap/.*"
               checkerSetType: "normal"
