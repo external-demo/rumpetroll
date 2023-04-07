@@ -24,6 +24,7 @@
       var over_time = {{ over_time }};
       var token = "{{ SETTINGS.TOKEN }}"
       var room = "1" // 废弃
+      var ignores_list = "{{ SETTINGS.IGNORES_LIST }}"
     </script>
     <link
       rel="stylesheet"
@@ -75,7 +76,7 @@
             margin-top: 1%;
           "
         >
-          GAMES OVER
+          本局对战已结束
         </p>
       </div>
 
@@ -186,7 +187,8 @@
           maxlength="10"
           placeholder="10 characters within the message"
         />
-        <button id="submit">Submit</button>
+        <button id="submit">发送消息</button>
+        <div id="is_admin_control"></div>
       </div>
       <div id="chatText"></div>
 

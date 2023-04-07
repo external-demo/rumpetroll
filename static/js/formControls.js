@@ -11,7 +11,30 @@
     var messageHistory = [];
     var messagePointer = -1;
     var winWidth = chatBox.width();
-    input.width(winWidth - 65 - 10 - 40);
+    var admin_control = $(this).find('#is_admin_control');
+
+    function init() {
+      $.ajax({
+        url: '/rumpetroll/api/get_username/',
+        data: { token: token },
+        success: function (data) {
+          // if (-1 !== ignores_list.indexOf(data.name)) {
+          if ('admin' == data.name) {
+            admin_control.html(`<button id="clean_rank">清除成绩</button><button id="send_golds">发送金币</button>`);
+            winWidth = winWidth / 2;
+          } else {
+            winWidth = winWidth - 65 - 10 - 40;
+          }
+        },
+        dataType: 'json',
+        async: false
+      });
+    }
+    init();
+    var clean_rank = $(this).find('#clean_rank');
+    var send_golds = $(this).find('#send_golds');
+
+    input.width(winWidth);
     if (!is_token) {
       chatBox.css('opacity', '0.3');
     } else {
@@ -118,6 +141,35 @@
       chatBox.removeClass('focus');
       return false;
     });
+
+    clean_rank.bind('click', function () {
+      $.ajax({
+        url: '/rumpetroll/api/clean/?token=' + token,
+        async: 'true',
+        dataType: 'json',
+        success: function (data) {
+          console.log('[request]:clean', data);
+        },
+        error: function () {
+          console.log('清除成绩出错');
+        }
+      });
+    });
+
+    send_golds.bind('click', function () {
+      $.ajax({
+        url: '/rumpetroll/api/gold/?num=500&token=' + token,
+        async: 'true',
+        dataType: 'json',
+        success: function (data) {
+          console.log('[request]:send golods', data);
+        },
+        error: function () {
+          console.log('发送金币错误');
+        }
+      });
+    });
+
     input.keyup(function (e) {
       var k = e.keyCode;
       if (input.val().length >= 45) {

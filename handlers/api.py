@@ -27,7 +27,7 @@ from common import export, utils_func
 from common.manager import NAMESPACE
 from common.retrying import Retrying
 from handlers import utils as handler_utils
-from handlers.utils import authenticated, get_rank
+from handlers.utils import authenticated, get_rank, status_uploader
 
 LOG = logging.getLogger(__name__)
 
@@ -233,7 +233,7 @@ class GoldsHandler(APIHandler):
             return self.json_response(result)
 
         try:
-            handler_utils.add_golds_client(num, False)
+            handler_utils.add_golds_client(num, False, self.request.protocol)
             # 试玩需求
             # is_test = test == '1'
             # if is_test:
@@ -242,7 +242,7 @@ class GoldsHandler(APIHandler):
             #     handler_utils.add_golds_client_loop(num, False)
             result = {
                 'result': True,
-                'message': u"添加豆子成功",
+                'message': u"添加金币成功",
                 'data': None,
             }
         except Exception as error:
@@ -350,7 +350,7 @@ class GetEndpointHandler(APIHandler):
             'room': room,
             'sid': sid,
             'cid': cid,
-            'ws': settings.WSS,
+            'ws': settings.WSS_MAP.get(request.protocol),
         }
         ws_url = '{ws}://{HOST}/rumpetroll/socket.io/{server_id}/{port}/?room={room}&sid={sid}&cid={cid}'.format(**ctx)
         return ws_url
@@ -397,7 +397,7 @@ class FunctionController(APIHandler):
 
 
 class CleanHandler(APIHandler):
-    """清楚数据开关"""
+    """清除数据开关"""
 
     KEY_PREFIX = 'rumpetroll::*'
     REDIS_KEYS = [
@@ -406,9 +406,11 @@ class CleanHandler(APIHandler):
     ]
 
     @authenticated
-    def post(self):
+    def get(self):
         _data = {}
         for key in self.REDIS_KEYS:
             _data[key] = settings.RD.delete(key)
-        data = {'result': True, 'data': _data, 'message': u'redis清理成功'}
+        NAMESPACE.rank = {}
+        status_uploader.upload_status(NAMESPACE.name, 'rank', {})
+        data = {'result': True, 'data': _data, 'message': u'成绩清除成功'}
         self.json_response(data)

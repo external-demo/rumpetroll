@@ -63,7 +63,7 @@ BASE_DIR = os.path.dirname(__file__)
 TOKEN = 'tPp5GwAmMPIrzXhyyA8X'
 DEBUG = bool(os.environ.get('DEBUG', False))
 WSS = os.environ.get("WSS", "ws")
-
+WSS_MAP = {"https": "wss", "http": "ws"}
 HTTP_PROXY = {}
 
 SITE_URL = '/rumpetroll/'
@@ -92,7 +92,6 @@ MYSQL_PASSWORD = os.environ.get("MYSQL_PASSWORD", '')
 # 数据连接 URL
 DB_URI = f'mysql+pymysql://{MYSQL_USERNAME}:' \
          f'{MYSQL_PASSWORD}@{MYSQL_HOSTNAME}/{MYSQL_DATABASE}?charset=utf8'
-
 
 POOL = redis.ConnectionPool(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, password=REDIS_PASSWORD)
 RD = redis.Redis(connection_pool=POOL)
