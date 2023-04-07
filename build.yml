@@ -23,13 +23,15 @@ stages:
                 - "JAVA"
               languageRuleSetMap:
                 JS_RULE:
-                - "opensource_js"
+                - "standard_js"
                 PYTHON_RULE:
-                - "opensource_python"
+                - "standard_python"
                 JAVA_RULE:
                 - "standard_java"
+                OTHER_RULE:
+                - "opensource_sensitive_other"
               customPath:
                 - ".*/static/assets/bootstrap/.*"
               checkerSetType: "normal"
               pyVersion: "py3"
-              toolScanType: "1"
+              toolScanType: "0"

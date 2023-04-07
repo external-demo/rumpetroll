@@ -40,7 +40,7 @@ class NodeDispatcher(object):
     def client_exit(self, node_name):
         """
         在给定节点上递减计数器并返回递减后的值。应谨慎使用，因为它可能会引起负载平衡问题。
-        
+
         :param node_name: 节点名称 
         """
         LOG.debug('Decr clients count for node_name=%s', node_name)
@@ -49,7 +49,7 @@ class NodeDispatcher(object):
     def try_enter(self, node_name):
         """
         尝试加入群组并返回结果，无论如何都将退出群组。仅适用于测试计数器是否已达到最大值。
-        
+
         :param node_name: 节点名称
         """
         future_cnt = self.client_enter(node_name)

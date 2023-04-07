@@ -73,7 +73,7 @@ DEFAULT_LOG_LEVEL = 'DEBUG'
 
 # 看网络是否需要代理访问API
 # HTTP_PROXY = {
-#     'proxy_host': '10.135.21.238',
+#     'proxy_host': '192.168.1.1',
 #     'proxy_port': 13128
 # }
 
