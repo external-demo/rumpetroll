@@ -16,7 +16,6 @@ from tornado.options import define, options
 
 # 组件标识
 MODULE = os.environ.get("MODULE")
-
 PORT = 20000
 USER_SERVER_PORT = 30000
 SERVICE_SERVER_PORT = 40000
@@ -73,7 +72,7 @@ DEFAULT_LOG_LEVEL = 'DEBUG'
 
 # 看网络是否需要代理访问API
 # HTTP_PROXY = {
-#     'proxy_host': '192.168.1.1',
+#     'proxy_host': '10.192.1.1',
 #     'proxy_port': 13128
 # }
 
