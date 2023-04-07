@@ -5,8 +5,6 @@
   $.fn.initChat = function () {
     var input = $(this).find('#chat');
     var submitBtn = $(this).find('#submit');
-    var clean_rank = $(this).find('#clean_rank');
-    var send_golds = $(this).find('#send_golds');
     var chatText = $('#chatText');
     var chatBox = $('#chat_box');
     var hidden = true;
@@ -20,8 +18,12 @@
         url: '/rumpetroll/api/get_username/',
         data: { token: token },
         success: function (data) {
+          // if (-1 !== ignores_list.indexOf(data.name)) {
           if ('admin' == data.name) {
             admin_control.html(`<button id="clean_rank">清除成绩</button><button id="send_golds">发送金币</button>`);
+            winWidth = winWidth / 2;
+          } else {
+            winWidth = winWidth - 65 - 10 - 40;
           }
         },
         dataType: 'json',
@@ -29,9 +31,10 @@
       });
     }
     init();
+    var clean_rank = $(this).find('#clean_rank');
+    var send_golds = $(this).find('#send_golds');
 
-    // input.width(winWidth - 65*3 - 10 - 40*2);
-    input.width(winWidth / 2);
+    input.width(winWidth);
     if (!is_token) {
       chatBox.css('opacity', '0.3');
     } else {
