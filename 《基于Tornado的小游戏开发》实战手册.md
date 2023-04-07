@@ -140,12 +140,6 @@ STATIC_URL = '/rumpetroll/'
 # 回调URL
 DEFAULT_LOG_LEVEL = 'DEBUG'
 
-# 看网络是否需要代理访问API
-# HTTP_PROXY = {
-#     'proxy_host': '10.135.21.238',
-#     'proxy_port': 13128
-# }
-
 # Redis配置
 LOG_FILE = os.environ.get('LOG_FILE', '/tmp/rumpetroll.log')
 REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
