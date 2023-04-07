@@ -21,6 +21,7 @@ class Application(web.Application):
 LOG = logging.getLogger(__name__)
 main_loop = ioloop.IOLoop.instance()
 
+
 def main():
     http_server = httpserver.HTTPServer(Application())
     http_server.listen(settings.get("port"))

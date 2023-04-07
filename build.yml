@@ -1,0 +1,37 @@
+version: v2.0
+
+stages:
+  - name: "stage1"
+    jobs:
+      job1:
+        runs-on:
+          pool-name: docker-on-devcloud
+          container:
+            image: mirrors.tencent.com/ci/tlinux3_ci:2.3.0
+        steps:
+          - uses: syncLocalCode@latest
+            name: 同步文件到云端插件
+            with:
+              syncGitRepository: true
+          - uses: CodeccCheckAtomDebug@4.*
+            name: 腾讯代码分析
+            with:
+              beAutoLang: false
+              languages:
+                - "JS"
+                - "PYTHON"
+                - "JAVA"
+              languageRuleSetMap:
+                JS_RULE:
+                - "standard_js"
+                PYTHON_RULE:
+                - "standard_python"
+                JAVA_RULE:
+                - "standard_java"
+                OTHER_RULE:
+                - "opensource_sensitive_other"
+              customPath:
+                - ".*/static/assets/bootstrap/.*"
+              checkerSetType: "normal"
+              pyVersion: "py3"
+              toolScanType: "1"

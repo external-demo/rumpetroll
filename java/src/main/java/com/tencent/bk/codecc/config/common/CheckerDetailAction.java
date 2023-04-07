@@ -62,7 +62,7 @@ public class CheckerDetailAction {
      * 获取单个规则详情
      * @return
      */
-    public CheckerDetail getCheckerDetail(String toolName, String checker){
+    public CheckerDetail getCheckerDetail(String toolName, String checker) {
         CheckerDetailVO checkerDetailVO = getCheckerDetail();
         if (Objects.nonNull(checkerDetailVO.getCheckerDetailList())
                 && !checkerDetailVO.getCheckerDetailList().isEmpty()) {

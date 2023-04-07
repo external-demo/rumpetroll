@@ -74,6 +74,6 @@ def main_process():
     tornado.ioloop.IOLoop.current().start()
 
 
-if __name__ == "__main__": 
+if __name__ == "__main__":
     LOG.info('rumpetroll start')
     main()
