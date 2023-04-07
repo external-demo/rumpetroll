@@ -5,7 +5,7 @@ stages:
     jobs:
       job1:
         runs-on:
-          pool-name: docker-on-devcloud  #docker-on-devcloud、docker、local、agentless
+          pool-name: docker-on-devcloud
           container:
             image: mirrors.tencent.com/ci/tlinux3_ci:2.3.0
         steps:
@@ -17,7 +17,7 @@ stages:
             name: 腾讯代码分析
             with:
               beAutoLang: false
-              languages: # 工程语言, 可取值："C_CPP", "JAVA", "C_SHARP", "JS", "OC", "PYTHON", "PHP", "RUBY", "GOLANG", "SWIFT", "TYPESCRIPT", "KOTLIN", "LUA", "OTHERS"
+              languages:
                 - "JS"
                 - "PYTHON"
                 - "JAVA"
@@ -32,4 +32,4 @@ stages:
                 - ".*/static/assets/bootstrap/.*"
               checkerSetType: "normal"
               pyVersion: "py3"
-              toolScanType: "1" # 扫描方式。0是全量扫描，1是增量扫描。
+              toolScanType: "1"
