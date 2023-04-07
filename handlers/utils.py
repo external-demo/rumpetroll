@@ -39,7 +39,7 @@ class NodeDispatcher(object):
     def client_exit(self, node_name):
         """
         在给定节点上递减计数器并返回递减后的值。应谨慎使用，因为它可能会引起负载平衡问题。
-        :param node_name: 节点名称 
+        :param node_name: 节点名称
         """
         LOG.debug('Decr clients count for node_name=%s', node_name)
         return self.redisdb.zincrby(self.RK_CLIENTS_COUNTER, node_name, -1)
@@ -105,7 +105,7 @@ class StatusUploader(object):
     def upload_status(self, node_name, type, value):
         """
         将给定的值上传到 Redis 中。
-        :param node_name: 节点名称 
+        :param node_name: 节点名称
         :param type: 类型
         :param value: 值
         """
