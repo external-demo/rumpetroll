@@ -129,9 +129,30 @@ strong {
     cursor: pointer;
     width: 60px;
     height: 34px;
-    line-height: 46px;
     text-align: center;
-    line-height: 28px;
+    line-height: 26px;
+    vertical-align: middle;
+    font-size: 12px;
+    margin-left: 5px;
+    border-radius: 4px;
+    /* float: right; */
+    position: absolute;
+    right: 172px;
+    /*bottom: 10px;*/
+}
+
+#clean_rank{
+	border: none;
+    color: #fff;
+    background-color: #c80303;
+    min-width: 65px;
+    display: inline-block;
+    white-space: nowrap;
+    outline: none;
+    cursor: pointer;
+    width: 60px;
+    height: 34px;
+    text-align: center;
     vertical-align: middle;
     font-size: 12px;
     margin-left: 5px;
@@ -139,7 +160,30 @@ strong {
     /* float: right; */
     position: absolute;
     right: 10px;
-    bottom: 10px;
+    /*bottom: 10px;*/
+}
+
+#send_golds {
+	border: none;
+    color: #fff;
+    background-color: #fec222;
+    min-width: 65px;
+    display: inline-block;
+    white-space: nowrap;
+    outline: none;
+    cursor: pointer;
+    width: 60px;
+    height: 34px;
+    text-align: center;
+    line-height: 26px;
+    vertical-align: middle;
+    font-size: 12px;
+    margin-left: 5px;
+    border-radius: 4px;
+    /* float: right; */
+    position: absolute;
+    right: 88px;
+    /*bottom: 10px;*/
 }
 
 #cant-connect {

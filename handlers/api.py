@@ -27,7 +27,7 @@ from common import export, utils_func
 from common.manager import NAMESPACE
 from common.retrying import Retrying
 from handlers import utils as handler_utils
-from handlers.utils import authenticated, get_rank
+from handlers.utils import authenticated, get_rank, status_uploader
 
 LOG = logging.getLogger(__name__)
 
@@ -242,7 +242,7 @@ class GoldsHandler(APIHandler):
             #     handler_utils.add_golds_client_loop(num, False)
             result = {
                 'result': True,
-                'message': u"添加豆子成功",
+                'message': u"添加金币成功",
                 'data': None,
             }
         except Exception as error:
@@ -410,11 +410,7 @@ class CleanHandler(APIHandler):
         _data = {}
         for key in self.REDIS_KEYS:
             _data[key] = settings.RD.delete(key)
-
-        key = 'rumpetroll::zs_nodes_status::rank'
-        for namespace in settings.RD.hgetall(key):
-            settings.RD.hset(key, namespace, json.dumps({}))
-            _data[key] = 1
-
-        data = {'result': True, 'data': _data, 'message': u'redis清理成功'}
+        NAMESPACE.rank = {}
+        status_uploader.upload_status(NAMESPACE.name, 'rank', {})
+        data = {'result': True, 'data': _data, 'message': u'成绩清除成功'}
         self.json_response(data)

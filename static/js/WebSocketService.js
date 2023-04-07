@@ -203,7 +203,9 @@ var WebSocketService = function (model, webSocket) {
         $('#tip_box').hide();
       }, 2000);
     }
-    $('#timer_wrapper').show();
+    if ('none' === $('#game_over').css('display')) {
+      $('#timer_wrapper').show();
+    }
     if (data.timestamp) {
       countDown(
         getSpeicalTime(data.timestamp),

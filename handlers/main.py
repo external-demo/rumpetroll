@@ -13,7 +13,6 @@ from tornado import gen
 import settings
 from auth import non_blocking as wx_client
 from auth import utils as wx_utils
-from handlers import utils as handlers_utils
 from handlers.utils import authenticated, get_rank, is_started
 
 LOG = logging.getLogger(__name__)
@@ -265,7 +264,6 @@ class LoginHandler(MainHandler, LoginRegister):
                 else:
                     self.set_cookie('openid', openid)
                     self.set_cookie('gender', login_res.get("gender", gender))
-                    LOG.debug(f'Login Success: {username}. add golds 300')
         else:
             location = '{}?next=http://{}/rumpetroll/'.format(
                 get_login_url(self.request),
