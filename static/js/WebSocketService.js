@@ -42,7 +42,6 @@ var WebSocketService = function (model, webSocket) {
   };
 
   function sankData() {
-    $('#timer_wrapper').hide();
     var sank = document.getElementById('sank_data');
     var html = '';
     sank.innerHTML = '';
@@ -50,8 +49,7 @@ var WebSocketService = function (model, webSocket) {
       url: '/rumpetroll/api/rank/',
       data: { token: token },
       success: function (data) {
-        for (let i = 0; i < data.length; i++) {
-          console.log(data[i]['name'], data[i]['golds']);
+        for (let i = 0; i < 10; i++) {
           index = i + 1;
           if (index > 3)
             html +=
@@ -128,7 +126,11 @@ var WebSocketService = function (model, webSocket) {
         secondElem.text('00'); // 计算秒
         haomiaoElem.text('00'); // 计算秒
         clearInterval(timer);
-        sankData();
+        $('#timer_wrapper').hide();
+        var sank_timer = setInterval(function () {
+          sankData();
+          clearInterval(sank_timer)
+        },6000);
       }
     }, 42);
   }
