@@ -34,8 +34,6 @@ import com.tencent.bk.codecc.pojo.checkers.CheckerSetsVO;
 import com.tencent.bk.codecc.pojo.common.CommonInfo;
 import com.tencent.bk.codecc.pojo.defect.DefectNode;
 import com.tencent.bk.codecc.pojo.project.ProjectConfig;
-import com.tencent.bk.codecc.pojo.reqrsp.*;
-import com.tencent.bk.codecc.pojo.tool.ToolInfo;
 import com.tencent.bk.codecc.pojo.ui.UIConfig;
 import com.tencent.bk.codecc.tool.ToolScan;
 import com.tencent.bk.codecc.utils.BeanUtils;

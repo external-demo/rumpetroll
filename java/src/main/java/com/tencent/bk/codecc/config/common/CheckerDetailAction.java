@@ -66,8 +66,8 @@ public class CheckerDetailAction {
         CheckerDetailVO checkerDetailVO = getCheckerDetail();
         if (Objects.nonNull(checkerDetailVO.getCheckerDetailList())
                 && !checkerDetailVO.getCheckerDetailList().isEmpty()) {
-            for(CheckerDetail checkerDetail: checkerDetailVO.getCheckerDetailList()) {
-                if (checkerDetail.getToolName().equals(toolName) && checkerDetail.getCheckerKey().equals(checker)){
+            for (CheckerDetail checkerDetail: checkerDetailVO.getCheckerDetailList()) {
+                if (checkerDetail.getToolName().equals(toolName) && checkerDetail.getCheckerKey().equals(checker)) {
                     return checkerDetail;
                 }
             }

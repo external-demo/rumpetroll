@@ -14,11 +14,13 @@ import sys
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+# 尝试重新载入 sys 模块
 try:
     reload(sys)
     sys.setdefaultencoding('utf-8')
 except NameError:
-    # py3
+    # 如果发生 NameError 异常，则表示运行在 python3 环境下
+    # 在 python3 中，这些字符已经默认使用 unicode 编码了，因此不需要设置编码
     pass
 
 
@@ -38,11 +40,17 @@ def read_csv():
     return ret_json
 
 
+# 定义一个保存函数，参数为 content
 def save(content):
+    # 检查参数是否存在
     if content:
+        # json 文件路径
         json_path = os.path.join(BASE_DIR, 'field_library.json')
+        # 打开 json 文件，并以写入模式写入内容
         with open(json_path, 'w') as fp:
+            # 将 content 内容以 JSON 格式存储到文件中
             json.dump(content, fp)
+
 
 
 def get_field_library():
@@ -196,34 +204,56 @@ def get_new_field(result):
     return new_field
 
 
+# 定义函数 main，接收参数 argv，默认为 None
 def main(argv=None):
     try:
+        # 创建 ArgumentParser 对象
         parser = argparse.ArgumentParser()
+        # 向 ArgumentParser 添加命令行参数 'filenames'（可传入多个文件名）
         parser.add_argument('filenames', nargs='*')
+        # 解析命令行参数，返回一个 Namespace 类型实例的对象到 args 中
         args = parser.parse_args(argv)
+        # 获取当前数据库中已有的所有字段信息
         field_library = get_field_library()
+        # 存放处理结果的列表
         result = []
+        # 遍历所用到的文件名
         for file_path in args.filenames:
+            # 更改目录分隔符为系统默认，并将路径拆分成各级目录列表
             directory = file_path.split(os.sep)
+            # 如果目录层数大于1
             if len(directory) > 1:
+                # 判断最后两级目录是否为'migrations'和以'.py'结尾
                 if directory[-2] == 'migrations' and directory[-1].endswith('.py'):
+                    # 取得文件所在项目的根目录
                     base_dir = os.path.dirname(os.path.dirname(BASE_DIR))
+                    # 组成完整的文件路径
                     full_path = os.path.join(base_dir, file_path)
+                    # 处理该文件的 create_model，并记录异常信息
                     create_err_field = handle_create_model(full_path, field_library)
+                    # 处理该文件的 add/alter model，并记录异常信息
                     alter_err_field = handle_add_alter_model(full_path, field_library)
+                    # 处理该文件的 rename model，并记录异常信息
                     rename_err_field = handle_rename_model(full_path, field_library)
+                    # 将所有异常信息添加到结果列表中，格式为 'File 文件名: 异常信息'
                     for err in create_err_field + alter_err_field + rename_err_field:
                         result.append('File {}: {}'.format(directory[-1], err))
+        # 如果处理结果列表不为空
         if result:
+            # 获取所有新建字段的信息
             new_field = get_new_field(result)
+            # 如果有新建字段，打印提示语并返回 1
             if new_field:
                 print('Some field not standard, please check.')
                 print('if you still want to commit, try it again')
                 return 1
+        # 处理完成，返回0
         return 0
+    # 捕获任何异常，并输出提示语句，并返回 0
     except Exception:
         print('Unexpected exception occurred')
         return 0
+
 
 
 if __name__ == '__main__':
