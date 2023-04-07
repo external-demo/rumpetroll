@@ -31,7 +31,6 @@ class NodeDispatcher(object):
     def client_enter(self, node_name):
         """
         在给定节点上递增计数器和返回递增后的值。 适用于记录当前的客户端数量来判断该节点是否满员。
-        
         :param node_name: 节点名称。
         """
         LOG.debug('Incr clients count for node_name=%s', node_name)
@@ -40,7 +39,6 @@ class NodeDispatcher(object):
     def client_exit(self, node_name):
         """
         在给定节点上递减计数器并返回递减后的值。应谨慎使用，因为它可能会引起负载平衡问题。
-
         :param node_name: 节点名称 
         """
         LOG.debug('Decr clients count for node_name=%s', node_name)
@@ -49,7 +47,6 @@ class NodeDispatcher(object):
     def try_enter(self, node_name):
         """
         尝试加入群组并返回结果，无论如何都将退出群组。仅适用于测试计数器是否已达到最大值。
-
         :param node_name: 节点名称
         """
         future_cnt = self.client_enter(node_name)
@@ -59,7 +56,6 @@ class NodeDispatcher(object):
     def force_update_count(self, node_name, count):
         """
         将计数器强制更新为给定值。 用于在启动时恢复由于以前的错误计数而出现的负载不平衡问题。 （例如轮询故障）
-        
         :param node_name: 节点名称
         :param count: 给定的值
         """
@@ -109,7 +105,6 @@ class StatusUploader(object):
     def upload_status(self, node_name, type, value):
         """
         将给定的值上传到 Redis 中。
-
         :param node_name: 节点名称 
         :param type: 类型
         :param value: 值

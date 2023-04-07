@@ -34,4 +34,4 @@ stages:
                 - ".*/static/assets/bootstrap/.*"
               checkerSetType: "normal"
               pyVersion: "py3"
-              toolScanType: "0"
+              toolScanType: "1"
