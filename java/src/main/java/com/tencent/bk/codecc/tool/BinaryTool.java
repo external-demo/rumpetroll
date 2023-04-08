@@ -214,7 +214,7 @@ public class BinaryTool {
             String[] envP = {"PATH=" + jdkPath + System.getenv("PATH")};
             LOGGER.info("运行环境变量: {}", String.join(" ", envP));
             LOGGER.info("运行开始");
-            if (!Strings.isNullOrEmpty(toolPath) && !cmdList.isEmpty()) {
+            if (!Strings.isNullOrEmpty(toolPath) && !cmdList.isEmpty()){
                 Process process = Runtime.getRuntime().exec(cmdList.toArray(new String[0]),
                         envP, Paths.get(toolPath).toFile());
                 in = new BufferedReader(new InputStreamReader(process.getInputStream()));

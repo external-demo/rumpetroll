@@ -69,11 +69,6 @@ header {
   text-align: center;
   font-weight: bold; }
 
-#nickname::placeholder {
-  color: #ceb478;
-  opacity: 0.7;
-}
-
 #pwd {
   height: 2rem;
   width: 14.89067rem;
