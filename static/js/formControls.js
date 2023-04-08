@@ -16,7 +16,7 @@
     function init() {
       $.ajax({
         url: '/rumpetroll/api/get_username/',
-        data: { token: token },
+        data: { token: token, isForLogin: 0},
         success: function (data) {
           // if (-1 !== ignores_list.indexOf(data.name)) {
           if ('admin' == data.name) {

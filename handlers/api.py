@@ -265,6 +265,11 @@ class GetUserNameHandler(APIHandler):
     def get(self):
         # gender 1为男性 2为女性 0为未知
         openid = self.get_cookie('openid', '')
+        is_for_login = self.request.arguments.get("isForLogin", [1])
+        try:
+            is_for_login = int(is_for_login[0])
+        except:
+            is_for_login = 1
         if not openid:
             data = {'is_got': False, 'name': 'Guest', 'gender': 1, 'openid': ''}
         elif openid == 'is__superuser':  # PC登入
@@ -273,6 +278,11 @@ class GetUserNameHandler(APIHandler):
             try:
                 gender = self.get_cookie('gender', '2')
                 name, gender, is_allow_login = yield wx_client.get_userinfo(openid, gender=gender)
+                if not is_allow_login and is_for_login:
+                    self.set_cookie("openid", "")
+                    name = "Guest"
+                    openid = ""
+                    is_allow_login = 0
                 data = {
                     'is_got': False,
                     'name': name,
@@ -293,6 +303,7 @@ class GetUserNameHandler(APIHandler):
                 data = {'is_got': False, 'name': 'Guest', 'gender': '1', 'openid': openid}
 
         self.json_response(data)
+        # self.redirect()
 
 
 class ExportHandler(APIHandler):
