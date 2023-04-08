@@ -266,10 +266,7 @@ class GetUserNameHandler(APIHandler):
         # gender 1为男性 2为女性 0为未知
         openid = self.get_cookie('openid', '')
         is_for_login = self.request.arguments.get("isForLogin", [1])
-        try:
-            is_for_login = int(is_for_login[0])
-        except:
-            is_for_login = 1
+        is_for_login = int(is_for_login[0]) if isinstance(is_for_login[0], int) else 1
         if not openid:
             data = {'is_got': False, 'name': 'Guest', 'gender': 1, 'openid': ''}
         elif openid == 'is__superuser':  # PC登入
